@@ -1,9 +1,6 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/marcosgomesneto/bun-devcontainers/tree/main/src/basic-bun
 {
-    "name": "Bun Container",
-    "image": "ghcr.io/nhaef/devcontainer-bun:latest",
-    "features": {
-      "ghcr.io/joedmck/devcontainer-features/wrangler:1": {}
-    }
+  "name": "Bun Container",
+  "image": "ghcr.io/nhaef/devcontainer-bun:latest"
 }
