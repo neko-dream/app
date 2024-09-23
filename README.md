@@ -1,4 +1,4 @@
-# Welcome to Remix + Cloudflare!
+<h1 align="center">猫の夢のフロント</h1>
 
 - 📖 [Remix docs](https://remix.run/docs)
 - 📖 [Remix Cloudflare docs](https://remix.run/guides/vite#cloudflare)
@@ -8,22 +8,23 @@
 Run the dev server:
 
 ```sh
-npm run dev
+pnpm run dev
 ```
 
 To run Wrangler:
 
 ```sh
-npm run build
-npm run start
+pnpm run build
+pnpm run start
 ```
 
 ## Typegen
 
 Generate types for your Cloudflare bindings in `wrangler.toml`:
 
+
 ```sh
-npm run typegen
+pnpm run typegen
 ```
 
 You will need to rerun typegen whenever you make changes to `wrangler.toml`.
@@ -33,13 +34,13 @@ You will need to rerun typegen whenever you make changes to `wrangler.toml`.
 First, build your app for production:
 
 ```sh
-npm run build
+pnpm run build
 ```
 
 Then, deploy your app to Cloudflare Pages:
 
 ```sh
-npm run deploy
+pnpm run deploy
 ```
 
 ## Styling
