@@ -2,5 +2,8 @@
 // README at: https://github.com/marcosgomesneto/bun-devcontainers/tree/main/src/basic-bun
 {
   "name": "Bun Container",
-  "image": "ghcr.io/nhaef/devcontainer-bun:latest"
+  "image": "ghcr.io/nhaef/devcontainer-bun:latest",
+  "features": {
+    "ghcr.io/joedmck/devcontainer-features/wrangler:1": {}
+  }
 }
