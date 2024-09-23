@@ -10,7 +10,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["esbenp.prettier-vscode"]
+      "extensions": ["esbenp.prettier-vscode", "be5invis.toml"]
     }
   }
 
