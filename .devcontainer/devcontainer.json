@@ -13,7 +13,8 @@
       "extensions": [
         "esbenp.prettier-vscode",
         "be5invis.toml",
-        "bradlc.vscode-tailwindcss"
+        "bradlc.vscode-tailwindcss",
+        "github.vscode-github-actions"
       ]
     }
   }
