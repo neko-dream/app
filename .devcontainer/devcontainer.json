@@ -10,7 +10,11 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["esbenp.prettier-vscode", "be5invis.toml"]
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "be5invis.toml",
+        "bradlc.vscode-tailwindcss"
+      ]
     }
   }
 
