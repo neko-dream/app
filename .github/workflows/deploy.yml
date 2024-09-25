@@ -1,11 +1,10 @@
 name: Cloudflare Worker Deploy
 
 on:
-  pull_request:
+  push:
     branches:
       - main
       - develop
-    types: [closed]
 
 jobs:
   build:
