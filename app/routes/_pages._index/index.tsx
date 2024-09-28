@@ -11,10 +11,10 @@ export default function Index() {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center space-y-4">
-      <Button onClick={handleClick} outline>
+      <Button onClick={handleClick} variation="outline">
         Googleログイン
       </Button>
-      <Button onClick={handleClick}>Facebookログイン</Button>
+      <Button onClick={handleClick} variation="primary">Facebookログイン</Button>
     </div>
   );
 }

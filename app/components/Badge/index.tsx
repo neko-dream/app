@@ -1,19 +1,25 @@
 import { ComponentProps, ForwardedRef, forwardRef } from "react";
+import { OpinionBgColorMap, OpinionJpMap } from "~/constants/opinion";
 
 type Props = Badge & ComponentProps<"div">;
 
 type Badge = {
-  status: "";
+  status: keyof typeof OpinionJpMap;
 };
 
-function Badge({ ...props }: Props, ref: ForwardedRef<HTMLImageElement>) {
+function Badge(
+  { status, className, ...props }: Props,
+  ref: ForwardedRef<HTMLImageElement>,
+) {
+  const bgColor = OpinionBgColorMap[status];
+
   return (
     <div
       {...props}
       ref={ref}
-      className="max-w-8 rounded-md bg-blue-400 text-center text-xs text-white"
+      className={`${bgColor} flex h-6 w-10 items-center justify-center rounded-full text-center text-xs text-white ${className}`}
     >
-      賛成
+      {OpinionJpMap[status]}
     </div>
   );
 }
