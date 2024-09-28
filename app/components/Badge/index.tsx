@@ -1,26 +1,29 @@
 import { ComponentProps, ForwardedRef, forwardRef } from "react";
 import { OpinionBgColorMap, OpinionJpMap } from "~/constants/opinion";
 
-type Props = Badge & ComponentProps<"div">;
+type Props = Badge & ComponentProps<"button">;
 
 type Badge = {
   status: keyof typeof OpinionJpMap;
+  isSelectStyle?: boolean;
 };
 
 function Badge(
-  { status, className, ...props }: Props,
-  ref: ForwardedRef<HTMLImageElement>,
+  { status, className, isSelectStyle, ...props }: Props,
+  ref: ForwardedRef<HTMLButtonElement>,
 ) {
-  const bgColor = OpinionBgColorMap[status];
+  const bgColor = isSelectStyle
+    ? "border-2 border-solid border-gray-400 text-gray-500"
+    : OpinionBgColorMap[status];
 
   return (
-    <div
+    <button
       {...props}
       ref={ref}
       className={`${bgColor} flex h-6 w-10 items-center justify-center rounded-full text-center text-xs text-white ${className}`}
     >
       {OpinionJpMap[status]}
-    </div>
+    </button>
   );
 }
 

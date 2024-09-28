@@ -25,3 +25,10 @@ export const Pass: Story = {
     status: "pass",
   },
 };
+
+export const IsSelect: Story = {
+  args: {
+    status: "pass",
+    isSelectStyle: true,
+  },
+};
