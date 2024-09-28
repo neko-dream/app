@@ -11,13 +11,21 @@ type Props = Card & ComponentProps<"div">;
 type Card = {
   title: string;
   description: string;
-  children: ReactNode;
+  children?: ReactNode;
   opinionStatus: keyof typeof OpinionJpMap;
   user: User;
 };
 
 function Card(
-  { user, title, description, opinionStatus, className, ...props }: Props,
+  {
+    user,
+    title,
+    description,
+    opinionStatus,
+    children,
+    className,
+    ...props
+  }: Props,
   ref: ForwardedRef<HTMLDivElement>,
 ) {
   return (
@@ -34,7 +42,11 @@ function Card(
         <p className="text-xs text-[#6d6c6a]">{user.displayName}</p>
       </div>
 
-      <RiMore2Fill className="card-meatball" size={24} />
+      <button className="ml-auto">
+        <RiMore2Fill className="card-meatball" size={24} />
+      </button>
+
+      {children}
 
       <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
       <Link
