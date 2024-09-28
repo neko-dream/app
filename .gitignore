@@ -8,3 +8,5 @@ node_modules
 .wrangler
 
 *storybook.log
+
+storybook-static
