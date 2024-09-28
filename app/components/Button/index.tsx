@@ -30,7 +30,7 @@ function Button(
 ) {
   const { children, variation, className, isLink } = props;
 
-  const base = `text-center w-full max-w-[175px] rounded-full px-4 py-2 font-bold ${variationMap[variation]} ${OpinionBgColorMap[variation as never]} ${className}`;
+  const base = `text-center w-full max-w-[175px] rounded-full p-2 font-bold ${variationMap[variation]} ${OpinionBgColorMap[variation as never]} ${className}`;
 
   if (isLink) {
     return (
