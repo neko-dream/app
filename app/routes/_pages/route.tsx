@@ -1,11 +1,12 @@
 import { Outlet } from "@remix-run/react";
+import Layout from "./components/Layout";
 
 export default function Route() {
   return (
     <div className="bg-[#e0efff]">
-      <div className="flex flex-col mx-auto min-h-screen max-w-sm bg-white">
+      <Layout>
         <Outlet />
-      </div>
+      </Layout>
     </div>
   );
 }

@@ -1,3 +1,31 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+.card {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-template-areas:
+    "avator      title       title       meatball"
+    "avator      status      status        meatball"
+    "description description description description"
+    "link        link        link        link";
+  grid-auto-columns: 56px auto auto 32px;
+
+  .card-avator {
+    grid-area: avator;
+  }
+  .card-title {
+    grid-area: title;
+  }
+  .card-status {
+    grid-area: status;
+  }
+  .card-description {
+    grid-area: description;
+  }
+  .card-link {
+    grid-area: link;
+  }
+}
