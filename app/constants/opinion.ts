@@ -10,5 +10,5 @@ export const OpinionJpMap = {
 export const OpinionBgColorMap = {
   agree: "bg-blue-500",
   disagree: "bg-red-500",
-  pass: "bg-gray-500",
+  pass: "bg-gray-300",
 } as const;

@@ -1,9 +1,12 @@
 import { Link, RemixLinkProps } from "@remix-run/react/dist/components";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { OpinionBgColorMap } from "~/constants/opinion";
+import { tv } from "tailwind-variants";
+
+type variants = "outline" | "primary" | "agree" | "disagree" | "pass";
 
 type Props = (Button | Link) & {
-  variation: keyof typeof variationMap;
+  variation: variants;
   children: ReactNode;
 };
 
@@ -16,13 +19,18 @@ type Button = {
   outline?: boolean;
 } & ComponentProps<"button">;
 
-const variationMap = {
-  outline: "border-2 border-solid border-green-500 text-green-500",
-  primary: "bg-green-500 text-white",
-  agree: "text-white",
-  disagree: "text-white",
-  pass: "text-white bg-[#ceccca]",
-} as const;
+const button = tv({
+  base: "text-center w-full max-w-[175px] rounded-full p-2 font-bold",
+  variants: {
+    color: {
+      outline: "border-2 border-solid border-green-500 text-green-500",
+      primary: "bg-green-500 text-white",
+      agree: `text-white ${OpinionBgColorMap["agree"]}`,
+      disagree: `text-white ${OpinionBgColorMap["disagree"]}`,
+      pass: `text-white ${OpinionBgColorMap["pass"]}`,
+    } satisfies { [x in variants]: string },
+  },
+});
 
 function Button(
   props: Props,
@@ -30,18 +38,24 @@ function Button(
 ) {
   const { children, variation, className, isLink } = props;
 
-  const base = `text-center w-full max-w-[175px] rounded-full p-2 font-bold ${variationMap[variation]} ${OpinionBgColorMap[variation as never]} ${className}`;
-
   if (isLink) {
     return (
-      <Link {...props} className={`${base} ${className}`} ref={ref}>
+      <Link
+        {...props}
+        className={button({ color: variation, class: className })}
+        ref={ref}
+      >
         {children}
       </Link>
     );
   }
 
   return (
-    <button {...(props as Button)} className={`${base} ${className}`} ref={ref}>
+    <button
+      {...(props as Button)}
+      className={button({ color: variation, class: className })}
+      ref={ref}
+    >
       {children}
     </button>
   );

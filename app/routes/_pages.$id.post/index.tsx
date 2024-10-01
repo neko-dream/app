@@ -12,23 +12,23 @@ export default function Page() {
       <Heading>あなたはどう思う？</Heading>
 
       <div className="mx-4">
-        <Label label="あなたの立場" tip="required" className="mt-6" />
+        <Label label="あなたの立場" required className="mt-6" />
         <div className="mt-2 flex space-x-2">
           <Badge status="agree" isSelectStyle />
           <Badge status="pass" isSelectStyle />
           <Badge status="disagree" isSelectStyle />
         </div>
 
-        <Label label="タイトル" tip="optional" className="mt-4" />
+        <Label label="タイトル" optional className="mt-4" />
         <Input placeholder="意見を一言で（タイトル）" className="mt-2" />
 
-        <Label label="意見" tip="required" className="mt-4" />
+        <Label label="意見" required className="mt-4" />
         <Textarea placeholder="あなたの意見を書こう！" className="mt-2" />
 
-        <Label label="参考画像" tip="optional" className="mt-4" />
+        <Label label="参考画像" optional className="mt-4" />
         <UploadArea onUpload={console.log} className="mt-2" />
 
-        <Label label="参考文献" tip="optional" className="mt-4" />
+        <Label label="参考文献" optional className="mt-4" />
         <Input placeholder="リンクなど" className="mt-2" />
       </div>
 

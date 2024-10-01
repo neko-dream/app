@@ -1,5 +1,6 @@
 import { ComponentProps, ForwardedRef, forwardRef } from "react";
 import { OpinionBgColorMap, OpinionJpMap } from "~/constants/opinion";
+import { tv } from "tailwind-variants";
 
 type Props = Badge & ComponentProps<"button">;
 
@@ -8,19 +9,33 @@ type Badge = {
   isSelectStyle?: boolean;
 };
 
+const badge = tv({
+  base: "flex h-6 w-10 items-center justify-center rounded-full text-center text-xs text-white",
+  variants: {
+    color: {
+      agree: OpinionBgColorMap["agree"],
+      disagree: OpinionBgColorMap["disagree"],
+      pass: OpinionBgColorMap["pass"],
+    },
+    isSelect: {
+      true: "border-2 border-solid border-gray-400 bg-white text-gray-500",
+    },
+  },
+});
+
 function Badge(
-  { status, className, isSelectStyle, ...props }: Props,
+  { status, isSelectStyle, className, ...props }: Props,
   ref: ForwardedRef<HTMLButtonElement>,
 ) {
-  const bgColor = isSelectStyle
-    ? "border-2 border-solid border-gray-400 text-gray-500"
-    : OpinionBgColorMap[status];
-
   return (
     <button
       {...props}
       ref={ref}
-      className={`${bgColor} flex h-6 w-10 items-center justify-center rounded-full text-center text-xs text-white ${className}`}
+      className={badge({
+        color: status,
+        isSelect: isSelectStyle,
+        class: className,
+      })}
     >
       {OpinionJpMap[status]}
     </button>
