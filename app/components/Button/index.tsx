@@ -1,7 +1,7 @@
 import { Link, RemixLinkProps } from "@remix-run/react/dist/components";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
-import { OpinionBgColorMap } from "~/constants/opinion";
 import { tv } from "tailwind-variants";
+import { OpinionBgColorMap } from "~/constants/opinion";
 
 type variants = "outline" | "primary" | "agree" | "disagree" | "pass";
 

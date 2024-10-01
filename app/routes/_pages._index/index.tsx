@@ -14,7 +14,9 @@ export default function Index() {
       <Button onClick={handleClick} variation="outline">
         Googleログイン
       </Button>
-      <Button onClick={handleClick} variation="primary">Facebookログイン</Button>
+      <Button onClick={handleClick} variation="primary">
+        Facebookログイン
+      </Button>
     </div>
   );
 }

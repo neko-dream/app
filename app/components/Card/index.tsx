@@ -1,11 +1,11 @@
-import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
-import Avator from "../Avator";
-import Badge from "../Badge";
-import { OpinionJpMap } from "~/constants/opinion";
-import { User } from "~/types/User";
 import { Link } from "@remix-run/react";
+import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { RiChat1Line, RiMore2Fill } from "react-icons/ri";
 import { tv } from "tailwind-variants";
+import { OpinionJpMap } from "~/constants/opinion";
+import { User } from "~/types/User";
+import Avator from "../Avator";
+import Badge from "../Badge";
 
 type Props = Card & ComponentProps<"div">;
 
