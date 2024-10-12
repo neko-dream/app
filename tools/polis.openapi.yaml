@@ -1,0 +1,970 @@
+openapi: 3.0.1
+info:
+  title: polis
+  description: ''
+  version: 1.0.0
+tags:
+  - name: vote
+  - name: opinion
+  - name: talk_session
+  - name: user
+  - name: auth
+paths:
+  /talksessions/{talkSessionID}/opinions/{opinionID}/votes:
+    post:
+      summary: 意思表明API
+      deprecated: false
+      description: ''
+      operationId: vote
+      tags:
+        - vote
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: セッションのID
+          required: true
+          schema:
+            type: string
+        - name: opinionID
+          in: path
+          description: 意見のID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                voteStatus:
+                  example: ''
+                  type: string
+              required:
+                - voteStatus
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items: &ref_0
+                  $ref: '#/components/schemas/opinion'
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+      x-ogen-operation-group: Vote
+  /talksession/{talkSessionID}/opinions:
+    get:
+      summary: セッションの意見一覧
+      deprecated: false
+      description: ランダムな意見
+      operationId: listOpinions
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: parentOpinionID
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    opinion: *ref_0
+                    user: &ref_1
+                      $ref: '#/components/schemas/user'
+                      description: 作成ユーザー
+                    commentCount:
+                      type: string
+                  required:
+                    - opinion
+                    - user
+                    - commentCount
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+      x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionId}/opinion:
+    get:
+      summary: 🚧 分析に関する意見
+      deprecated: false
+      description: ''
+      operationId: getTopOpinions
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                required:
+                  - 01J93WTW4J3ZBAAVVZV8PSWZ6R
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+      x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionID}/opinions:
+    post:
+      summary: セッションに対して意見投稿
+      deprecated: false
+      description: parentOpinionIDがなければルートの意見として投稿される
+      operationId: postOpinionPost
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                parentOpinionID:
+                  type: string
+                  example: ''
+                  nullable: true
+                title:
+                  type: string
+                  example: ''
+                  nullable: true
+                opinionContent:
+                  type: string
+                  maxLength: 140
+                  example: ''
+                referenceURL:
+                  type: string
+                  example: ''
+                  nullable: true
+                picture:
+                  type: string
+                  format: binary
+                  example: ''
+              required:
+                - opinionContent
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: Opinion
+  /talksession/{talkSessionID}/opinions/{opinionID}:
+    get:
+      summary: 意見に対するコメント一覧を返す
+      deprecated: false
+      description: ''
+      operationId: opinionComments
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: opinionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rootOpinion:
+                    type: object
+                    properties:
+                      user: *ref_1
+                      opinion: *ref_0
+                    required:
+                      - user
+                      - opinion
+                  opinions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        opinion: *ref_0
+                        user: *ref_1
+                        myItentionStatus: &ref_4
+                          $ref: '#/components/schemas/voteType'
+                          description: 意見投稿主の意見。ルート意見の場合はここには何も入らない
+                      required:
+                        - opinion
+                        - user
+                        - myItentionStatus
+                required:
+                  - rootOpinion
+                  - opinions
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+      x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionId}:
+    get:
+      summary: 🚧 トークセッションの詳細
+      deprecated: false
+      description: ''
+      operationId: getTalkSessionDetail
+      tags:
+        - talk_session
+      parameters:
+        - name: talkSessionId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema: &ref_2
+                $ref: '#/components/schemas/talkSession'
+          headers: {}
+      security: []
+      x-ogen-operation-group: TalkSession
+  /talksessions:
+    get:
+      summary: トークセッションコレクション
+      deprecated: false
+      description: ''
+      operationId: getTalkSessionList
+      tags:
+        - talk_session
+      parameters:
+        - name: limit
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: integer
+            nullable: true
+        - name: offset
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: integer
+            nullable: true
+        - name: theme
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+            nullable: true
+        - name: status
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+            enum:
+              - open
+              - finished
+            default: open
+            x-apidog-enum:
+              - name: ''
+                value: open
+                description: 開催中
+              - name: ''
+                value: finished
+                description: 終了済み
+            nullable: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  talkSessions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        talkSession: *ref_2
+                        opinionCount:
+                          type: integer
+                      required:
+                        - talkSession
+                        - opinionCount
+                required:
+                  - talkSessions
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+      x-ogen-operation-group: TalkSession
+    post:
+      summary: トークセッション作成
+      deprecated: false
+      description: ''
+      operationId: createTalkSession
+      tags:
+        - talk_session
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+                  maxLength: 50
+                  minLength: 5
+                  example: オブジェクト指向は悪
+                scheduledEndTime:
+                  type: string
+                  format: date-time
+                  example: '2024-12-17T03:24:00Z'
+                latitude:
+                  type: number
+                  description: 緯度
+                  example: 0
+                  nullable: true
+                longitude:
+                  type: number
+                  description: 経度
+                  example: 0
+                  nullable: true
+              required:
+                - theme
+                - scheduledEndTime
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: トークセッションID
+                  theme:
+                    type: string
+                    description: テーマ
+                  owner: *ref_1
+                  createdAt:
+                    type: string
+                    description: 作成日時
+                  finishedAt:
+                    type: string
+                    description: 終了日時
+                  scheduledEndTime:
+                    type: string
+                    description: 終了予定日時
+                  location:
+                    anyOf:
+                      - &ref_3
+                        $ref: '#/components/schemas/location'
+                      - type: 'null'
+                    description: 位置情報
+                required:
+                  - id
+                  - theme
+                  - owner
+                  - createdAt
+                  - scheduledEndTime
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: TalkSession
+  /user:
+    put:
+      summary: ユーザー情報の変更
+      deprecated: false
+      description: ''
+      operationId: editUserProfile
+      tags:
+        - user
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                  description: ユーザー名
+                  example: ''
+                  nullable: true
+                icon:
+                  type: string
+                  format: binary
+                  description: ユーザーアイコン
+                  example: ''
+                yearOfBirth:
+                  type: integer
+                  description: 生まれ年
+                  example: 0
+                  nullable: true
+                gender:
+                  type: string
+                  enum:
+                    - male
+                    - female
+                    - other
+                    - preferNotToSay
+                  description: 性別
+                  example: ''
+                  nullable: true
+                municipality:
+                  type: string
+                  description: 市区町村
+                  example: ''
+                  nullable: true
+                occupation:
+                  type: string
+                  enum:
+                    - 正社員
+                    - 契約社員
+                    - 公務員
+                    - 自営業
+                    - 会社役員
+                    - パート・アルバイト
+                    - 家事従事者
+                    - 学生
+                    - 無職
+                    - その他
+                    - 無回答
+                  description: 職業
+                  example: ''
+                  nullable: true
+                householdSize:
+                  type: integer
+                  description: 世帯人数
+                  example: 0
+                  nullable: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  displayID:
+                    type: string
+                    pattern: ^[A-Za-z0-9]$
+                    examples:
+                      - userid
+                    minLength: 3
+                    maxLength: 25
+                  displayName:
+                    type: string
+                  iconURL:
+                    type: string
+                required:
+                  - displayID
+                  - displayName
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: user
+    post:
+      summary: ユーザー作成
+      deprecated: false
+      description: ''
+      operationId: registerUser
+      tags:
+        - user
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                  description: ユーザー名。日本語なども設定可能。
+                  example: ''
+                displayID:
+                  type: string
+                  description: ユーザーID。プロフィールのパスなどで使用される。DBのIDとは別。
+                  example: ''
+                icon:
+                  format: binary
+                  type: string
+                  description: ユーザーアイコン
+                  example: ''
+                yearOfBirth:
+                  type: integer
+                  default: 0
+                  description: 生まれ年
+                  example: 0
+                  nullable: true
+                gender:
+                  type: string
+                  enum:
+                    - male
+                    - female
+                    - other
+                    - preferNotToSay
+                  default: preferNotToSay
+                  description: 性別
+                  example: ''
+                  nullable: true
+                municipality:
+                  type: string
+                  description: 市区町村
+                  example: ''
+                  nullable: true
+                occupation:
+                  type: string
+                  enum:
+                    - 正社員
+                    - 契約社員
+                    - 公務員
+                    - 自営業
+                    - 会社役員
+                    - パート・アルバイト
+                    - 家事従事者
+                    - 学生
+                    - 無職
+                    - その他
+                    - 無回答
+                  default: 無回答
+                  description: ユーザーの職業
+                  example: ''
+                  nullable: true
+                householdSize:
+                  type: integer
+                  minimum: 0
+                  description: 世帯人数
+                  example: 0
+                  nullable: true
+              required:
+                - displayName
+                - displayID
+                - gender
+                - occupation
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  displayID:
+                    type: string
+                    pattern: ^[A-Za-z0-9]$
+                    examples:
+                      - userid
+                    minLength: 3
+                    maxLength: 25
+                  displayName:
+                    type: string
+                  iconURL:
+                    type: string
+                required:
+                  - displayID
+                  - displayName
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: user
+  /auth/token/info:
+    get:
+      summary: JWTの内容を返してくれる
+      deprecated: false
+      description: ''
+      operationId: oauth_token_info
+      tags:
+        - auth
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  aud:
+                    type: string
+                    description: Audience
+                  exp:
+                    type: string
+                    description: 有効期限
+                  iat:
+                    type: string
+                    description: 発行日時
+                  iss:
+                    type: string
+                    description: 発行者
+                  sub:
+                    type: string
+                    description: ユーザID
+                  jti:
+                    type: string
+                    description: JWT ID
+                  displayId:
+                    type: string
+                    description: ユーザーID
+                  displayName:
+                    type: string
+                    description: ユーザー名
+                  iconURL:
+                    type: string
+                    description: アイコンURL
+                  isVerify:
+                    type: boolean
+                    description: ユーザ登録済みか
+                required:
+                  - aud
+                  - exp
+                  - iat
+                  - iss
+                  - sub
+                  - jti
+                  - isVerify
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: Auth
+  /test:
+    get:
+      summary: OpenAPIテスト用
+      deprecated: false
+      description: ''
+      operationId: test
+      tags:
+        - user
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  optInt:
+                    type: integer
+                    nullable: true
+                  optNilInt:
+                    type: integer
+                  optNilBool:
+                    type: boolean
+                    nullable: true
+                  optBool:
+                    type: boolean
+                  optUrl:
+                    type: string
+                    format: uri
+                  optNilUrl:
+                    type: string
+                    format: url
+                    nullable: true
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security: []
+      x-ogen-operation-group: test
+components:
+  schemas:
+    talkSession:
+      type: object
+      properties:
+        id:
+          type: string
+          description: トークセッションID
+        theme:
+          type: string
+          description: テーマ
+        owner: *ref_1
+        createdAt:
+          type: string
+          description: 作成日時
+        finishedAt:
+          type: string
+          description: 終了日時
+        scheduledEndTime:
+          type: string
+          description: 終了予定日時
+        location:
+          anyOf:
+            - *ref_3
+            - type: 'null'
+          description: 位置情報
+      required:
+        - id
+        - theme
+        - owner
+        - createdAt
+        - scheduledEndTime
+    validationErrorItem:
+      type: object
+      properties:
+        field:
+          type: string
+          faker: id
+          description: バリデーションエラーのフィールド
+        message:
+          type: string
+          description: バリデーションエラーメッセージ
+      required:
+        - field
+        - message
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        data:
+          type: string
+      required:
+        - code
+        - message
+        - data
+    user:
+      type: object
+      properties:
+        displayID:
+          type: string
+          pattern: ^[A-Za-z0-9]$
+          examples:
+            - userid
+          minLength: 3
+          maxLength: 25
+        displayName:
+          type: string
+        iconURL:
+          type: string
+      required:
+        - displayID
+        - displayName
+    opinion:
+      type: object
+      properties:
+        id:
+          type: string
+          faker: '1'
+          description: 意見ID
+        title:
+          type: string
+        content:
+          type: string
+          description: 意見のテキスト
+          minLength: 1
+          maxLength: 140
+        parentID:
+          type: string
+          description: 親の意見ID。ルートならば無し
+        voteType: *ref_4
+        pictureURL:
+          type: string
+          description: 画像が返る場合もある
+        referenceURL:
+          type: string
+          description: 参考文献URL
+      required:
+        - content
+        - id
+    voteType:
+      type: string
+      description: 意見の3種のステータス
+      enum:
+        - agree
+        - disagree
+        - pass
+    location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          description: 緯度
+        longitude:
+          type: number
+          description: 経度
+        prefecture:
+          type: string
+          description: 都道府県
+        city:
+          type: string
+          description: 市区町村
+      required:
+        - latitude
+        - longitude
+        - prefecture
+        - city
+    tokenClaim:
+      type: object
+      properties:
+        aud:
+          type: string
+          description: Audience
+        exp:
+          type: string
+          description: 有効期限
+        iat:
+          type: string
+          description: 発行日時
+        iss:
+          type: string
+          description: 発行者
+        sub:
+          type: string
+          description: ユーザID
+        jti:
+          type: string
+          description: JWT ID
+        displayId:
+          type: string
+          description: ユーザーID
+        displayName:
+          type: string
+          description: ユーザー名
+        iconURL:
+          type: string
+          description: アイコンURL
+        isVerify:
+          type: boolean
+          description: ユーザ登録済みか
+      required:
+        - aud
+        - exp
+        - iat
+        - iss
+        - sub
+        - jti
+        - isVerify
+  securitySchemes:
+    apikey-header-SessionId:
+      type: apiKey
+      in: header
+      name: SessionId
+servers: []
