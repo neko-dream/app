@@ -6,12 +6,7 @@ export default function Page() {
     <div>
       <Heading>あなたはどう思う？</Heading>
 
-      <Button
-        variation="primary"
-        className="mx-auto mt-6 block"
-        isLink={true}
-        to={"./post"}
-      >
+      <Button variation="primary" className="mx-auto mt-6 block">
         意見を投稿する
       </Button>
 
@@ -20,8 +15,6 @@ export default function Page() {
       <Button
         variation="primary"
         className="mx-auto mt-6 block whitespace-nowrap"
-        isLink={true}
-        to={"./opinion"}
       >
         みんなの意見を見る
       </Button>

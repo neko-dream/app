@@ -33,9 +33,7 @@ export default function Page() {
       </div>
 
       <div className="mt-8 flex justify-center space-x-8">
-        <Button variation="outline" className="w-24 whitespace-normal">
-          保存する
-        </Button>
+        <Button className="w-24 whitespace-normal">保存する</Button>
         <Button variation="primary" className="w-24 whitespace-normal">
           投稿する
         </Button>
