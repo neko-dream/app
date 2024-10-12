@@ -18,9 +18,9 @@
     "sb:build": "storybook build"
   },
   "dependencies": {
-    "@remix-run/cloudflare": "2.12.0",
-    "@remix-run/cloudflare-pages": "2.12.0",
-    "@remix-run/react": "2.12.0",
+    "@remix-run/cloudflare": "2.13.0",
+    "@remix-run/cloudflare-pages": "2.13.0",
+    "@remix-run/react": "2.13.0",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",
     "@cloudflare/workers-types": "^4.20240919.0",
-    "@remix-run/dev": "2.12.0",
+    "@remix-run/dev": "2.13.0",
     "@remix-run/testing": "^2.12.1",
     "@storybook/addon-essentials": "^8.3.3",
     "@storybook/addon-interactions": "^8.3.3",
