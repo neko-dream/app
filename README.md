@@ -22,9 +22,8 @@ pnpm run start
 
 Generate types for your Cloudflare bindings in `wrangler.toml`:
 
-
 ```sh
-pnpm run typegen
+bun typegen
 ```
 
 You will need to rerun typegen whenever you make changes to `wrangler.toml`.
@@ -34,13 +33,13 @@ You will need to rerun typegen whenever you make changes to `wrangler.toml`.
 First, build your app for production:
 
 ```sh
-pnpm run build
+bun run build
 ```
 
 Then, deploy your app to Cloudflare Pages:
 
 ```sh
-pnpm run deploy
+bun run deploy
 ```
 
 ## Styling
