@@ -6,8 +6,10 @@ export default function Index() {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    window.alert("なんかログインダイアログだす");
-    navigate("/home");
+    const result = window.confirm("Googleの認証ページに飛びます。");
+    if (result) {
+      navigate("/api/redirecter/signup");
+    }
   };
 
   return (
