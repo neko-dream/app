@@ -7,8 +7,17 @@ export const OpinionJpMap = {
 /**
  * tailwindcss class
  */
-export const OpinionBgColorMap = {
-  agree: "bg-blue-500",
-  disagree: "bg-red-500",
-  pass: "bg-gray-300",
+export const OpinionColor = {
+  agree: {
+    bg: "bg-blue-500",
+    border: "border-blue-500",
+  },
+  disagree: {
+    bg: "bg-red-500",
+    border: "border-red-500",
+  },
+  pass: {
+    bg: "bg-gray-300",
+    border: "border-gray-300",
+  },
 } as const;
