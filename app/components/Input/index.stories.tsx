@@ -11,6 +11,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    placeholder: '意見を一言で(タイトル)'
+    placeholder: "意見を一言で(タイトル)",
   },
 };

@@ -1,20 +1,21 @@
 import { useNavigate } from "@remix-run/react";
-import Button from "~/components/Button";
+import FacebookLoginButton from "~/components/Button/template/FacebookLoginButton";
+import GoogleLoginButton from "~/components/Button/template/GoogleLoginButton";
 
 export default function Index() {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    window.alert("なんかログインダイアログだす");
-    navigate("/home");
+    const result = window.confirm("Googleの認証ページに飛びます。");
+    if (result) {
+      navigate("/api/redirecter/signup");
+    }
   };
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center space-y-4">
-      <Button onClick={handleClick} variation="outline">
-        Googleログイン
-      </Button>
-      <Button onClick={handleClick} variation="primary">Facebookログイン</Button>
+      <GoogleLoginButton onClick={handleClick} />
+      <FacebookLoginButton />
     </div>
   );
 }

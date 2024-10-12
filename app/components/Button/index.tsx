@@ -1,47 +1,39 @@
-import { Link, RemixLinkProps } from "@remix-run/react/dist/components";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
-import { OpinionBgColorMap } from "~/constants/opinion";
+import { tv } from "tailwind-variants";
 
-type Props = (Button | Link) & {
-  variation: keyof typeof variationMap;
+type variants = "primary" | "agree" | "disagree" | "pass";
+
+type Props = ComponentProps<"button"> & {
+  variation?: variants;
   children: ReactNode;
+  outline?: boolean;
 };
 
-type Link = {
-  isLink?: true;
-} & RemixLinkProps;
-
-type Button = {
-  isLink?: false;
-  outline?: boolean;
-} & ComponentProps<"button">;
-
-const variationMap = {
-  outline: "border-2 border-solid border-green-500 text-green-500",
-  primary: "bg-green-500 text-white",
-  agree: "text-white",
-  disagree: "text-white",
-  pass: "text-white bg-[#ceccca]",
-} as const;
+const button = tv({
+  base: "text-center w-full max-w-[175px] rounded-full p-2 font-bold",
+  variants: {
+    color: {
+      primary: "bg-green-500 text-white border-green-500",
+      agree: "text-white bg-blue-500 border-blue-500",
+      disagree: "text-white bg-red-500 border-red-500",
+      pass: "text-white bg-gray-300 border-gray-300",
+    } satisfies { [x in variants]: string },
+    outline: {
+      true: "border-2 border-solid bg-white text-gray-500",
+    },
+  },
+});
 
 function Button(
-  props: Props,
-  ref: ForwardedRef<HTMLButtonElement & HTMLAnchorElement>,
+  { children, variation, className, outline = false, ...props }: Props,
+  ref: ForwardedRef<HTMLButtonElement>,
 ) {
-  const { children, variation, className, isLink } = props;
-
-  const base = `text-center w-full max-w-[175px] rounded-full p-2 font-bold ${variationMap[variation]} ${OpinionBgColorMap[variation as never]} ${className}`;
-
-  if (isLink) {
-    return (
-      <Link {...props} className={`${base} ${className}`} ref={ref}>
-        {children}
-      </Link>
-    );
-  }
-
   return (
-    <button {...(props as Button)} className={`${base} ${className}`} ref={ref}>
+    <button
+      {...props}
+      className={button({ color: variation, class: className, outline })}
+      ref={ref}
+    >
       {children}
     </button>
   );

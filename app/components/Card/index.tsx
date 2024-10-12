@@ -1,10 +1,11 @@
+import { Link } from "@remix-run/react";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
-import Avator from "../Avator";
-import Badge from "../Badge";
+import { RiChat1Line, RiMore2Fill } from "react-icons/ri";
+import { tv } from "tailwind-variants";
 import { OpinionJpMap } from "~/constants/opinion";
 import { User } from "~/types/User";
-import { Link } from "@remix-run/react";
-import { RiChat1Line, RiMore2Fill } from "react-icons/ri";
+import Avator from "../Avator";
+import Badge from "../Badge";
 
 type Props = Card & ComponentProps<"div">;
 
@@ -15,6 +16,10 @@ type Card = {
   opinionStatus: keyof typeof OpinionJpMap;
   user: User;
 };
+
+const card = tv({
+  base: "card rounded-md border border-solid border-black p-4",
+});
 
 function Card(
   {
@@ -29,11 +34,7 @@ function Card(
   ref: ForwardedRef<HTMLDivElement>,
 ) {
   return (
-    <div
-      {...props}
-      ref={ref}
-      className={`card rounded-md border border-solid border-black p-4 ${className}`}
-    >
+    <div {...props} ref={ref} className={card({ class: className })}>
       <Avator src={user.photoURL} className="card-avator" />
       <p className="card-title">{title}</p>
 

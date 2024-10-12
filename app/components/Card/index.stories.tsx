@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { createRemixStub } from "@remix-run/testing";
+import type { Meta, StoryObj } from "@storybook/react";
 import Card from ".";
 
 const meta: Meta<typeof Card> = {

@@ -1,4 +1,5 @@
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
+import { tv } from "tailwind-variants";
 
 type Props = Heading & ComponentProps<"div">;
 
@@ -6,16 +7,16 @@ type Heading = {
   children: ReactNode;
 };
 
+const heading = tv({
+  base: "flex h-6 items-center bg-slate-200 pl-4 text-sm",
+});
+
 function Heading(
   { className, children, ...props }: Props,
   ref: ForwardedRef<HTMLDivElement>,
 ) {
   return (
-    <div
-      {...props}
-      ref={ref}
-      className={`flex h-6 items-center bg-slate-200 pl-4 text-sm ${className}`}
-    >
+    <div {...props} ref={ref} className={heading({ class: className })}>
       {children}
     </div>
   );

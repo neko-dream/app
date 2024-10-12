@@ -17,7 +17,8 @@ export const Primary: Story = {
 
 export const Outline: Story = {
   args: {
-    variation: "outline",
+    variation: "agree",
+    outline: true,
     children: "hello world!!",
   },
 };
