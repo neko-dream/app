@@ -4,7 +4,7 @@ import Heading from "~/components/Heading";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
-import UploadArea from "~/components/UploadArea";
+import UploadArea from "~/components/Uploadarea";
 
 export default function Page() {
   return (

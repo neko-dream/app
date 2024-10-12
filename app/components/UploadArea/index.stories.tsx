@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Textarea from ".";
+import Uploadarea from ".";
 
-const meta: Meta<typeof Textarea> = {
-  title: "components/Textarea",
-  component: Textarea,
+const meta: Meta<typeof Uploadarea> = {
+  title: "components/Uploadarea",
+  component: Uploadarea,
 };
 
 export default meta;
