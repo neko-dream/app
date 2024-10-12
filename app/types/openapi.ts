@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/api/talksessions/{talkSessionID}/opinions/{opinionID}/votes": {
+    "/talksessions/{talkSessionID}/opinions/{opinionID}/votes": {
         parameters: {
             query?: never;
             header?: never;
@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/talksession/{talkSessionID}/opinions": {
+    "/talksession/{talkSessionID}/opinions": {
         parameters: {
             query?: never;
             header?: never;
@@ -41,7 +41,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/talksessions/{talkSessionId}/opinion": {
+    "/talksessions/{talkSessionId}/opinion": {
         parameters: {
             query?: never;
             header?: never;
@@ -58,7 +58,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/talksessions/{talkSessionID}/opinions": {
+    "/talksessions/{talkSessionID}/opinions": {
         parameters: {
             query?: never;
             header?: never;
@@ -78,7 +78,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/talksession/{talkSessionID}/opinions/{opinionID}": {
+    "/talksession/{talkSessionID}/opinions/{opinionID}": {
         parameters: {
             query?: never;
             header?: never;
@@ -95,7 +95,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/talksessions/{talkSessionId}": {
+    "/talksessions/{talkSessionId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -112,7 +112,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/talksessions": {
+    "/talksessions": {
         parameters: {
             query?: never;
             header?: never;
@@ -130,19 +130,35 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/user": {
+    "/user": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** ユーザー情報の取得 */
-        get: operations["getUserProfile"];
+        get?: never;
         /** ユーザー情報の変更 */
         put: operations["editUserProfile"];
         /** ユーザー作成 */
         post: operations["registerUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/token/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** JWTの内容を返してくれる */
+        get: operations["oauth_token_info"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -156,7 +172,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** 無題のAPI */
+        /** OpenAPIテスト用 */
         get: operations["test"];
         put?: never;
         post?: never;
@@ -231,6 +247,28 @@ export interface components {
             prefecture: string;
             /** @description 市区町村 */
             city: string;
+        };
+        tokenClaim: {
+            /** @description Audience */
+            aud: string;
+            /** @description 有効期限 */
+            exp: string;
+            /** @description 発行日時 */
+            iat: string;
+            /** @description 発行者 */
+            iss: string;
+            /** @description ユーザID */
+            sub: string;
+            /** @description JWT ID */
+            jti: string;
+            /** @description ユーザーID */
+            displayId?: string;
+            /** @description ユーザー名 */
+            displayName?: string;
+            /** @description アイコンURL */
+            iconURL?: string;
+            /** @description ユーザ登録済みか */
+            isVerify: boolean;
         };
     };
     responses: never;
@@ -549,29 +587,6 @@ export interface operations {
             };
         };
     };
-    getUserProfile: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        displayID: string;
-                        displayName: string;
-                        iconURL?: string;
-                    };
-                };
-            };
-        };
-    };
     editUserProfile: {
         parameters: {
             query?: never;
@@ -724,6 +739,54 @@ export interface operations {
                 };
                 content: {
                     "application/json": Record<string, never>;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    oauth_token_info: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Audience */
+                        aud: string;
+                        /** @description 有効期限 */
+                        exp: string;
+                        /** @description 発行日時 */
+                        iat: string;
+                        /** @description 発行者 */
+                        iss: string;
+                        /** @description ユーザID */
+                        sub: string;
+                        /** @description JWT ID */
+                        jti: string;
+                        /** @description ユーザーID */
+                        displayId?: string;
+                        /** @description ユーザー名 */
+                        displayName?: string;
+                        /** @description アイコンURL */
+                        iconURL?: string;
+                        /** @description ユーザ登録済みか */
+                        isVerify: boolean;
+                    };
                 };
             };
             500: {
