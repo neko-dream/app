@@ -1,22 +1,39 @@
-import { Link } from "@remix-run/react";
+import { Await, useLoaderData, useSearchParams } from "@remix-run/react";
+import { Suspense } from "react";
+import Heading from "~/components/Heading";
+import Session from "~/components/Session";
+import Tabs from "~/components/Tabs";
+import { loader } from "./modules/loader";
+
+export { headers } from "~/modules/header";
+export { loader };
 
 export default function Page() {
+  const { $session } = useLoaderData<typeof loader>();
+  const [params] = useSearchParams();
+  const isFinished = params.get("q") === "finished";
+
   return (
-    <div className="m-4 flex flex-col space-y-8">
-      <p>ダッシュボード的な画面</p>
-      <p>下記のリンクで各々のページに飛べます</p>
-      <Link to="/a" className="underline">
-        投票画面
-      </Link>
-      <Link to="/a/judge" className="underline">
-        賛成反対する画面
-      </Link>
-      <Link to="/a/opinion" className="underline">
-        みんなの意見の画面
-      </Link>
-      <Link to="/a/post" className="underline">
-        意見投稿する画面
-      </Link>
+    <div className="flex flex-col">
+      <Heading className="h-10">投稿されたセッション</Heading>
+      <Tabs
+        items={[
+          { label: "開催中", href: "/home" },
+          { label: "終了", href: "/home?q=finished" },
+        ]}
+        active={isFinished ? "終了" : "開催中"}
+      />
+      <div className="space-y-2 bg-gray-100 h-full pt-2">
+        <Suspense>
+          <Await resolve={$session}>
+            {({ talkSessions }) => {
+              return talkSessions.map((session, i) => (
+                <Session {...session} key={i} />
+              ));
+            }}
+          </Await>
+        </Suspense>
+      </div>
     </div>
   );
 }
