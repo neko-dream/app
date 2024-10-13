@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Label from ".";
+import Input from "../Input";
 
 const meta: Meta<typeof Label> = {
   title: "components/Label",
@@ -11,14 +12,23 @@ type Story = StoryObj<typeof meta>;
 
 export const Required: Story = {
   args: {
-    tip: "required",
-    label: "あなたの立場",
+    required: true,
+    title: "あなたの立場",
   },
 };
 
 export const Optional: Story = {
   args: {
-    tip: "optional",
-    label: "あなたの立場",
+    optional: true,
+    title: "あなたの立場",
+  },
+};
+
+export const Errors: Story = {
+  args: {
+    optional: true,
+    title: "あなたの立場",
+    children: <Input />,
+    errors: ["エラーが発生しました", "エラーが発生しました"],
   },
 };
