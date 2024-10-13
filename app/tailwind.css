@@ -2,6 +2,21 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+html {
+  background-color: #e0efff;
+}
+
+body {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  min-height: 100vh;
+  max-width: 320px;
+  flex-direction: column;
+  background-color: white;
+  padding-bottom: 64px;
+}
+
 .card {
   display: grid;
   align-items: center;
