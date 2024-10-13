@@ -1,0 +1,33 @@
+{
+  "name": "Kotohiro",
+  "short_name": "Kotohiro",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Wonder Widgets"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Wonder Widgets"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "lang": "ja"
+}

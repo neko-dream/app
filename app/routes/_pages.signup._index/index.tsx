@@ -96,7 +96,6 @@ export default function Page() {
       Object.keys(errors || {}).length !== 0
     );
   };
-  console.log(form.value);
 
   return (
     <div className="flex flex-1 flex-col items-center ">
