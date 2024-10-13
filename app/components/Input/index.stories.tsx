@@ -14,3 +14,10 @@ export const Default: Story = {
     placeholder: "意見を一言で(タイトル)",
   },
 };
+
+export const Error: Story = {
+  args: {
+    placeholder: "意見を一言で(タイトル)",
+    error: true,
+  },
+};
