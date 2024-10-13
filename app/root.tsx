@@ -9,7 +9,7 @@ import {
 import "./tailwind.css";
 
 export const links: LinksFunction = () => [
-  { rel: "manifest", href: "/manifest.json" },
+  { rel: "manifest", href: "/manifest.json", crossOrigin: "use-credentials" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
