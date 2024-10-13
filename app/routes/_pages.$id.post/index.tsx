@@ -12,24 +12,29 @@ export default function Page() {
       <Heading>あなたはどう思う？</Heading>
 
       <div className="mx-4">
-        <Label label="あなたの立場" required className="mt-6" />
-        <div className="mt-2 flex space-x-2">
-          <Badge status="agree" isSelectStyle />
-          <Badge status="pass" isSelectStyle />
-          <Badge status="disagree" isSelectStyle />
-        </div>
+        <Label title="あなたの立場" required className="mt-6">
+          <div className="mt-2 flex space-x-2">
+            <Badge status="agree" isSelectStyle />
+            <Badge status="pass" isSelectStyle />
+            <Badge status="disagree" isSelectStyle />
+          </div>
+        </Label>
 
-        <Label label="タイトル" optional className="mt-4" />
-        <Input placeholder="意見を一言で（タイトル）" className="mt-2" />
+        <Label title="タイトル" optional className="mt-4">
+          <Input placeholder="意見を一言で（タイトル）" className="mt-2" />
+        </Label>
 
-        <Label label="意見" required className="mt-4" />
-        <Textarea placeholder="あなたの意見を書こう！" className="mt-2" />
+        <Label title="意見" required className="mt-4">
+          <Textarea placeholder="あなたの意見を書こう！" className="mt-2" />
+        </Label>
 
-        <Label label="参考画像" optional className="mt-4" />
-        <UploadArea onUpload={console.log} className="mt-2" />
+        <Label title="参考画像" optional className="mt-4">
+          <UploadArea className="mt-2" />
+        </Label>
 
-        <Label label="参考文献" optional className="mt-4" />
-        <Input placeholder="リンクなど" className="mt-2" />
+        <Label title="参考文献" optional className="mt-4">
+          <Input placeholder="リンクなど" className="mt-2" />
+        </Label>
       </div>
 
       <div className="mt-8 flex justify-center space-x-8">
