@@ -1,14 +1,12 @@
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { tv } from "tailwind-variants";
-
-type variants = "normal" | "error";
+import { NON_SELECT_VALUE } from "./constants";
 
 type Props = ComponentProps<"select"> & {
-  children: ReactNode;
-  placeholader?: string;
-  defaultValue?: string;
-  variant?: variants;
   options: { value: string; title: string }[];
+  placeholader?: string;
+  error?: boolean;
+  useNonSelect?: boolean;
 };
 
 const select = tv({
@@ -17,36 +15,39 @@ const select = tv({
     placeholder: "hidden text-gray-400",
   },
   variants: {
-    variant: {
-      error: "",
-      normal: "",
+    error: {
+      true: "border-red-500",
     },
   },
 });
 
 function Select(
-  { variant, className, placeholader, options, defaultValue, ...props }: Props,
+  { error, className, placeholader, options, useNonSelect, ...props }: Props,
   ref: ForwardedRef<HTMLSelectElement>,
 ) {
-  const { placeholder, base } = select({ variant, class: className });
+  const { placeholder, base } = select({ error, class: className });
 
   return (
     <select
       {...props}
-      id="select"
       ref={ref}
       className={base()}
-      defaultValue={defaultValue || "0"}
       onChange={(e) => {
+        props.onChange && props.onChange(e);
         e.currentTarget.style.color = "black";
       }}
     >
-      <option disabled value="0" className={placeholder()}>
+      <option value={NON_SELECT_VALUE} className={placeholder()}>
         {placeholader ? placeholader : "選択する"}
       </option>
-      {options.map(({ value, title }) => {
-        return <option value={value}>{title}</option>;
+      {options.map(({ value, title }, i) => {
+        return (
+          <option key={i} value={value}>
+            {title}
+          </option>
+        );
       })}
+      {useNonSelect && <option value={NON_SELECT_VALUE}>---</option>}
     </select>
   );
 }

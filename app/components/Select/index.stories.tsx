@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import adress from "~/assets/data/adress.json";
+import prefectures from "~/assets/data/adress/prefectures.json";
 import birthday from "~/assets/data/birthday.json";
-import business from "~/assets/data/business.json";
 import gender from "~/assets/data/gender.json";
+import occupation from "~/assets/data/occupation.json";
 import Select from ".";
 
 const meta: Meta<typeof Select> = {
@@ -14,7 +14,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    variant: "normal",
+    error: true,
     options: [...Array(30)].map((_, i) => ({
       value: `${i}`,
       title: `${i}個目の北海道!!`,
@@ -22,42 +22,26 @@ export const Default: Story = {
   },
 };
 
-export const Adress: Story = {
+export const Prefectures: Story = {
   args: {
-    variant: "normal",
-    options: adress.map((v) => ({
-      value: v,
-      title: v,
-    })),
+    options: prefectures.map((v) => ({ value: `${v}`, title: `${v}` })),
   },
 };
 
 export const Birthday: Story = {
   args: {
-    variant: "normal",
-    options: birthday.map((v) => ({
-      value: `${v}`,
-      title: `${v}`,
-    })),
+    options: birthday.map((v) => ({ value: `${v}`, title: `${v}` })),
   },
 };
 
 export const Gender: Story = {
   args: {
-    variant: "normal",
-    options: gender.map((v) => ({
-      value: `${v}`,
-      title: `${v}`,
-    })),
+    options: gender.map((v) => ({ value: v, title: v })),
   },
 };
 
-export const Business: Story = {
+export const Occupation: Story = {
   args: {
-    variant: "normal",
-    options: business.map((v) => ({
-      value: `${v}`,
-      title: `${v}`,
-    })),
+    options: occupation.map((v) => ({ value: v, title: v })),
   },
 };
