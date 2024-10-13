@@ -22,7 +22,7 @@ export default function Route() {
   const [isSearchMenuOpen, setIsSearchMenuOpen] = useState(false);
 
   const handleOpenSearchMenu = () => {
-    setIsSearchMenuOpen(true);
+    setIsSearchMenuOpen((prev) => !prev);
   };
 
   return (
