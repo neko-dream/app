@@ -39,5 +39,13 @@ export const signupFormSchema = v.object({
   gender: v.optional(genderSchema),
   occupation: v.optional(occupationSchema),
   householdSize: v.optional(v.string()),
-  yearOfBirth: v.optional(v.number()),
+  // MEMO: select 要素の defaultValue が "---" で年月日だけ数字なので変換してる。
+  yearOfBirth: v.optional(
+    v.pipe(
+      v.string(),
+      v.transform((i) => {
+        return i === "---" ? null : Number(i);
+      }),
+    ),
+  ),
 });
