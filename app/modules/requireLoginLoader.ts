@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, defer } from "@remix-run/node";
+import { LoaderFunctionArgs, defer } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
 import { components } from "~/libs/api/openapi";
 
