@@ -12,10 +12,11 @@ export const loader: LoaderFunction = ({ params }) => {
   try {
     switch (params?.id || "") {
       case "signup":
-        const signupURL = new URL("auth/google/login", API_BASE_URL);
-        signupURL.searchParams.append("redirect_url", BASE_URL);
+        const loginURL = new URL("auth/google/login", API_BASE_URL);
+        const signupURL = new URL("signup", BASE_URL);
+        loginURL.searchParams.append("redirect_url", signupURL.toString());
 
-        return redirect(signupURL.toString());
+        return redirect(loginURL.toString());
       default:
         return redirect("/");
     }
