@@ -10,7 +10,7 @@ type Props = ComponentProps<"button"> & {
 };
 
 const button = tv({
-  base: "text-center w-full max-w-[175px] rounded-full p-2 font-bold",
+  base: "text-center w-full max-w-[175px] rounded-full p-2 font-bold disabled:opacity-30",
   variants: {
     color: {
       primary: "bg-green-500 text-white border-green-500",
