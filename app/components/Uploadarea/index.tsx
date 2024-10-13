@@ -1,32 +1,30 @@
-import { useRef } from "react";
+import { ComponentProps } from "react";
 import { RiImage2Line } from "react-icons/ri";
 import { tv } from "tailwind-variants";
 
-type Props = {
-  onUpload: (fileList: FileList | null) => void;
+type Props = ComponentProps<"button"> & {
   className?: string;
+  preview?: string;
 };
 
-const uploadArea = tv({
-  base: "flex h-20 w-24 items-center justify-center rounded-md border border-gray-300",
+const uploadarea = tv({
+  base: "h-[100px] w-[100px]",
 });
 
-export default function UploadArea({ onUpload, className }: Props) {
-  const ref = useRef<HTMLInputElement>(null);
-
-  const handleClick = () => {
-    ref.current?.click();
-  };
-
+export default function Uploadarea({ className, preview, ...props }: Props) {
   return (
-    <button onClick={handleClick} className={uploadArea({ class: className })}>
-      <RiImage2Line className="text-gray-500" size={20} />
-      <input
-        type="file"
-        hidden
-        ref={ref}
-        onChange={(e) => onUpload(e.currentTarget.files)}
-      />
+    <button {...props} className={uploadarea({ className })} type="button">
+      {preview ? (
+        <img
+          src={preview}
+          alt=""
+          className="border border-gray-300 rounded-md"
+        />
+      ) : (
+        <div className="flex items-center justify-center border border-gray-300 rounded-md w-full h-full">
+          <RiImage2Line className="text-gray-500" size={20} />
+        </div>
+      )}
     </button>
   );
 }

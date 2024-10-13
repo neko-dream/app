@@ -10,7 +10,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  args: {},
+};
+
+export const Preview: Story = {
   args: {
-    onUpload: console.log,
+    preview: "https://placehold.jp/300x300.png",
   },
 };
