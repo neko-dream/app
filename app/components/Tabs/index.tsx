@@ -15,7 +15,7 @@ const tabs = tv({
 });
 
 const link = tv({
-  base: "border-b-2 border-white w-full h-full flex items-center justify-center",
+  base: "border-b-2 border-white w-full h-full flex text-xs items-center justify-center",
   variants: {
     active: { true: "border-b-2 border-blue-500" },
   },
@@ -26,7 +26,7 @@ function Tabs(
   ref: ForwardedRef<HTMLParagraphElement>,
 ) {
   return (
-    <div {...props} ref={ref} className={tabs()}>
+    <div {...props} ref={ref} className={tabs({ className })}>
       {items.map(({ href, label }, i) => {
         return (
           <Link

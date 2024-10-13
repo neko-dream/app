@@ -9,7 +9,7 @@ type Avator = {
 };
 
 const avator = tv({
-  base: "h-10 w-10 rounded-full bg-slate-500",
+  base: "block h-10 w-10 rounded-full bg-slate-500",
 });
 
 function Avator(
@@ -17,9 +17,9 @@ function Avator(
   ref: ForwardedRef<HTMLSourceElement>,
 ) {
   return (
-    <picture ref={ref} {...props}>
-      <source srcSet={props.src} media="(orientation: portrait)" />
-      <img src={defaultImage} alt="" className={avator({ className })} />
+    <picture ref={ref} {...props} className={avator({ className })}>
+      <source srcSet={props.src} />
+      <img src={defaultImage} alt="" className="w-full rounded-full" />
     </picture>
   );
 }
