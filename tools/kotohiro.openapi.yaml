@@ -1,0 +1,179 @@
+openapi: 3.0.1
+info:
+  title: kotohiro
+  description: ''
+  version: 1.0.0
+tags:
+  - name: user
+paths:
+  /user:
+    post:
+      summary: ユーザー作成
+      deprecated: false
+      description: ''
+      operationId: registerUser
+      tags:
+        - user
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                  description: ユーザー名。日本語なども設定可能。
+                  example: ''
+                displayID:
+                  type: string
+                  description: ユーザーID。プロフィールのパスなどで使用される。DBのIDとは別。
+                  example: ''
+                icon:
+                  format: binary
+                  type: string
+                  description: ユーザーアイコン
+                  example: ''
+                yearOfBirth:
+                  type: integer
+                  default: 0
+                  description: 生まれ年
+                  example: 0
+                  nullable: true
+                gender:
+                  type: string
+                  enum:
+                    - 男性
+                    - 女性
+                    - その他
+                    - 回答しない
+                  default: preferNotToSay
+                  description: 性別
+                  example: ''
+                  nullable: true
+                prefectures:
+                  description: 都道府県
+                  example: ''
+                  type: string
+                municipality:
+                  type: string
+                  description: 市区町村
+                  example: ''
+                  nullable: true
+                occupation:
+                  type: string
+                  enum:
+                    - 正社員
+                    - 契約社員
+                    - 公務員
+                    - 自営業
+                    - 会社役員
+                    - パート・アルバイト
+                    - 家事従事者
+                    - 学生
+                    - 無職
+                    - その他
+                    - 回答しない
+                  default: 無回答
+                  description: ユーザーの職業
+                  example: ''
+                  nullable: true
+                householdSize:
+                  type: integer
+                  minimum: 0
+                  description: 世帯人数
+                  example: 0
+                  nullable: true
+              required:
+                - displayName
+                - displayID
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  displayID:
+                    type: string
+                    pattern: ^[A-Za-z0-9]$
+                    examples:
+                      - userid
+                    minLength: 3
+                    maxLength: 25
+                  displayName:
+                    type: string
+                  iconURL:
+                    type: string
+                required:
+                  - displayID
+                  - displayName
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: user
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        displayID:
+          type: string
+          pattern: ^[A-Za-z0-9]$
+          examples:
+            - userid
+          minLength: 3
+          maxLength: 25
+        displayName:
+          type: string
+        iconURL:
+          type: string
+      required:
+        - displayID
+        - displayName
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+    validationErrorItem:
+      type: object
+      properties:
+        field:
+          type: string
+          faker: id
+          description: バリデーションエラーのフィールド
+        message:
+          type: string
+          description: バリデーションエラーメッセージ
+      required:
+        - field
+        - message
+  securitySchemes:
+    apikey-header-SessionId:
+      type: apiKey
+      in: header
+      name: SessionId
+servers: []
