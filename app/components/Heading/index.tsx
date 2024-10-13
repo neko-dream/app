@@ -8,7 +8,7 @@ type Heading = {
 };
 
 const heading = tv({
-  base: "flex h-6 items-center bg-slate-200 pl-4 text-sm",
+  base: "flex h-6 items-center bg-gray-100 pl-4 text-sm",
 });
 
 function Heading(
