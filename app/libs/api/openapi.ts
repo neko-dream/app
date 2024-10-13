@@ -137,7 +137,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** ユーザー情報の取得 */
+        get: operations["get_user_info"];
         /** ユーザー情報の変更 */
         put: operations["editUserProfile"];
         /** ユーザー作成 */
@@ -195,8 +196,6 @@ export interface components {
             owner: components["schemas"]["user"];
             /** @description 作成日時 */
             createdAt: string;
-            /** @description 終了日時 */
-            finishedAt?: string;
             /** @description 終了予定日時 */
             scheduledEndTime: string;
             /** @description 位置情報 */
@@ -211,12 +210,11 @@ export interface components {
         error: {
             code: string;
             message: string;
-            data: string;
         };
         user: {
             displayID: string;
             displayName: string;
-            iconURL?: string;
+            iconURL?: string | null;
         };
         opinion: {
             /** @description 意見ID */
@@ -275,6 +273,32 @@ export interface components {
             offset: number;
             limit: number;
         };
+        userDemographics: {
+            /** @description 誕生年 */
+            yearOfBirth?: number | null;
+            /**
+             * 職業
+             * @description 職業
+             */
+            occupation: string;
+            /**
+             * 性別
+             * @description 性別
+             */
+            gender: string;
+            /**
+             * 市区町村
+             * @description 市区町村
+             */
+            municipality?: string | null;
+            /**
+             * 世帯人数
+             * @description 世帯人数
+             */
+            householdSize?: number | null;
+            /** @description 都道府県 */
+            prefecture?: string | null;
+        };
     };
     responses: never;
     parameters: never;
@@ -316,12 +340,26 @@ export interface operations {
                     "application/json": components["schemas"]["opinion"][];
                 };
             };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
+                };
+            };
             500: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -346,8 +384,19 @@ export interface operations {
                         opinion: components["schemas"]["opinion"];
                         /** @description 作成ユーザー */
                         user: components["schemas"]["user"];
-                        commentCount: string;
+                        replyCount: number;
                     }[];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
             500: {
@@ -355,7 +404,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -379,12 +431,26 @@ export interface operations {
                     "application/json": Record<string, never>;
                 };
             };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
+                };
+            };
             500: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -426,12 +492,26 @@ export interface operations {
                     "application/json": Record<string, never>;
                 };
             };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
+                };
+            };
             500: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -460,13 +540,24 @@ export interface operations {
                             user: components["schemas"]["user"];
                             opinion: components["schemas"]["opinion"];
                         };
+                        myVoteType?: components["schemas"]["voteType"] | null;
                         opinions: {
                             opinion: components["schemas"]["opinion"];
                             /** @description 作成ユーザー */
                             user: components["schemas"]["user"];
-                            /** @description 意見投稿主の意見。ルート意見の場合はここには何も入らない */
-                            myItentionStatus: components["schemas"]["voteType"];
+                            myVoteType?: components["schemas"]["voteType"] | null;
                         }[];
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
                     };
                 };
             };
@@ -475,7 +566,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -497,6 +591,17 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["talkSession"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -537,12 +642,26 @@ export interface operations {
                     };
                 };
             };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
+                };
+            };
             500: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -592,13 +711,53 @@ export interface operations {
                         owner: components["schemas"]["user"];
                         /** @description 作成日時 */
                         createdAt: string;
-                        /** @description 終了日時 */
-                        finishedAt?: string;
                         /** @description 終了予定日時 */
                         scheduledEndTime: string;
                         /** @description 位置情報 */
                         location?: components["schemas"]["location"] | null;
                     };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
+                };
+            };
+        };
+    };
+    get_user_info: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description 作成ユーザー */
+                        user: components["schemas"]["user"];
+                        demographics: components["schemas"]["userDemographics"];
+                    };
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
                 };
             };
         };
@@ -645,12 +804,17 @@ export interface operations {
                      * @example
                      * @enum {string|null}
                      */
-                    occupation?: "正社員" | "契約社員" | "公務員" | "自営業" | "会社役員" | "パート・アルバイト" | "家事従事者" | "学生" | "無職" | "その他" | "無回答" | null;
+                    occupation?: "正社員" | "契約社員" | "公務員" | "自営業" | "会社役員" | "パート・アルバイト" | "家事従事者" | "学生" | "無職" | "その他" | "回答しない" | null;
                     /**
                      * @description 世帯人数
                      * @example 0
                      */
                     householdSize?: number | null;
+                    /**
+                     * @description 都道府県
+                     * @example
+                     */
+                    prefectures?: string | null;
                 };
             };
         };
@@ -663,7 +827,18 @@ export interface operations {
                     "application/json": {
                         displayID: string;
                         displayName: string;
-                        iconURL?: string;
+                        iconURL?: string | null;
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
                     };
                 };
             };
@@ -672,7 +847,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -732,7 +910,7 @@ export interface operations {
                      * @example
                      * @enum {string|null}
                      */
-                    occupation?: "正社員" | "契約社員" | "公務員" | "自営業" | "会社役員" | "パート・アルバイト" | "家事従事者" | "学生" | "無職" | "その他" | "無回答";
+                    occupation?: "正社員" | "契約社員" | "公務員" | "自営業" | "会社役員" | "パート・アルバイト" | "家事従事者" | "学生" | "無職" | "その他" | "回答しない";
                     /**
                      * @description 世帯人数
                      * @example 0
@@ -750,7 +928,7 @@ export interface operations {
                     "application/json": {
                         displayID: string;
                         displayName: string;
-                        iconURL?: string;
+                        iconURL?: string | null;
                     };
                 };
             };
@@ -759,7 +937,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
             500: {
@@ -767,7 +948,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -810,12 +994,26 @@ export interface operations {
                     };
                 };
             };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
+                };
+            };
             500: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -844,6 +1042,14 @@ export interface operations {
                         /** Format: url */
                         optNilUrl?: string | null;
                     };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
                 };
             };
             500: {

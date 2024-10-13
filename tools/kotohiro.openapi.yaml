@@ -4,9 +4,896 @@ info:
   description: ''
   version: 1.0.0
 tags:
+  - name: vote
+  - name: opinion
+  - name: talk_session
   - name: user
+  - name: auth
 paths:
+  /talksessions/{talkSessionID}/opinions/{opinionID}/votes:
+    post:
+      summary: 意思表明API
+      deprecated: false
+      description: ''
+      operationId: vote
+      tags:
+        - vote
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: セッションのID
+          required: true
+          schema:
+            type: string
+        - name: opinionID
+          in: path
+          description: 意見のID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                voteStatus:
+                  type: string
+                  enum:
+                    - agree
+                    - disagree
+                    - pass
+                  example: ''
+                  nullable: true
+              required:
+                - voteStatus
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items: &ref_0
+                  $ref: '#/components/schemas/opinion'
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: Vote
+  /talksession/{talkSessionID}/swipe_opinions:
+    get:
+      summary: スワイプ用のエンドポイント
+      deprecated: false
+      description: セッションの中からまだ投票していない意見をランダムに取得する
+      operationId: swipe_opinions
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    opinion: *ref_0
+                    user: &ref_1
+                      $ref: '#/components/schemas/user'
+                      description: 作成ユーザー
+                    replyCount:
+                      type: integer
+                  required:
+                    - opinion
+                    - user
+                    - replyCount
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionId}/opinion:
+    get:
+      summary: 🚧 分析に関する意見
+      deprecated: false
+      description: ''
+      operationId: getTopOpinions
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                required:
+                  - 01J93WTW4J3ZBAAVVZV8PSWZ6R
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionID}/opinions:
+    post:
+      summary: セッションに対して意見投稿
+      deprecated: false
+      description: parentOpinionIDがなければルートの意見として投稿される
+      operationId: postOpinionPost
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                parentOpinionID:
+                  type: string
+                  example: ''
+                  nullable: true
+                title:
+                  type: string
+                  example: ''
+                  nullable: true
+                opinionContent:
+                  type: string
+                  maxLength: 140
+                  example: ''
+                referenceURL:
+                  type: string
+                  example: ''
+                  nullable: true
+                picture:
+                  type: string
+                  format: binary
+                  example: ''
+              required:
+                - opinionContent
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionID}/opinions/{opinionID}/replies:
+    get:
+      summary: 意見に対するコメント一覧を返す
+      deprecated: false
+      description: ''
+      operationId: opinionComments
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: opinionID
+          in: path
+          description: 親意見のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rootOpinion:
+                    type: object
+                    properties:
+                      user: *ref_1
+                      opinion: *ref_0
+                    required:
+                      - user
+                      - opinion
+                  myVoteType:
+                    anyOf:
+                      - &ref_2
+                        $ref: '#/components/schemas/voteType'
+                        description: 意見投稿主の意見。ルート意見の場合はここには何も入らない
+                      - type: 'null'
+                  opinions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        opinion: *ref_0
+                        user: *ref_1
+                        myVoteType:
+                          anyOf:
+                            - *ref_2
+                            - type: 'null'
+                      required:
+                        - opinion
+                        - user
+                required:
+                  - rootOpinion
+                  - opinions
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionId}:
+    get:
+      summary: 🚧 トークセッションの詳細
+      deprecated: false
+      description: ''
+      operationId: getTalkSessionDetail
+      tags:
+        - talk_session
+      parameters:
+        - name: talkSessionId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema: &ref_3
+                $ref: '#/components/schemas/talkSession'
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: TalkSession
+  /talksessions:
+    get:
+      summary: トークセッションコレクション
+      deprecated: false
+      description: ''
+      operationId: getTalkSessionList
+      tags:
+        - talk_session
+      parameters:
+        - name: limit
+          in: query
+          description: 1ページあたりの要素数
+          required: false
+          example: 10
+          schema:
+            type: integer
+            nullable: true
+        - name: offset
+          in: query
+          description: どの要素から始めるか
+          required: false
+          example: 0
+          schema:
+            type: integer
+            nullable: true
+        - name: theme
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+            nullable: true
+        - name: status
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+            enum:
+              - open
+              - finished
+            default: open
+            x-apidog-enum:
+              - name: ''
+                value: open
+                description: 開催中
+              - name: ''
+                value: finished
+                description: 終了済み
+            nullable: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  talkSessions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        talkSession: *ref_3
+                        opinionCount:
+                          type: integer
+                      required:
+                        - talkSession
+                        - opinionCount
+                  pagination:
+                    $ref: '#/components/schemas/offsetPagination'
+                required:
+                  - talkSessions
+                  - pagination
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: TalkSession
+    post:
+      summary: トークセッション作成
+      deprecated: false
+      description: ''
+      operationId: createTalkSession
+      tags:
+        - talk_session
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+                  maxLength: 50
+                  minLength: 5
+                  example: オブジェクト指向は悪
+                scheduledEndTime:
+                  type: string
+                  format: date-time
+                  example: '2024-12-17T03:24:00Z'
+                latitude:
+                  type: number
+                  description: 緯度
+                  example: 0
+                  nullable: true
+                longitude:
+                  type: number
+                  description: 経度
+                  example: 0
+                  nullable: true
+              required:
+                - theme
+                - scheduledEndTime
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: トークセッションID
+                  theme:
+                    type: string
+                    description: テーマ
+                  owner: *ref_1
+                  createdAt:
+                    type: string
+                    description: 作成日時
+                  scheduledEndTime:
+                    type: string
+                    description: 終了予定日時
+                  location:
+                    anyOf:
+                      - &ref_4
+                        $ref: '#/components/schemas/location'
+                      - type: 'null'
+                    description: 位置情報
+                required:
+                  - id
+                  - theme
+                  - owner
+                  - createdAt
+                  - scheduledEndTime
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: TalkSession
   /user:
+    put:
+      summary: ユーザー情報の変更
+      deprecated: false
+      description: ''
+      operationId: editUserProfile
+      tags:
+        - user
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                  description: ユーザー名
+                  example: ''
+                  nullable: true
+                icon:
+                  type: string
+                  format: binary
+                  description: ユーザーアイコン
+                  example: ''
+                yearOfBirth:
+                  type: integer
+                  description: 生まれ年
+                  example: 0
+                  nullable: true
+                gender:
+                  type: string
+                  enum:
+                    - 男性
+                    - 女性
+                    - その他
+                    - 回答しない
+                  description: 性別
+                  example: ''
+                  nullable: true
+                municipality:
+                  type: string
+                  description: 市区町村
+                  example: ''
+                  nullable: true
+                occupation:
+                  type: string
+                  enum:
+                    - 正社員
+                    - 契約社員
+                    - 公務員
+                    - 自営業
+                    - 会社役員
+                    - パート・アルバイト
+                    - 家事従事者
+                    - 学生
+                    - 無職
+                    - その他
+                    - 回答しない
+                  description: 職業
+                  example: ''
+                  nullable: true
+                householdSize:
+                  type: integer
+                  description: 世帯人数
+                  example: 0
+                  nullable: true
+                prefectures:
+                  type: string
+                  description: 都道府県
+                  example: ''
+                  nullable: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  displayID:
+                    type: string
+                    pattern: ^[A-Za-z0-9]$
+                    examples:
+                      - userid
+                    minLength: 3
+                    maxLength: 25
+                  displayName:
+                    type: string
+                  iconURL:
+                    type: string
+                    nullable: true
+                required:
+                  - displayID
+                  - displayName
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: user
+    get:
+      summary: ユーザー情報の取得
+      deprecated: false
+      description: ''
+      operationId: get_user_info
+      tags:
+        - user
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user: *ref_1
+                  demographics:
+                    $ref: '#/components/schemas/userDemographics'
+                required:
+                  - user
+                  - demographics
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: User
     post:
       summary: ユーザー作成
       deprecated: false
@@ -106,6 +993,7 @@ paths:
                     type: string
                   iconURL:
                     type: string
+                    nullable: true
                 required:
                   - displayID
                   - displayName
@@ -116,7 +1004,194 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: user
+  /auth/token/info:
+    get:
+      summary: JWTの内容を返してくれる
+      deprecated: false
+      description: ''
+      operationId: oauth_token_info
+      tags:
+        - auth
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  aud:
+                    type: string
+                    description: Audience
+                  exp:
+                    type: string
+                    description: 有効期限
+                  iat:
+                    type: string
+                    description: 発行日時
+                  iss:
+                    type: string
+                    description: 発行者
+                  sub:
+                    type: string
+                    description: ユーザID
+                  jti:
+                    type: string
+                    description: JWT ID
+                  displayId:
+                    type: string
+                    description: ユーザーID
+                  displayName:
+                    type: string
+                    description: ユーザー名
+                  iconURL:
+                    type: string
+                    description: アイコンURL
+                  isVerify:
+                    type: boolean
+                    description: ユーザ登録済みか
+                required:
+                  - aud
+                  - exp
+                  - iat
+                  - iss
+                  - sub
+                  - jti
+                  - isVerify
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: Auth
+  /test:
+    get:
+      summary: OpenAPIテスト用
+      deprecated: false
+      description: ''
+      operationId: test
+      tags:
+        - user
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  optInt:
+                    type: integer
+                    nullable: true
+                  optNilInt:
+                    type: integer
+                  optNilBool:
+                    type: boolean
+                    nullable: true
+                  optBool:
+                    type: boolean
+                  optUrl:
+                    type: string
+                    format: uri
+                  optNilUrl:
+                    type: string
+                    format: url
+                    nullable: true
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
                 properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
           headers: {}
         '500':
           description: ''
@@ -125,12 +1200,67 @@ paths:
               schema:
                 type: object
                 properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
           headers: {}
-      security:
-        - apikey-header-SessionId: []
-      x-ogen-operation-group: user
+      security: []
+      x-ogen-operation-group: test
 components:
   schemas:
+    talkSession:
+      type: object
+      properties:
+        id:
+          type: string
+          description: トークセッションID
+        theme:
+          type: string
+          description: テーマ
+        owner: *ref_1
+        createdAt:
+          type: string
+          description: 作成日時
+        scheduledEndTime:
+          type: string
+          description: 終了予定日時
+        location:
+          anyOf:
+            - *ref_4
+            - type: 'null'
+          description: 位置情報
+      required:
+        - id
+        - theme
+        - owner
+        - createdAt
+        - scheduledEndTime
+    validationErrorItem:
+      type: object
+      properties:
+        field:
+          type: string
+          faker: id
+          description: バリデーションエラーのフィールド
+        message:
+          type: string
+          description: バリデーションエラーメッセージ
+      required:
+        - field
+        - message
+    error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
     user:
       type: object
       properties:
@@ -145,32 +1275,152 @@ components:
           type: string
         iconURL:
           type: string
+          nullable: true
       required:
         - displayID
         - displayName
-    error:
+    opinion:
       type: object
       properties:
-        code:
+        id:
           type: string
-        message:
+          faker: '1'
+          description: 意見ID
+        title:
           type: string
+        content:
+          type: string
+          description: 意見のテキスト
+          minLength: 1
+          maxLength: 140
+        parentID:
+          type: string
+          description: 親の意見ID。ルートならば無し
+        voteType: *ref_2
+        pictureURL:
+          type: string
+          description: 画像が返る場合もある
+        referenceURL:
+          type: string
+          description: 参考文献URL
       required:
-        - code
-        - message
-    validationErrorItem:
+        - content
+        - id
+    voteType:
+      type: string
+      description: 意見の3種のステータス
+      enum:
+        - agree
+        - disagree
+        - pass
+    location:
       type: object
       properties:
-        field:
+        latitude:
+          type: number
+          description: 緯度
+        longitude:
+          type: number
+          description: 経度
+        prefecture:
           type: string
-          faker: id
-          description: バリデーションエラーのフィールド
-        message:
+          description: 都道府県
+        city:
           type: string
-          description: バリデーションエラーメッセージ
+          description: 市区町村
       required:
-        - field
-        - message
+        - latitude
+        - longitude
+        - prefecture
+        - city
+    tokenClaim:
+      type: object
+      properties:
+        aud:
+          type: string
+          description: Audience
+        exp:
+          type: string
+          description: 有効期限
+        iat:
+          type: string
+          description: 発行日時
+        iss:
+          type: string
+          description: 発行者
+        sub:
+          type: string
+          description: ユーザID
+        jti:
+          type: string
+          description: JWT ID
+        displayId:
+          type: string
+          description: ユーザーID
+        displayName:
+          type: string
+          description: ユーザー名
+        iconURL:
+          type: string
+          description: アイコンURL
+        isVerify:
+          type: boolean
+          description: ユーザ登録済みか
+      required:
+        - aud
+        - exp
+        - iat
+        - iss
+        - sub
+        - jti
+        - isVerify
+    offsetPagination:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+      required:
+        - totalCount
+        - offset
+        - limit
+    userDemographics:
+      type: object
+      properties:
+        yearOfBirth:
+          type: integer
+          description: 誕生年
+          nullable: true
+        occupation:
+          type: string
+          title: 職業
+          description: 職業
+        gender:
+          type: string
+          title: 性別
+          description: 性別
+        municipality:
+          type: string
+          title: 市区町村
+          description: 市区町村
+          nullable: true
+        householdSize:
+          type: integer
+          minimum: 1
+          maximum: 5
+          title: 世帯人数
+          description: 世帯人数
+          nullable: true
+        prefecture:
+          type: string
+          description: 都道府県
+          nullable: true
+      required:
+        - occupation
+        - gender
   securitySchemes:
     apikey-header-SessionId:
       type: apiKey
