@@ -5,7 +5,7 @@ import defaultImage from "~/assets/default/avator-1.png";
 type Props = Avator & ComponentProps<"div">;
 
 type Avator = {
-  src: string;
+  src?: string;
 };
 
 const avator = tv({
