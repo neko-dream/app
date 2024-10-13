@@ -5,7 +5,7 @@ import defaultImage from "~/assets/default/avator-1.png";
 type Props = Avator & ComponentProps<"div">;
 
 type Avator = {
-  src?: string;
+  src?: string | null;
 };
 
 const avator = tv({
@@ -18,7 +18,7 @@ function Avator(
 ) {
   return (
     <picture ref={ref} {...props} className={avator({ className })}>
-      <source srcSet={props.src} />
+      <source srcSet={props.src || ""} />
       <img src={defaultImage} alt="" className="w-full rounded-full" />
     </picture>
   );

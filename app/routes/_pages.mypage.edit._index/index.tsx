@@ -40,8 +40,8 @@ export default function Page() {
 
   const [form, fields] = useForm({
     defaultValue: {
-      ...user.demographics,
-      ...user.user,
+      ...user,
+      icon: null,
     },
     onSubmit: async (e) => {
       e.preventDefault();
@@ -107,7 +107,6 @@ export default function Page() {
   const handleUploadButtonClick = () => {
     inputFileRef.current?.click();
   };
-  console.log(preview);
 
   return (
     <div className="flex flex-1 flex-col items-center ">
