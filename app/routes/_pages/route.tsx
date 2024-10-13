@@ -27,11 +27,7 @@ export default function Route() {
           <Suspense>
             <Await resolve={$user}>
               {(user) => {
-                if (user?.isVerify) {
-                  return (
-                    <Avator src={user?.iconURL || ""} className="h-8 w-8" />
-                  );
-                }
+                return <Avator src={user?.iconURL || ""} className="h-8 w-8" />;
               }}
             </Await>
           </Suspense>
