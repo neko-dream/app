@@ -6,6 +6,6 @@
  */
 export const deleteDashValues = (obj?: object) => {
   return Object.fromEntries(
-    Object.entries(obj || {}).filter(([_, v]) => v !== "---"),
+    Object.entries(obj || {}).filter(([, v]) => v !== "---"),
   );
 };

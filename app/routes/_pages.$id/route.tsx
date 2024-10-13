@@ -1,5 +1,9 @@
 import { Outlet } from "@remix-run/react";
 import Avator from "~/components/Avator";
+import { loader } from "./modules/loader";
+
+export { ErrorBoundary } from "./modules/ErrorBoundary";
+export { loader };
 
 export default function Route() {
   return (

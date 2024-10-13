@@ -14,7 +14,8 @@
         "esbenp.prettier-vscode",
         "be5invis.toml",
         "bradlc.vscode-tailwindcss",
-        "github.vscode-github-actions"
+        "github.vscode-github-actions",
+        "dbaeumer.vscode-eslint"
       ],
       "settings": {
         "editor.formatOnSave": true,

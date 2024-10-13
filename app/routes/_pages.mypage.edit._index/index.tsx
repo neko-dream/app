@@ -6,7 +6,8 @@ import {
 } from "@conform-to/react";
 import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { parseWithValibot } from "conform-to-valibot";
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useControl } from "node_modules/@conform-to/react/integrations";
+import { ChangeEvent, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import CameraIcon from "~/assets/camera.svg";
 import municipality from "~/assets/data/adress/municipality.json";
@@ -74,14 +75,7 @@ export default function Page() {
 
   const [preview, setPreview] = useState<string>();
   const inputFileRef = useRef<HTMLInputElement>(null);
-
-  // 都道府県が変更されたら市町村の選択肢を初期化
-  useEffect(() => {
-    form.update({
-      name: fields.municipality.name,
-      value: NON_SELECT_VALUE,
-    });
-  }, [fields.prefectures.value]);
+  const prefecturesControl = useControl(fields.prefectures);
 
   // 都道府県が選択されたら市町村の選択肢を変更
   const municipalityOptions = useMemo(() => {
@@ -160,22 +154,29 @@ export default function Page() {
         <Label title="都道府県" optional errors={fields.prefectures.errors}>
           <Select
             {...getSelectProps(fields.prefectures)}
+            onChange={(e) => {
+              // 同じ都道府県が選択されたら何もしない
+              if (prefecturesControl.value === e.currentTarget.value) {
+                return;
+              }
+              form.update({
+                name: fields.city.name,
+                value: NON_SELECT_VALUE,
+              });
+              prefecturesControl.change(e.currentTarget.value);
+            }}
             error={isFieldsError(fields.prefectures.errors)}
             options={prefectures.map((v) => ({ value: v, title: v }))}
           />
         </Label>
 
-        <Label title="市町村" optional errors={fields.municipality.errors}>
+        <Label title="市町村" optional errors={fields.city.errors}>
           <Select
-            {...getSelectProps(fields.municipality)}
-            // FIXME: getSelectPropsで余分なkeyを渡しているためエラーが出るため上書き
-            key={""}
+            {...getSelectProps(fields.city)}
             disabled={fields.prefectures.value === NON_SELECT_VALUE}
-            error={isFieldsError(fields.municipality.errors)}
+            error={isFieldsError(fields.city.errors)}
             placeholader={
-              fields.prefectures.value === NON_SELECT_VALUE
-                ? "都道府県を選択してください"
-                : "選択する"
+              fields.city.value ? "都道府県を選択してください" : "選択する"
             }
             options={municipalityOptions}
           />

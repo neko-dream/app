@@ -21,7 +21,7 @@ function Tip(
   ref: ForwardedRef<HTMLParagraphElement>,
 ) {
   return (
-    <p {...props} ref={ref} className={tip({ optional, required })}>
+    <p {...props} ref={ref} className={tip({ className, optional, required })}>
       {optional ? "任意" : "必須"}
     </p>
   );

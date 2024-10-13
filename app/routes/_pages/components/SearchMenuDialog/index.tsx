@@ -40,7 +40,7 @@ export const SearchMenuDialog = ({ open, onChange }: Props) => {
 
   return (
     <>
-      <div
+      <button
         onClick={handleCloseModal}
         className="absolute w-full max-w-[375px] h-full bg-gray-600/40"
       />

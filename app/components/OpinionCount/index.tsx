@@ -1,4 +1,3 @@
-import { Link } from "@remix-run/react";
 import { RiMessage2Line } from "react-icons/ri";
 
 type Props = {

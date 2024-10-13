@@ -1,4 +1,4 @@
-import { Await, useLoaderData, useSearchParams } from "@remix-run/react";
+import { Await, Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { Suspense } from "react";
 import Heading from "~/components/Heading";
 import Session from "~/components/Session";
@@ -26,9 +26,15 @@ export default function Page() {
       <div className="space-y-2 bg-gray-100 h-full pt-2">
         <Suspense>
           <Await resolve={$session}>
-            {({ talkSessions }) => {
-              return talkSessions.map((session, i) => (
-                <Session {...session} key={i} />
+            {(data) => {
+              return data?.talkSessions.map((session, i) => (
+                <Link
+                  to={`/${session.talkSession.id}`}
+                  className="block"
+                  key={i}
+                >
+                  <Session {...session} />
+                </Link>
               ));
             }}
           </Await>

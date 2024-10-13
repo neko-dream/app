@@ -11,12 +11,13 @@ import { LoaderFunction, redirect } from "@remix-run/cloudflare";
 export const loader: LoaderFunction = ({ params }) => {
   try {
     switch (params?.id || "") {
-      case "signup":
+      case "signup": {
         const loginURL = new URL("auth/google/login", API_BASE_URL);
         const signupURL = new URL("signup", BASE_URL);
         loginURL.searchParams.append("redirect_url", signupURL.toString());
 
         return redirect(loginURL.toString());
+      }
       default:
         return redirect("/");
     }

@@ -32,21 +32,13 @@ const occupationSchema = v.optional(
 
 const baseSchema = v.object({
   displayName: v.string("ユーザー名の入力は必須です"),
-  municipality: v.optional(v.string()),
+  city: v.optional(v.string()),
   prefectures: v.optional(v.string()),
   icon: v.optional(v.instance(File)),
   gender: v.optional(genderSchema),
   occupation: v.optional(occupationSchema),
   householdSize: v.optional(v.union([v.string(), v.number()])),
-  // MEMO: select 要素の defaultValue が "---" で年月日だけ数字なので変換してる。
-  yearOfBirth: v.optional(
-    v.pipe(
-      v.union([v.string(), v.number()]),
-      v.transform((i) => {
-        return i === "---" ? null : Number(i);
-      }),
-    ),
-  ),
+  yearOfBirth: v.optional(v.union([v.string(), v.number()])),
 });
 
 export const userEditFormSchema = baseSchema;

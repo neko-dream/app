@@ -4,15 +4,15 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build",
-    "deploy": "pnpm run build && wrangler pages deploy",
+    "build": "bun run lint && remix vite:build",
+    "deploy": "bun run build && wrangler pages deploy",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "format": "prettier --write ./app/**",
     "start": "wrangler pages dev ./build/client",
     "typecheck": "tsc",
     "typegen": "wrangler types",
-    "preview": "pnpm run build && wrangler pages dev",
+    "preview": "bun run build && wrangler pages dev",
     "cf-typegen": "wrangler types",
     "sb": "storybook dev -p 6006",
     "sb:build": "storybook build"

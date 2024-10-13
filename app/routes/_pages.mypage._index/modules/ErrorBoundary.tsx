@@ -1,5 +1,4 @@
 import { isRouteErrorResponse, Link, useRouteError } from "@remix-run/react";
-import { isErrorResponse } from "@remix-run/react/dist/data";
 import Error from "~/components/Error";
 
 export function ErrorBoundary(): JSX.Element {

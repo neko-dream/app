@@ -8,7 +8,9 @@ const setQuery = (requestURL: string) => {
     if (query === "open" || query === "finished") {
       return query;
     }
-  } catch {}
+  } catch {
+    return;
+  }
 };
 
 export const loader = ({ request }: LoaderFunctionArgs) => {
@@ -21,7 +23,7 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
         },
       },
     })
-    .then((res) => res?.data);
+    .then((res) => res?.data || null);
 
   return defer({ $session }, { headers: httpCacheHeader() });
 };

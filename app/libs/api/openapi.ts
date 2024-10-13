@@ -149,6 +149,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/opinions/histories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 今までに投稿した異見 */
+        get: operations["opinionsHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sessions/histories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** リアクション済みのセッション一覧 */
+        get: operations["sessionsHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/token/info": {
         parameters: {
             query?: never;
@@ -200,6 +234,10 @@ export interface components {
             scheduledEndTime: string;
             /** @description 位置情報 */
             location?: components["schemas"]["location"] | null;
+            /** @description 市区町村 */
+            city?: string | null;
+            /** @description 都道府県 */
+            prefecture?: string | null;
         };
         validationErrorItem: {
             /** @description バリデーションエラーのフィールド */
@@ -241,10 +279,6 @@ export interface components {
             latitude: number;
             /** @description 経度 */
             longitude: number;
-            /** @description 都道府県 */
-            prefecture: string;
-            /** @description 市区町村 */
-            city: string;
         };
         tokenClaim: {
             /** @description Audience */
@@ -290,7 +324,7 @@ export interface components {
              * 市区町村
              * @description 市区町村
              */
-            municipality?: string | null;
+            city?: string | null;
             /**
              * 世帯人数
              * @description 世帯人数
@@ -322,7 +356,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/x-www-form-urlencoded": {
+                "multipart/form-data": {
                     /**
                      * @example
                      * @enum {string|null}
@@ -473,10 +507,14 @@ export interface operations {
                     title?: string | null;
                     /** @example  */
                     opinionContent: string;
-                    /** @example  */
+                    /**
+                     * Format: url
+                     * @example
+                     */
                     referenceURL?: string | null;
                     /**
                      * Format: binary
+                     * @description 参考画像。4MiBまで
                      * @example
                      */
                     picture?: string;
@@ -675,7 +713,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/x-www-form-urlencoded": {
+                "multipart/form-data": {
                     /** @example オブジェクト指向は悪 */
                     theme: string;
                     /**
@@ -693,6 +731,16 @@ export interface operations {
                      * @example 0
                      */
                     longitude?: number | null;
+                    /**
+                     * @description 市区町村
+                     * @example
+                     */
+                    city?: string | null;
+                    /**
+                     * @description 都道府県
+                     * @example
+                     */
+                    prefecture?: string | null;
                 };
             };
         };
@@ -715,6 +763,10 @@ export interface operations {
                         scheduledEndTime: string;
                         /** @description 位置情報 */
                         location?: components["schemas"]["location"] | null;
+                        /** @description 市区町村 */
+                        city?: string | null;
+                        /** @description 都道府県 */
+                        prefecture?: string | null;
                     };
                 };
             };
@@ -798,7 +850,7 @@ export interface operations {
                      * @description 市区町村
                      * @example
                      */
-                    municipality?: string | null;
+                    city?: string | null;
                     /**
                      * @description 職業
                      * @example
@@ -860,19 +912,22 @@ export interface operations {
             query?: never;
             header?: never;
             path?: never;
-            cookie?: never;
+            cookie?: {
+                /** @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJrb3RvaGlyby5jb20iLCJkaXNwbGF5SWQiOm51bGwsImRpc3BsYXlOYW1lIjpudWxsLCJleHAiOjE3Mjg4OTM0NzAsImlhdCI6MTcyODgwNzA3MCwiaWNvblVSTCI6bnVsbCwiaXNWZXJpZnkiOmZhbHNlLCJpc3MiOiJrb3RvaGlyby5jb20iLCJqdGkiOiIwMTkyODRlZS02OWQwLTc3MWUtOTZjZi0xMDcyMjdmNDM2ODYiLCJzdWIiOiIwMTkyODRlYy01YzJhLTc1MzUtOTg2Yi03NTU3NWVhZTg3MjgifQ.APv33CyxLOlu4cuukgdqLEIsUq0CM7dMg66A6tutyuw */
+                SessionId?: string;
+            };
         };
         requestBody?: {
             content: {
                 "multipart/form-data": {
                     /**
                      * @description ユーザー名。日本語なども設定可能。
-                     * @example
+                     * @example hogesge
                      */
                     displayName: string;
                     /**
                      * @description ユーザーID。プロフィールのパスなどで使用される。DBのIDとは別。
-                     * @example
+                     * @example suge-
                      */
                     displayID: string;
                     /**
@@ -903,7 +958,7 @@ export interface operations {
                      * @description 市区町村
                      * @example
                      */
-                    municipality?: string | null;
+                    city?: string | null;
                     /**
                      * @description ユーザーの職業
                      * @default 無回答
@@ -952,6 +1007,86 @@ export interface operations {
                         code: string;
                         message: string;
                     };
+                };
+            };
+        };
+    };
+    opinionsHistory: {
+        parameters: {
+            query?: {
+                /** @description ソートきー */
+                sort?: "latest" | "mostReply" | "oldest" | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        opinions: {
+                            /** @description 作成ユーザー */
+                            user: components["schemas"]["user"];
+                            opinion: components["schemas"]["opinion"];
+                            replyCount: number;
+                        }[];
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    sessionsHistory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
                 };
             };
         };
