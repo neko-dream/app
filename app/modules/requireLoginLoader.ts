@@ -1,5 +1,4 @@
 import { LoaderFunctionArgs, defer } from "@remix-run/node";
-import { m } from "~/constants/message";
 import { api } from "~/libs/api";
 import { components } from "~/libs/api/openapi";
 
@@ -17,9 +16,8 @@ export const requireLoginLoader = <T extends Record<string, unknown>>(
       headers: args.request.headers,
     });
     if (!data) {
-      throw new Response(null, {
-        status: 401,
-        statusText: m.ログイン後閲覧可能です,
+      throw new Response("Not Found", {
+        status: 404,
       });
     }
 

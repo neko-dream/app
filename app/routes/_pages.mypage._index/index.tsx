@@ -4,7 +4,6 @@ import Avator from "~/components/Avator";
 import Tabs from "~/components/Tabs";
 import { loader } from "./modules/loader";
 
-export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { headers } from "~/modules/header";
 export { loader };
 

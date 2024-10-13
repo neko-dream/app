@@ -30,7 +30,6 @@ import { userEditFormSchema } from "~/feature/user/schemas/form";
 import { api } from "~/libs/api";
 import { loader } from "./modules/loader";
 
-export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
 
 export default function Page() {

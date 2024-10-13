@@ -14,6 +14,7 @@ import Avator from "~/components/Avator";
 import { SearchMenuDialog } from "./components/SearchMenuDialog";
 import { loader } from "./modules/loader";
 
+export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
 
 export default function Route() {
