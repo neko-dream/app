@@ -9,7 +9,7 @@ type Props = ComponentProps<"button"> & {
   outline?: boolean;
 };
 
-const button = tv({
+export const button = tv({
   base: "text-center w-full max-w-[175px] rounded-full p-2 font-bold disabled:opacity-30",
   variants: {
     color: {

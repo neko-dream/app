@@ -1,4 +1,5 @@
-import Button from "~/components/Button";
+import { Link } from "@remix-run/react";
+import { button } from "~/components/Button";
 import Heading from "~/components/Heading";
 
 export default function Page() {
@@ -6,18 +7,26 @@ export default function Page() {
     <div>
       <Heading>あなたはどう思う？</Heading>
 
-      <Button variation="primary" className="mx-auto mt-6 block">
+      <Link
+        to={"./post"}
+        className={button({
+          color: "primary",
+          className: "block mx-auto mt-6",
+        })}
+      >
         意見を投稿する
-      </Button>
+      </Link>
 
       <Heading className="mt-6">みんなの意見、どう思う？</Heading>
-
-      <Button
-        variation="primary"
-        className="mx-auto mt-6 block whitespace-nowrap"
+      <Link
+        to={"./opinion"}
+        className={button({
+          color: "primary",
+          className: "block mx-auto mt-6 whitespace-nowrap",
+        })}
       >
         みんなの意見を見る
-      </Button>
+      </Link>
     </div>
   );
 }
