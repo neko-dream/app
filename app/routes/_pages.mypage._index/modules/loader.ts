@@ -1,6 +1,5 @@
 import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
-import { httpCacheHeader } from "~/libs/api/cache-header";
 import { boundary } from "~/modules/boundary";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

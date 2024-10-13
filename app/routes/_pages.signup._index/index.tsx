@@ -21,12 +21,13 @@ import Select from "~/components/Select";
 import { NON_SELECT_VALUE } from "~/components/Select/constants";
 import Uploadarea from "~/components/Uploadarea";
 import { m } from "~/constants/message";
+import { deleteDashValues } from "~/feature/user/libs/delete-dash-value";
+import { isFieldsError } from "~/feature/user/libs/is-fields-error";
+import { isMunicipality } from "~/feature/user/libs/is-municipality";
+import { signupFormSchema } from "~/feature/user/schemas/form";
 import { api } from "~/libs/api";
-import { deleteDashValues } from "./libs/delete-dash-value";
-import { isFieldsError } from "./libs/is-fields-error";
-import { isMunicipality } from "./libs/is-municipality";
-import { signupFormSchema } from "./schemas/signupForm.schema";
 
+export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader } from "./modules/loader";
 
 export default function Page() {
