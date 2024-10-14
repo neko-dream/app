@@ -1,11 +1,24 @@
+import { Link } from "@remix-run/react";
+import { button } from "~/components/Button";
 import Card from "~/components/Card";
 import Heading from "~/components/Heading";
 
 export default function Page() {
   return (
     <>
-      <Heading>みんなの意見、どう思う？</Heading>
-
+      <Heading>あなたの意見</Heading>
+      <Link
+        to={"../post"}
+        className={button({
+          color: "primary",
+          className: "block mx-auto mt-6",
+        })}
+      >
+        意見を投稿する
+      </Link>
+      <Heading className="mt-6">あなたのポジション</Heading>
+      グラフがある
+      <Heading className="mt-6">みんなの意見</Heading>
       <div className="m-4 space-y-4">
         <Card
           title="過言では？"

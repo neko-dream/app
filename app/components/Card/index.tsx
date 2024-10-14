@@ -1,4 +1,3 @@
-import { Link } from "@remix-run/react";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { RiChat1Line, RiMore2Fill } from "react-icons/ri";
 import { tv } from "tailwind-variants";
@@ -50,13 +49,10 @@ function Card(
       {children}
 
       <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
-      <Link
-        to="#"
-        className="card-link mt-1 flex items-center space-x-1 text-blue-500"
-      >
+      <div className="card-link mt-1 flex items-center space-x-1 text-blue-500">
         <RiChat1Line />
         <p className="text-sm">コメント16件</p>
-      </Link>
+      </div>
     </div>
   );
 }

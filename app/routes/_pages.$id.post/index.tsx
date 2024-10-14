@@ -1,47 +1,86 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
-import { Form, useOutletContext } from "@remix-run/react";
+import { Form, useNavigate, useOutletContext } from "@remix-run/react";
 import { parseWithValibot } from "conform-to-valibot";
+import { ChangeEvent, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import Button from "~/components/Button";
 import Heading from "~/components/Heading";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
 import UploadArea from "~/components/Uploadarea";
+import { m } from "~/constants/message";
 import { SessionRouteContext } from "~/feature/session/context";
+import { deleteDashValues } from "~/feature/user/libs/delete-dash-value";
 import { isFieldsError } from "~/feature/user/libs/is-fields-error";
 import { api } from "~/libs/api";
 import { createOpinionFormSchema } from "./schemas/createOpinionForm.schema";
 
 export default function Page() {
   const { session } = useOutletContext<SessionRouteContext>();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [form, fields] = useForm({
     onSubmit: async (e) => {
       e.preventDefault();
-      console.log(e);
 
-      const { data } = await api.POST(
-        "/talksessions/{talkSessionID}/opinions",
-        {
-          credentials: "include",
-          params: {
-            path: {
-              talkSessionID: session.id,
+      if (loading) {
+        return;
+      }
+      setLoading(true);
+
+      try {
+        const { data, error } = await api.POST(
+          "/talksessions/{talkSessionID}/opinions",
+          {
+            credentials: "include",
+            params: {
+              path: {
+                talkSessionID: session.id,
+              },
             },
+            body: form.value as never,
           },
-          body: form.value as never,
-        },
-      );
+        );
 
-      console.log(data);
+        if (data) {
+          toast(m.投稿しました);
+          navigate("../opinion");
+        } else {
+          toast.error(error.message);
+        }
+      } catch {
+        toast.error(m.エラーが発生しました);
+      } finally {
+        setLoading(false);
+      }
     },
     onValidate: ({ formData }) => {
-      const p = parseWithValibot(formData, { schema: createOpinionFormSchema });
-      console.log(p);
-
-      return p;
+      return parseWithValibot(formData, { schema: createOpinionFormSchema });
     },
+    shouldValidate: "onInput",
   });
+
+  const [preview, setPreview] = useState<string>();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleOnChangeInputFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    const [file] = e.target.files;
+    setPreview(URL.createObjectURL(file));
+  };
+
+  const handleDisabled = (value?: object, errors?: object) => {
+    return (
+      Object.keys(deleteDashValues(value)).length === 0 ||
+      Object.keys(errors || {}).length !== 0
+    );
+  };
+
+  console.log(form.value, form.allErrors);
 
   return (
     <>
@@ -58,26 +97,32 @@ export default function Page() {
             {...getInputProps(fields.title, { type: "text" })}
             error={isFieldsError(fields.title.errors)}
             placeholder="意見を一言で（タイトル）"
-            className="mt-2"
+            className="h-12 px-4"
           />
         </Label>
 
         <Label
           title="意見"
-          required
           className="mt-4"
+          required
           errors={fields.opinionContent.errors}
         >
           <Textarea
             {...getInputProps(fields.opinionContent, { type: "text" })}
             error={isFieldsError(fields.opinionContent.errors)}
-            placeholder="あなたの意見を書こう！"
-            className="mt-2"
+            className="p-[14px]"
+            placeholder="記入する"
           />
         </Label>
 
         <Label title="参考画像" optional className="mt-4">
-          <UploadArea className="mt-2" />
+          <UploadArea
+            className="mt-2"
+            onClick={() => {
+              inputRef.current?.click();
+            }}
+            preview={preview}
+          />
         </Label>
 
         <Label
@@ -88,15 +133,25 @@ export default function Page() {
         >
           <Input
             {...getInputProps(fields.referenceURL, { type: "text" })}
+            error={isFieldsError(fields.referenceURL.errors)}
             placeholder="リンクなど"
-            className="mt-2"
+            className="h-12 px-4"
           />
         </Label>
+
+        <input
+          {...getInputProps(fields.picture, { type: "text" })}
+          type="file"
+          hidden
+          ref={inputRef}
+          onChange={handleOnChangeInputFile}
+        />
 
         <Button
           type="submit"
           variation="primary"
           className="block mt-8 mx-auto whitespace-normal"
+          disabled={handleDisabled(form.value, form.allErrors) || loading}
         >
           投稿する
         </Button>

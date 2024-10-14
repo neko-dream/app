@@ -1,4 +1,5 @@
 import { useNavigate } from "@remix-run/react";
+import EefaultIcon from "~/assets/default/avator-1.png";
 import FacebookLoginButton from "~/components/Button/template/FacebookLoginButton";
 import GoogleLoginButton from "~/components/Button/template/GoogleLoginButton";
 import { generateMetaTag } from "~/modules/generateMetaTag";
@@ -19,8 +20,9 @@ export default function Index() {
 
   return (
     <div className="flex flex-1 flex-col items-center ">
-      <p className="mt-8 font-bold">ことひろにログインする</p>
-      <p className="mt-3">打っていいのは打たれる覚悟のある奴だけだ</p>
+      <img src={EefaultIcon} alt="" className="w-32 h-32 mt-16" />
+      <p className="mt-3 px-4 ">多種多様な意見や言葉を重ねてよりよい</p>
+      <p>意思決定を目指すサービス</p>
       <div className="mt-8 space-y-4">
         <GoogleLoginButton onClick={handleClick} />
         <FacebookLoginButton />
