@@ -7,7 +7,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     headers: request.headers,
     params: {
       path: {
-        talkSessionId: params.talkSessionId || "",
+        talkSessionId: params.id || "",
       },
     },
   });

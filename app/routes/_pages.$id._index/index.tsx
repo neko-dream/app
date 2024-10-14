@@ -6,7 +6,6 @@ export default function Page() {
   return (
     <div>
       <Heading>あなたはどう思う？</Heading>
-
       <Link
         to={"./post"}
         className={button({

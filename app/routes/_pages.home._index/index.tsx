@@ -29,7 +29,7 @@ export default function Page() {
             {(data) => {
               return data?.talkSessions.map((session, i) => (
                 <Link
-                  to={`/${session.talkSession.id}`}
+                  to={`/${session.talkSession.id}/swipe`}
                   className="block"
                   key={i}
                 >

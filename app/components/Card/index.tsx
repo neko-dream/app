@@ -3,7 +3,7 @@ import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { RiChat1Line, RiMore2Fill } from "react-icons/ri";
 import { tv } from "tailwind-variants";
 import { OpinionJpMap } from "~/constants/opinion";
-import { User } from "~/types/User";
+import { User } from "~/feature/user/types";
 import Avator from "../Avator";
 import Badge from "../Badge";
 
