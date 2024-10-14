@@ -3,7 +3,9 @@ import FacebookLoginButton from "~/components/Button/template/FacebookLoginButto
 import GoogleLoginButton from "~/components/Button/template/GoogleLoginButton";
 import { generateMetaTag } from "~/modules/generateMetaTag";
 
-export const meta = generateMetaTag();
+export const meta = generateMetaTag({
+  title: "トップページ",
+});
 
 export default function Index() {
   const navigate = useNavigate();
