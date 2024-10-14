@@ -33,8 +33,6 @@ export default function AdressInputs({ form, fields }: Props) {
   }, [fields.prefectures.value]);
 
   const prefecturesControl = useControl(fields.prefectures);
-  console.log(fields.city.value);
-  console.log(fields.prefectures.value);
 
   return (
     <>
