@@ -9,7 +9,6 @@ import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
 import UploadArea from "~/components/Uploadarea";
-import { m } from "~/constants/message";
 import { handleDisabled, isFieldsError } from "~/feature/form/libs";
 import { SessionRouteContext } from "~/feature/session/context";
 import { api } from "~/libs/api";
@@ -44,13 +43,13 @@ export default function Page() {
         );
 
         if (data) {
-          toast(m.投稿しました);
+          toast("投稿しました");
           navigate("../opinion");
         } else {
           toast.error(error.message);
         }
       } catch {
-        toast.error(m.エラーが発生しました);
+        toast.error("エラーが発生しました");
       } finally {
         setLoading(false);
       }

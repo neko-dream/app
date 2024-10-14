@@ -11,7 +11,6 @@ import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Select from "~/components/Select";
 import Uploadarea from "~/components/Uploadarea";
-import { m } from "~/constants/message";
 import AdressInputs from "~/feature/form/components/AdressInputs";
 import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
 import { handleDisabled, isFieldsError } from "~/feature/form/libs";
@@ -35,7 +34,7 @@ export default function Page() {
       if (error) {
         toast.error(error.message);
       } else {
-        toast.success(m.登録が完了しました);
+        toast.success("登録が完了しました");
         navigate("/home");
       }
     },

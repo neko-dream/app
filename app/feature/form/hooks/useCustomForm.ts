@@ -3,7 +3,6 @@ import { parseWithValibot } from "conform-to-valibot";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { ObjectEntries, ObjectSchema } from "valibot";
-import { m } from "~/constants/message";
 import { deleteDashValues } from "../libs";
 
 type U = ObjectSchema<ObjectEntries, undefined>;
@@ -30,7 +29,7 @@ export const useCustomForm = <T extends U>({ schema, onSubmit }: Props<T>) => {
       try {
         onSubmit({ e, value: deleteDashValues(form.value) });
       } catch {
-        toast.error(m.エラーが発生しました);
+        toast.error("エラーが発生しました");
       } finally {
         setLoading(false);
       }

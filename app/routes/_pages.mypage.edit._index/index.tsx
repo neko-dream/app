@@ -18,7 +18,6 @@ import Button from "~/components/Button";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Select from "~/components/Select";
-import { m } from "~/constants/message";
 import AdressInputs from "~/feature/form/components/AdressInputs";
 import {
   deleteDashValues,
@@ -56,11 +55,11 @@ export default function Page() {
         if (error) {
           toast.error(error.message);
         } else {
-          toast.success(m.登録情報の編集が完了しました);
+          toast.success("登録情報の編集が完了しました");
           navigate("/mypage");
         }
       } catch {
-        toast.error(m.エラーが発生しました);
+        toast.error("エラーが発生しました");
       } finally {
         setLoading(false);
       }

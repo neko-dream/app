@@ -9,7 +9,6 @@ import Heading from "~/components/Heading";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
-import { m } from "~/constants/message";
 import AdressInputs from "~/feature/form/components/AdressInputs";
 import {
   deleteDashValues,
@@ -45,11 +44,11 @@ export default function Page() {
         if (error) {
           toast.error(error.message);
         } else {
-          toast.success(m.登録が完了しました);
+          toast.success("登録が完了しました");
           navigate("/home");
         }
       } catch {
-        toast.error(m.エラーが発生しました);
+        toast.error("エラーが発生しました");
       } finally {
         setLoading(false);
       }
