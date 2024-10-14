@@ -11,7 +11,8 @@ export const generateMetaTag = () => {
           "多種多様な意見や言葉を重ねてよりよい意思決定を目指すサービス",
       },
       {
-        "og:url": "https://ogp-sample.pages.dev/ogp?title=ことひろ",
+        property: "og:url",
+        content: "https://ogp-sample.pages.dev/ogp?title=ことひろ",
       },
     ];
   };
