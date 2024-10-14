@@ -1,6 +1,9 @@
 import { useNavigate } from "@remix-run/react";
 import FacebookLoginButton from "~/components/Button/template/FacebookLoginButton";
 import GoogleLoginButton from "~/components/Button/template/GoogleLoginButton";
+import { generateMetaTag } from "~/modules/generateMetaTag";
+
+export const meta = generateMetaTag();
 
 export default function Index() {
   const navigate = useNavigate();
