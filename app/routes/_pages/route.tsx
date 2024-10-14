@@ -38,7 +38,7 @@ export default function Route() {
         <Suspense>
           <Await resolve={$user}>
             {(user) => {
-              if (!isLoggedIn) {
+              if (!user) {
                 return null;
               }
 
@@ -47,7 +47,7 @@ export default function Route() {
                   <Link to={"/create"}>
                     <img src={PenIcon} alt="" loading="lazy" />
                   </Link>
-                  <Link to={isLoggedIn ? "/mypage" : "/"}>
+                  <Link to={"/mypage"}>
                     <Avator src={user?.iconURL || ""} className="h-8 w-8" />
                   </Link>
                 </>

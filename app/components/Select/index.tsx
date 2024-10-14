@@ -1,6 +1,5 @@
 import { ComponentProps, ForwardedRef, forwardRef } from "react";
 import { tv } from "tailwind-variants";
-import { NON_SELECT_VALUE } from "./constants";
 
 type Props = ComponentProps<"select"> & {
   options: { value: string; title: string }[];
@@ -22,7 +21,7 @@ const select = tv({
 });
 
 function Select(
-  { error, className, placeholader, options, useNonSelect, ...props }: Props,
+  { error, className, options, placeholader, ...props }: Props,
   ref: ForwardedRef<HTMLSelectElement>,
 ) {
   const { placeholder, base } = select({ error, class: className });
@@ -36,10 +35,12 @@ function Select(
         props.onChange && props.onChange(e);
         e.currentTarget.style.color = "black";
       }}
+      defaultValue="0"
     >
-      <option value={NON_SELECT_VALUE} className={placeholder()}>
-        {placeholader ? placeholader : "選択する"}
+      <option value="0" disabled className={placeholder()}>
+        {placeholader || "選択する"}
       </option>
+      <option value={"1"}>---</option>
       {options.map(({ value, title }, i) => {
         return (
           <option key={i} value={value}>
@@ -47,7 +48,6 @@ function Select(
           </option>
         );
       })}
-      {useNonSelect && <option value={NON_SELECT_VALUE}>---</option>}
     </select>
   );
 }

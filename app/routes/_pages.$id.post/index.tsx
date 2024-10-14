@@ -10,9 +10,8 @@ import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
 import UploadArea from "~/components/Uploadarea";
 import { m } from "~/constants/message";
+import { handleDisabled, isFieldsError } from "~/feature/form/libs";
 import { SessionRouteContext } from "~/feature/session/context";
-import { deleteDashValues } from "~/feature/user/libs/delete-dash-value";
-import { isFieldsError } from "~/feature/user/libs/is-fields-error";
 import { api } from "~/libs/api";
 import { createOpinionFormSchema } from "./schemas/createOpinionForm.schema";
 
@@ -72,15 +71,6 @@ export default function Page() {
     const [file] = e.target.files;
     setPreview(URL.createObjectURL(file));
   };
-
-  const handleDisabled = (value?: object, errors?: object) => {
-    return (
-      Object.keys(deleteDashValues(value)).length === 0 ||
-      Object.keys(errors || {}).length !== 0
-    );
-  };
-
-  console.log(form.value, form.allErrors);
 
   return (
     <>
