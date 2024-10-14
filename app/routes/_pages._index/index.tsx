@@ -2,11 +2,12 @@ import { useNavigate } from "@remix-run/react";
 import EefaultIcon from "~/assets/default/avator-1.png";
 import FacebookLoginButton from "~/components/Button/template/FacebookLoginButton";
 import GoogleLoginButton from "~/components/Button/template/GoogleLoginButton";
-import { generateMetaTag } from "~/modules/generateMetaTag";
 
-export const meta = generateMetaTag({
-  title: "トップページ",
-});
+// import { generateMetaTag } from "~/modules/generateMetaTag";
+
+// export const meta = generateMetaTag({
+//   title: "トップページ",
+// });
 
 export default function Index() {
   const navigate = useNavigate();
