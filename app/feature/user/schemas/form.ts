@@ -33,7 +33,7 @@ const occupationSchema = v.optional(
 const baseSchema = v.object({
   displayName: v.string("ユーザー名の入力は必須です"),
   city: v.optional(v.string()),
-  prefectures: v.optional(v.string()),
+  prefecture: v.optional(v.string()),
   icon: v.optional(v.instance(File)),
   gender: v.optional(genderSchema),
   occupation: v.optional(occupationSchema),
@@ -41,9 +41,18 @@ const baseSchema = v.object({
   yearOfBirth: v.optional(v.union([v.string(), v.number()])),
 });
 
-export const userEditFormSchema = baseSchema;
+export const adressFormSchema = v.object({
+  city: v.optional(v.string()),
+  prefecture: v.optional(v.string()),
+});
+
+export const userEditFormSchema = v.object({
+  ...baseSchema.entries,
+  ...adressFormSchema.entries,
+});
 
 export const signupFormSchema = v.object({
   displayID: v.pipe(v.string("ユーザーIDの入力は必須です"), alphanumericSchema),
   ...baseSchema.entries,
+  ...adressFormSchema.entries,
 });

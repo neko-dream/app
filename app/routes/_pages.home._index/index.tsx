@@ -5,7 +5,6 @@ import Session from "~/components/Session";
 import Tabs from "~/components/Tabs";
 import { loader } from "./modules/loader";
 
-export { headers } from "~/modules/header";
 export { loader };
 
 export default function Page() {

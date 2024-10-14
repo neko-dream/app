@@ -6,12 +6,9 @@ import {
 } from "@conform-to/react";
 import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { parseWithValibot } from "conform-to-valibot";
-import { useControl } from "node_modules/@conform-to/react/integrations";
-import { ChangeEvent, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import CameraIcon from "~/assets/camera.svg";
-import municipality from "~/assets/data/adress/municipality.json";
-import prefectures from "~/assets/data/adress/prefectures.json";
 import bathday from "~/assets/data/birthday.json";
 import gender from "~/assets/data/gender.json";
 import houseHoldSize from "~/assets/data/house-hold-size.json";
@@ -21,11 +18,12 @@ import Button from "~/components/Button";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Select from "~/components/Select";
-import { NON_SELECT_VALUE } from "~/components/Select/constants";
-import { m } from "~/constants/message";
-import { deleteDashValues } from "~/feature/user/libs/delete-dash-value";
-import { isFieldsError } from "~/feature/user/libs/is-fields-error";
-import { isMunicipality } from "~/feature/user/libs/is-municipality";
+import AdressInputs from "~/feature/form/components/AdressInputs";
+import {
+  deleteDashValues,
+  handleDisabled,
+  isFieldsError,
+} from "~/feature/form/libs";
 import { userEditFormSchema } from "~/feature/user/schemas/form";
 import { api } from "~/libs/api";
 import { loader } from "./modules/loader";
@@ -36,6 +34,7 @@ export default function Page() {
   const { user } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  console.log(user);
 
   const [form, fields] = useForm({
     defaultValue: {
@@ -57,11 +56,11 @@ export default function Page() {
         if (error) {
           toast.error(error.message);
         } else {
-          toast.success(m.登録情報の編集が完了しました);
+          toast.success("登録情報の編集が完了しました");
           navigate("/mypage");
         }
       } catch {
-        toast.error(m.エラーが発生しました);
+        toast.error("エラーが発生しました");
       } finally {
         setLoading(false);
       }
@@ -74,19 +73,6 @@ export default function Page() {
 
   const [preview, setPreview] = useState<string>();
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const prefecturesControl = useControl(fields.prefectures);
-
-  // 都道府県が選択されたら市町村の選択肢を変更
-  const municipalityOptions = useMemo(() => {
-    if (isMunicipality(fields.prefectures.value)) {
-      return municipality[fields.prefectures.value].map((v) => ({
-        value: v,
-        title: v,
-      }));
-    } else {
-      return [];
-    }
-  }, [fields.prefectures.value]);
 
   const handleOnChangeInputFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -94,13 +80,6 @@ export default function Page() {
     }
     const [file] = e.target.files;
     setPreview(URL.createObjectURL(file));
-  };
-
-  const handleDisabled = (value?: object, errors?: object) => {
-    return (
-      Object.keys(deleteDashValues(value)).length === 0 ||
-      Object.keys(errors || {}).length !== 0
-    );
   };
 
   const handleUploadButtonClick = () => {
@@ -149,36 +128,8 @@ export default function Page() {
           />
         </Label>
 
-        <Label title="都道府県" optional errors={fields.prefectures.errors}>
-          <Select
-            {...getSelectProps(fields.prefectures)}
-            onChange={(e) => {
-              // 同じ都道府県が選択されたら何もしない
-              if (prefecturesControl.value === e.currentTarget.value) {
-                return;
-              }
-              form.update({
-                name: fields.city.name,
-                value: NON_SELECT_VALUE,
-              });
-              prefecturesControl.change(e.currentTarget.value);
-            }}
-            error={isFieldsError(fields.prefectures.errors)}
-            options={prefectures.map((v) => ({ value: v, title: v }))}
-          />
-        </Label>
-
-        <Label title="市町村" optional errors={fields.city.errors}>
-          <Select
-            {...getSelectProps(fields.city)}
-            disabled={fields.prefectures.value === NON_SELECT_VALUE}
-            error={isFieldsError(fields.city.errors)}
-            placeholader={
-              fields.city.value ? "都道府県を選択してください" : "選択する"
-            }
-            options={municipalityOptions}
-          />
-        </Label>
+        {/* FIXME: 型が合わない */}
+        <AdressInputs fields={fields} form={form as never} />
 
         <Label title="職業" optional errors={fields.occupation.errors}>
           <Select

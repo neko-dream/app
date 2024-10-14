@@ -22,9 +22,4 @@ const convertFormData = (params: object): FormData => {
 export const api = createClient<paths>({
   baseUrl: API_BASE_URL,
   bodySerializer: (body) => body && convertFormData(body),
-  fetch: (request) => {
-    return globalThis.fetch(request, {
-      mode: "cors",
-    });
-  },
 });
