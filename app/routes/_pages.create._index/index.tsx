@@ -6,6 +6,7 @@ import {
 } from "@conform-to/react";
 import { Form, useNavigate } from "@remix-run/react";
 import { parseWithValibot } from "conform-to-valibot";
+import dayjs from "dayjs";
 import { useControl } from "node_modules/@conform-to/react/integrations";
 import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
@@ -38,9 +39,14 @@ export default function Page() {
       setLoading(true);
 
       try {
+        console.log(form.value?.scheduledEndTime);
+
         const { error } = await api.POST("/talksessions", {
           credentials: "include",
-          body: deleteDashValues(form.value) as never,
+          body: deleteDashValues({
+            ...form.value,
+            scheduledEndTime: dayjs(form.value?.scheduledEndTime).toISOString(),
+          }) as never,
         });
 
         if (error) {
