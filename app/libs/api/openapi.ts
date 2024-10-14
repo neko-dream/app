@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/talksession/{talkSessionID}/swipe_opinions": {
+    "/talksessions/{talkSessionID}/swipe_opinions": {
         parameters: {
             query?: never;
             header?: never;
@@ -87,6 +87,23 @@ export interface paths {
         };
         /** 意見に対するコメント一覧を返す */
         get: operations["opinionComments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/talksessions/{talkSessionID}/opinions/{opinionID}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 意見の詳細 */
+        get: operations["getOpinionDetail"];
         put?: never;
         post?: never;
         delete?: never;
@@ -166,7 +183,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sessions/histories": {
+    "/talksessions/histories": {
         parameters: {
             query?: never;
             header?: never;
@@ -400,7 +417,9 @@ export interface operations {
     };
     swipe_opinions: {
         parameters: {
-            query?: never;
+            query?: {
+                limit?: number;
+            };
             header?: never;
             path: {
                 talkSessionID: string;
@@ -608,6 +627,40 @@ export interface operations {
                         code: string;
                         message: string;
                     };
+                };
+            };
+        };
+    };
+    getOpinionDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                talkSessionID: string;
+                opinionID: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        opinion: components["schemas"]["opinion"];
+                        /** @description 作成ユーザー */
+                        user: components["schemas"]["user"];
+                    };
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
                 };
             };
         };
@@ -912,10 +965,7 @@ export interface operations {
             query?: never;
             header?: never;
             path?: never;
-            cookie?: {
-                /** @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJrb3RvaGlyby5jb20iLCJkaXNwbGF5SWQiOm51bGwsImRpc3BsYXlOYW1lIjpudWxsLCJleHAiOjE3Mjg4OTM0NzAsImlhdCI6MTcyODgwNzA3MCwiaWNvblVSTCI6bnVsbCwiaXNWZXJpZnkiOmZhbHNlLCJpc3MiOiJrb3RvaGlyby5jb20iLCJqdGkiOiIwMTkyODRlZS02OWQwLTc3MWUtOTZjZi0xMDcyMjdmNDM2ODYiLCJzdWIiOiIwMTkyODRlYy01YzJhLTc1MzUtOTg2Yi03NTU3NWVhZTg3MjgifQ.APv33CyxLOlu4cuukgdqLEIsUq0CM7dMg66A6tutyuw */
-                SessionId?: string;
-            };
+            cookie?: never;
         };
         requestBody?: {
             content: {

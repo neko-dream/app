@@ -99,9 +99,10 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
-      security: []
+      security:
+        - apikey-header-SessionId: []
       x-ogen-operation-group: Vote
-  /talksession/{talkSessionID}/swipe_opinions:
+  /talksessions/{talkSessionID}/swipe_opinions:
     get:
       summary: スワイプ用のエンドポイント
       deprecated: false
@@ -116,6 +117,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: limit
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            nullable: true
       responses:
         '200':
           description: ''
@@ -447,6 +456,57 @@ paths:
                 required:
                   - code
                   - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionID}/opinions/{opinionID}:
+    get:
+      summary: 意見の詳細
+      deprecated: false
+      description: ''
+      operationId: getOpinionDetail
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: opinionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  opinion: *ref_0
+                  user: *ref_1
+                required:
+                  - opinion
+                  - user
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
               examples:
                 '1':
                   summary: internal
@@ -921,15 +981,7 @@ paths:
       operationId: registerUser
       tags:
         - user
-      parameters:
-        - name: SessionId
-          in: cookie
-          description: ''
-          required: false
-          example: >-
-            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJrb3RvaGlyby5jb20iLCJkaXNwbGF5SWQiOm51bGwsImRpc3BsYXlOYW1lIjpudWxsLCJleHAiOjE3Mjg4OTM0NzAsImlhdCI6MTcyODgwNzA3MCwiaWNvblVSTCI6bnVsbCwiaXNWZXJpZnkiOmZhbHNlLCJpc3MiOiJrb3RvaGlyby5jb20iLCJqdGkiOiIwMTkyODRlZS02OWQwLTc3MWUtOTZjZi0xMDcyMjdmNDM2ODYiLCJzdWIiOiIwMTkyODRlYy01YzJhLTc1MzUtOTg2Yi03NTU3NWVhZTg3MjgifQ.APv33CyxLOlu4cuukgdqLEIsUq0CM7dMg66A6tutyuw
-          schema:
-            type: string
+      parameters: []
       requestBody:
         content:
           multipart/form-data:
@@ -1150,7 +1202,7 @@ paths:
           headers: {}
       security: []
       x-ogen-operation-group: User
-  /sessions/histories:
+  /talksessions/histories:
     get:
       summary: リアクション済みのセッション一覧
       deprecated: false
