@@ -34,7 +34,6 @@ export default function Page() {
   const { user } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  console.log(user);
 
   const [form, fields] = useForm({
     defaultValue: {
