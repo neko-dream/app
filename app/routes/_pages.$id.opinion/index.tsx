@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { button } from "~/components/Button";
 import Card from "~/components/Card";
 import Heading from "~/components/Heading";
+import { scrolled } from "~/variants/scrolled-component";
 
 export default function Page() {
   return (
@@ -19,7 +20,7 @@ export default function Page() {
       <Heading className="mt-6">あなたのポジション</Heading>
       グラフがある
       <Heading className="mt-6">みんなの意見</Heading>
-      <div className="m-4 space-y-4">
+      <div className={scrolled({ class: "m-4 space-y-4" })}>
         <Card
           title="過言では？"
           description="確かにいい感じだが、完全に習得するのに学習コストがかかるので、すべてのアプリに適応するのは難しいかも"
