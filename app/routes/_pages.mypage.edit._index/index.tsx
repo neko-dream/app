@@ -86,7 +86,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center ">
+    <div className="h-full overflow-scroll flex flex-1 flex-col items-center pb-12">
       <div className="relative">
         <Avator src={preview} className="w-16 h-16 mt-12" />
         <button
