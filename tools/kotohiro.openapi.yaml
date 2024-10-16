@@ -191,76 +191,6 @@ paths:
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: Opinion
-  /talksessions/{talkSessionId}/opinion:
-    get:
-      summary: 🚧 分析に関する意見
-      deprecated: false
-      description: ''
-      operationId: getTopOpinions
-      tags:
-        - opinion
-      parameters:
-        - name: talkSessionId
-          in: path
-          description: ''
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-                required:
-                  - 01J93WTW4J3ZBAAVVZV8PSWZ6R
-          headers: {}
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-                required:
-                  - code
-                  - message
-              examples:
-                '1':
-                  summary: internal
-                  value:
-                    code: GENERAL-000
-                    message: INTERNAL SERVER ERROR.
-          headers: {}
-        '500':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-                required:
-                  - code
-                  - message
-              examples:
-                '1':
-                  summary: internal
-                  value:
-                    code: GENERAL-000
-                    message: INTERNAL SERVER ERROR.
-          headers: {}
-      security: []
-      x-ogen-operation-group: Opinion
   /talksessions/{talkSessionID}/opinions:
     post:
       summary: セッションに対して意見投稿
@@ -750,7 +680,7 @@ paths:
                     description: 終了予定日時
                   location:
                     anyOf:
-                      - &ref_4
+                      - &ref_5
                         $ref: '#/components/schemas/location'
                       - type: 'null'
                     description: 位置情報
@@ -792,6 +722,102 @@ paths:
           headers: {}
       security:
         - apikey-header-SessionId: []
+      x-ogen-operation-group: TalkSession
+  /talksessions/{talkSessionId}/analysis:
+    get:
+      summary: 分析結果一覧
+      deprecated: false
+      description: ''
+      operationId: talkSessionAnalysis
+      tags:
+        - talk_session
+      parameters:
+        - name: talkSessionId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  myPosition: &ref_4
+                    $ref: '#/components/schemas/userGroupPosition'
+                  positions:
+                    type: array
+                    items: *ref_4
+                  groupOpinions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        groupId:
+                          type: integer
+                        opinions:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              opinion: *ref_0
+                              user: *ref_1
+                            required:
+                              - opinion
+                              - user
+                      required:
+                        - groupId
+                        - opinions
+                required:
+                  - positions
+                  - groupOpinions
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
       x-ogen-operation-group: TalkSession
   /user:
     put:
@@ -1018,7 +1044,7 @@ paths:
                   description: 性別
                   example: ''
                   nullable: true
-                prefectures:
+                prefecture:
                   description: 都道府県
                   example: ''
                   type: string
@@ -1436,7 +1462,7 @@ components:
           description: 終了予定日時
         location:
           anyOf:
-            - *ref_4
+            - *ref_5
             - type: 'null'
           description: 位置情報
         city:
@@ -1628,6 +1654,22 @@ components:
       required:
         - occupation
         - gender
+    userGroupPosition:
+      type: object
+      properties:
+        posX:
+          type: number
+        posY:
+          type: number
+        displayId:
+          type: string
+        groupId:
+          type: integer
+      required:
+        - posX
+        - posY
+        - displayId
+        - groupId
   securitySchemes:
     apikey-header-SessionId:
       type: apiKey
