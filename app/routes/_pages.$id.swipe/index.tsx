@@ -12,6 +12,7 @@
 // import { api } from "~/libs/api";
 // import { useLoaderData } from "@remix-run/react";
 import { Deck } from "./components/CardSwiper";
+import "./index.css";
 import { loader } from "./modules/loader";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";

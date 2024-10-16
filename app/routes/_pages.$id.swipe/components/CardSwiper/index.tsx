@@ -26,8 +26,9 @@ const trans = (r: number, s: number) =>
   `rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
 
 export function Deck() {
+  const [text, setText] = useState("Swipe me");
   const [gone] = useState(() => new Set()); // The set flags all the cards that are flicked out
-  const [props, api] = useSprings(cards.length, (i) => ({
+  const [item, api] = useSprings(cards.length, (i) => ({
     ...to(i),
     from: from(),
   }));
@@ -63,6 +64,20 @@ export function Deck() {
         const rot = mx / 100 + (isGone ? xdir * 10 * velocity : 0); // How much the card tilts, flicking it harder makes it rotate faster
         const scale = down ? 1.1 : 1; // Active cards lift up a bit
 
+        if (isGone) {
+          if (100 < mx) {
+            setText("右にスワイプした");
+          } else if (mx < -100) {
+            setText("左にスワイプした");
+          }
+
+          if (100 < my) {
+            setText("下にスワイプした");
+          } else if (my < -100) {
+            setText("上にスワイプした");
+          }
+        }
+
         return {
           y,
           x,
@@ -73,33 +88,38 @@ export function Deck() {
         };
       });
       if (!down && gone.size === cards.length) {
-        console.log("終了");
+        setText("終了");
       }
     },
   );
 
   // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
-  return props?.map(({ x, y, rot, scale }, i) => (
-    <animated.div className="deck" key={i} style={{ x, y }}>
-      <animated.div
-        {...bind(i)}
-        style={{
-          transform: interpolate([rot, scale], trans),
-        }}
-      >
-        <Card
-          title={"テスト"}
-          description={"テスト本文です。"}
-          user={{
-            displayID: "",
-            displayName: "ドチャクソ卍太郎",
-            photoURL:
-              "https://avatars.githubusercontent.com/u/135724197?s=96&v=4",
-          }}
-          opinionStatus="disagree"
-          className="bg-white pointer-events-none"
-        />
-      </animated.div>
-    </animated.div>
-  ));
+  return (
+    <>
+      {item?.map(({ x, y, rot, scale }, i) => (
+        <animated.div className="deck" key={i} style={{ x, y }}>
+          <animated.div
+            {...bind(i)}
+            style={{
+              transform: interpolate([rot, scale], trans),
+            }}
+          >
+            <Card
+              title={"テスト"}
+              description={"テスト本文です。"}
+              user={{
+                displayID: "",
+                displayName: "ドチャクソ卍太郎",
+                photoURL:
+                  "https://avatars.githubusercontent.com/u/135724197?s=96&v=4",
+              }}
+              opinionStatus="disagree"
+              className="bg-white pointer-events-none select-none"
+            />
+          </animated.div>
+        </animated.div>
+      ))}
+      <p className="mt-80">{text}</p>
+    </>
+  );
 }
