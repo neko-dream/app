@@ -34,7 +34,9 @@ export default function Route() {
         <Link
           to={isLoggedIn ? "/home" : "/"}
           className="mr-auto"
-          onClick={handleClose}
+          onClick={() => {
+            window.location.reload();
+          }}
         >
           Kotohiro
         </Link>
