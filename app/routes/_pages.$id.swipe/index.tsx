@@ -10,6 +10,7 @@
 // import { OpinionStatus } from "~/feature/opinion/status";
 // import { SessionRouteContext } from "~/feature/session/context";
 // import { api } from "~/libs/api";
+// import { useLoaderData } from "@remix-run/react";
 import { Deck } from "./components/CardSwiper";
 import { loader } from "./modules/loader";
 
@@ -17,6 +18,8 @@ export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
 
 export default function Page() {
+  // const { data } = useLoaderData<typeof loader>();
+
   return (
     <div className="container">
       <Deck />

@@ -1,6 +1,7 @@
 import { useSprings, animated, to as interpolate } from "@react-spring/web";
 import { useState } from "react";
 import { useDrag } from "react-use-gesture";
+import Card from "~/components/Card";
 import "./index.css";
 
 const cards = [
@@ -12,20 +13,17 @@ const cards = [
   "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",
 ];
 
-// These two are just helpers, they curate spring data, values that are later being interpolated into css
 const to = (i: number) => ({
-  x: 0,
-  y: i * -4,
+  x: i * 6,
+  y: i * 6,
   scale: 1,
-  rot: -10 + Math.random() * 20,
-  delay: i * 100,
+  delay: i * 50,
 });
 
-const from = () => ({ x: 0, rot: 0, scale: 1.5, y: -1000 });
+const from = () => ({ x: 0, rot: 0, y: -1000, scale: 1.5 });
 
-// This is being used down there in the view, it interpolates rotation and scale into a css transform
 const trans = (r: number, s: number) =>
-  `perspective(1500px) rotateX(30deg) rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
+  `rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
 
 export function Deck() {
   const [gone] = useState(() => new Set()); // The set flags all the cards that are flicked out
@@ -55,24 +53,34 @@ export function Deck() {
           config: { friction: 50, tension: down ? 800 : isGone ? 200 : 500 },
         };
       });
-      if (!down && gone.size === cards.length)
-        setTimeout(() => {
-          gone.clear();
-          api.start((i) => to(i));
-        }, 600);
+      if (!down && gone.size === cards.length) {
+        console.log("終了");
+      }
     },
   );
+
   // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
   return props?.map(({ x, y, rot, scale }, i) => (
     <animated.div className="deck" key={i} style={{ x, y }}>
-      {/* This is the card itself, we're binding our gesture to it (and inject its index so we know which is which) */}
       <animated.div
         {...bind(i)}
         style={{
           transform: interpolate([rot, scale], trans),
-          backgroundImage: `url(${cards[i]})`,
         }}
-      />
+      >
+        <Card
+          title={"テスト"}
+          description={"テスト本文です。"}
+          user={{
+            displayID: "",
+            displayName: "ドチャクソ卍太郎",
+            photoURL:
+              "https://avatars.githubusercontent.com/u/135724197?s=96&v=4",
+          }}
+          opinionStatus="disagree"
+          className="bg-white pointer-events-none"
+        />
+      </animated.div>
     </animated.div>
   ));
 }
