@@ -8,5 +8,5 @@ export const createSessionFormSchema = v.object({
   scheduledEndTime: v.string("終了日時の入力は必須です"),
   description: v.optional(v.string()),
   city: v.optional(v.string()),
-  prefectures: v.optional(v.string()),
+  prefecture: v.optional(v.string()),
 });
