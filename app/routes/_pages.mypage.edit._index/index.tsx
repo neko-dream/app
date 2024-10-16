@@ -26,6 +26,7 @@ import {
 } from "~/feature/form/libs";
 import { userEditFormSchema } from "~/feature/user/schemas/form";
 import { api } from "~/libs/api";
+import { scrolled } from "~/variants/scrolled-component";
 import { loader } from "./modules/loader";
 
 export { loader };
@@ -86,7 +87,11 @@ export default function Page() {
   };
 
   return (
-    <div className="h-full overflow-scroll flex flex-1 flex-col items-center pb-12">
+    <div
+      className={scrolled({
+        className: "flex flex-1 flex-col items-center pb-12",
+      })}
+    >
       <div className="relative">
         <Avator src={preview} className="w-16 h-16 mt-12" />
         <button
