@@ -11,6 +11,8 @@
 // import { SessionRouteContext } from "~/feature/session/context";
 // import { api } from "~/libs/api";
 // import { useLoaderData } from "@remix-run/react";
+import { Link } from "@remix-run/react";
+import { button } from "~/components/Button";
 import { Deck } from "./components/CardSwiper";
 import "./index.css";
 import { loader } from "./modules/loader";
@@ -22,8 +24,19 @@ export default function Page() {
   // const { data } = useLoaderData<typeof loader>();
 
   return (
-    <div className="container">
-      <Deck />
+    <div>
+      <div className="container">
+        <Deck />
+      </div>
+      <Link
+        to={"../opinion"}
+        className={button({
+          color: "primary",
+          className: "block mt-40 mx-auto whitespace-nowrap",
+        })}
+      >
+        みんなの意見（仮
+      </Link>
     </div>
   );
 }
