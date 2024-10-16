@@ -54,13 +54,13 @@ export default function Page() {
 
         if (error) {
           toast.error(error.message);
+          setLoading(false);
         } else {
           toast.success("登録情報の編集が完了しました");
           navigate("/mypage");
         }
       } catch {
         toast.error("エラーが発生しました");
-      } finally {
         setLoading(false);
       }
     },
