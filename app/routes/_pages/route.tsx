@@ -16,7 +16,11 @@ export default function Route() {
   const [isSearchMenuOpen, setIsSearchMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleOpenSearchMenu = () => {
+  const handleClose = () => {
+    setIsSearchMenuOpen(false);
+  };
+
+  const handleOpenChange = () => {
     setIsSearchMenuOpen((prev) => !prev);
   };
 
@@ -26,12 +30,16 @@ export default function Route() {
 
   return (
     <>
-      <header className="shrink-0 flex h-10 w-full items-center justify-between border-b-[1px] border-solid border-[#d6e3ed] px-4 space-x-6 z-20">
-        <Link to={isLoggedIn ? "/home" : "/"} className="mr-auto">
+      <header className="shrink-0 flex h-10 w-full items-center justify-between border-b-[1px] border-solid border-[#d6e3ed] px-4 space-x-6 z-20 bg-white">
+        <Link
+          to={isLoggedIn ? "/home" : "/"}
+          className="mr-auto"
+          onClick={handleClose}
+        >
           Kotohiro
         </Link>
 
-        <button onClick={handleOpenSearchMenu}>
+        <button onClick={handleOpenChange}>
           <img src={SearchIcon} alt="" loading="lazy" />
         </button>
 
@@ -44,10 +52,10 @@ export default function Route() {
 
               return (
                 <>
-                  <Link to={"/create"}>
+                  <Link to={"/create"} onClick={handleClose}>
                     <img src={PenIcon} alt="" loading="lazy" />
                   </Link>
-                  <Link to={"/mypage"}>
+                  <Link to={"/mypage"} onClick={handleClose}>
                     <Avator src={user?.iconURL || ""} className="h-8 w-8" />
                   </Link>
                 </>
@@ -62,7 +70,7 @@ export default function Route() {
       <ToastContainer position="top-center" />
       <SearchMenuDialog
         open={isSearchMenuOpen}
-        onChange={setIsSearchMenuOpen}
+        onOpenChange={setIsSearchMenuOpen}
       />
     </>
   );
