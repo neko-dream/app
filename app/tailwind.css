@@ -11,7 +11,7 @@ body {
   flex-direction: column;
   width: 100%;
   max-width: 375px;
-  height: 100dvh;
+  height: 100vh;
   margin-inline: auto;
   background-color: white;
   overflow: hidden;
