@@ -1,6 +1,7 @@
 import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
-import { notfound } from "~/libs/notfound";
+
+// import { notfound } from "~/libs/notfound";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const data = await api
@@ -18,7 +19,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     .then((res) => res.data?.[0]);
 
   if (!data) {
-    throw notfound();
+    // throw notfound();
   }
 
   return json({ data });
