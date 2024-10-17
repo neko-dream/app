@@ -89,7 +89,7 @@ export function Deck() {
   // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
   return item?.map(({ x, y, rot, scale }, i) => (
     <animated.div
-      className="block absolute touch-none will-change-transform h-[calc(100%-116px)] w-[80%] left-[10%] z-10"
+      className="block absolute touch-none will-change-transform h-[calc(100%-116px-40px)] w-[80%] left-[10%] z-10"
       key={i}
       style={{ x, y }}
     >

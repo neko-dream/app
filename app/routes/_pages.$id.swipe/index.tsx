@@ -12,6 +12,7 @@
 // import { api } from "~/libs/api";
 // import { useLoaderData } from "@remix-run/react";
 import Button from "~/components/Button";
+import Heading from "~/components/Heading";
 import { Deck } from "./components/CardSwiper";
 import { loader } from "./modules/loader";
 
@@ -23,6 +24,8 @@ export default function Page() {
 
   return (
     <div className="w-full h-full relative z-30">
+      <Heading className="mb-4">みんなの意見、どう思う？</Heading>
+
       <Deck />
       <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
         <Button variation="disagree">違うかも</Button>
