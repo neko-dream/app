@@ -140,7 +140,6 @@ export const useSwipe = (): useSwipeHook => {
           y: y + i * 6,
           x: x,
           rot,
-          // scale,
           left: "10%",
           delay: undefined,
           config: { friction: 50, tension: down ? 800 : isGone ? 200 : 500 },

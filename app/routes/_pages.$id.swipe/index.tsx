@@ -1,7 +1,7 @@
-import { useEffect } from "react";
 import Button from "~/components/Button";
 import Heading from "~/components/Heading";
 import CardSwiper from "./components/CardSwiper";
+import { OpinionModal } from "./components/OpinonModal";
 import { useSwipe } from "./hooks/useSwipe";
 import { loader } from "./modules/loader";
 
@@ -13,13 +13,18 @@ export default function Page() {
   const swipe = useSwipe();
 
   const handleClose = () => {
+    swipe.api.resume();
+    swipe.state.setOpen(false);
     swipe.api.start((i) => {
       const current = 2 - swipe.gone.size;
       if (i !== current) return;
 
       return {
+        w: "80%",
+        h: "75%",
         y: i * 6,
         x: 0,
+        left: "10%",
         config: {
           friction: 50,
           tension: 200,
@@ -44,21 +49,24 @@ export default function Page() {
   };
 
   return (
-    <div className="w-full h-full relative z-30">
-      <Heading className="mb-4">みんなの意見、どう思う？</Heading>
-      <CardSwiper {...swipe} />
-      <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
-        <Button variation="disagree" onClick={() => handleClick("disagree")}>
-          違うかも
-        </Button>
-        <Button variation="pass" onClick={() => handleClick("pass")}>
-          保留
-        </Button>
-        <Button variation="agree" onClick={() => handleClick("agree")}>
-          良さそう
-        </Button>
+    <>
+      <div className="w-full h-full relative z-30">
+        <Heading className="mb-4">みんなの意見、どう思う？</Heading>
+        <CardSwiper {...swipe} />
+        <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
+          <Button variation="disagree" onClick={() => handleClick("disagree")}>
+            違うかも
+          </Button>
+          <Button variation="pass" onClick={() => handleClick("pass")}>
+            保留
+          </Button>
+          <Button variation="agree" onClick={() => handleClick("agree")}>
+            良さそう
+          </Button>
+        </div>
       </div>
-    </div>
+      <OpinionModal onOpenChange={handleClose} open={swipe.state.open} />
+    </>
   );
 }
 

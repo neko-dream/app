@@ -49,10 +49,13 @@ function Card(
       {children}
 
       <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
-      <div className="card-link mt-1 flex items-center space-x-1 text-blue-500">
+      <button
+        onClick={() => console.log("コメント")}
+        className="card-link mt-1 flex items-center space-x-1 text-blue-500"
+      >
         <RiChat1Line />
         <p className="text-sm">コメント16件</p>
-      </div>
+      </button>
     </div>
   );
 }
