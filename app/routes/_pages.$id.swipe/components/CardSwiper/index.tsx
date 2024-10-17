@@ -6,9 +6,6 @@ import "./index.css";
 
 const cards = [
   "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/9/9b/RWS_Tarot_07_Chariot.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_06_Lovers.jpg",
   "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/RWS_Tarot_02_High_Priestess.jpg/690px-RWS_Tarot_02_High_Priestess.jpg",
   "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",
 ];
@@ -33,12 +30,9 @@ export function Deck() {
     from: from(),
   }));
 
-  // Create a bunch of springs using the helpers above
-  // Create a gesture, we're interested in down-state, delta (current-pos - click-pos), direction and velocity
   const bind = useDrag(
     ({ args: [index], down, movement: [mx, my], velocity }) => {
       const trigger = velocity > 0.1; // If you flick hard enough it should trigger the card to fly out
-      // 動きの幅を取得してどちらに飛ばすか決める。
       let xdir = 0;
       if (100 < mx) {
         xdir = 1;
@@ -53,11 +47,6 @@ export function Deck() {
         ydir = -1;
       }
 
-      // const xdir = xDir < 0 ? -1 : 1; // Direction should either point left or right
-      // const ydir = yDir < 0 ? -1 : 1; // Direction should either point left or right
-      // If button/finger's up and trigger velocity is reached, we flag the card ready to fly out
-      // console.log(gone.size);
-
       api.start((i) => {
         if (!down && trigger && (ydir !== 0 || xdir !== 0)) {
           gone.add(index);
@@ -66,14 +55,9 @@ export function Deck() {
         if (i !== index) return;
 
         const isGone = gone.has(index);
-        const x = isGone ? (200 + window.innerWidth) * xdir : down ? mx : i * 6; // When a card is gone it flys out left or right, otherwise goes back to zero
-        const y = isGone
-          ? (200 + window.innerHeight) * ydir
-          : down
-            ? my
-            : i * 6; // When a card is gone it flys out left or right, otherwise goes back to zero
-        const rot = mx / 100 + (isGone ? xdir * 10 * velocity : 0); // How much the card tilts, flicking it harder makes it rotate faster
-        const scale = down ? 1.1 : 1; // Active cards lift up a bit
+        const x = isGone ? (200 + window.innerWidth) * xdir : down ? mx : 0; // When a card is gone it flys out left or right, otherwise goes back to zero
+        const y = isGone ? (200 + window.innerHeight) * ydir : down ? my : 0; // When a card is gone it flys out left or right, otherwise goes back to zero
+        const rot = down ? mx / 100 + (isGone ? xdir * 10 * velocity : 0) : 0; // How much the card tilts, flicking it harder makes it rotate faster
 
         if (isGone) {
           if (100 < mx) {
@@ -90,10 +74,10 @@ export function Deck() {
         }
 
         return {
-          y,
-          x,
+          y: y + i * 6,
+          x: x + i * 6,
           rot,
-          scale,
+          // scale,
           delay: undefined,
           config: { friction: 50, tension: down ? 800 : isGone ? 200 : 500 },
         };
@@ -111,12 +95,7 @@ export function Deck() {
         <animated.div className="deck" key={i} style={{ x, y }}>
           <animated.div
             {...bind(i)}
-            style={{
-              transform: interpolate([rot, scale], trans),
-              // backgroundImage: `url("https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg")`,
-              // width: "100px",
-              // height: "200px",
-            }}
+            style={{ transform: interpolate([rot, scale], trans) }}
           >
             <Card
               title={"テスト"}
