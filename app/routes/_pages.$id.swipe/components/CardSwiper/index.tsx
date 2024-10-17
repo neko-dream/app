@@ -2,7 +2,6 @@ import { useSprings, animated, to as interpolate } from "@react-spring/web";
 import { useState } from "react";
 import { useDrag } from "react-use-gesture";
 import Card from "~/components/Card";
-import "./index.css";
 
 const cards = [
   "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg",
@@ -11,7 +10,7 @@ const cards = [
 ];
 
 const to = (i: number) => ({
-  x: i * 6,
+  x: 0,
   y: i * 6,
   scale: 1,
   delay: i * 50,
@@ -23,7 +22,6 @@ const trans = (r: number, s: number) =>
   `rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
 
 export function Deck() {
-  const [text, setText] = useState("Swipe me");
   const [gone] = useState(() => new Set()); // The set flags all the cards that are flicked out
   const [item, api] = useSprings(cards.length, (i) => ({
     ...to(i),
@@ -61,21 +59,21 @@ export function Deck() {
 
         if (isGone) {
           if (100 < mx) {
-            setText("右にスワイプした");
+            // setText("右にスワイプした");
           } else if (mx < -100) {
-            setText("左にスワイプした");
+            // setText("左にスワイプした");
           }
 
           if (100 < my) {
-            setText("下にスワイプした");
+            // setText("下にスワイプした");
           } else if (my < -100) {
-            setText("上にスワイプした");
+            // setText("上にスワイプした");
           }
         }
 
         return {
           y: y + i * 6,
-          x: x + i * 6,
+          x: x,
           rot,
           // scale,
           delay: undefined,
@@ -83,36 +81,36 @@ export function Deck() {
         };
       });
       if (!down && gone.size === cards.length) {
-        setText("終了");
+        // setText("終了");
       }
     },
   );
 
   // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
-  return (
-    <>
-      {item?.map(({ x, y, rot, scale }, i) => (
-        <animated.div className="deck" key={i} style={{ x, y }}>
-          <animated.div
-            {...bind(i)}
-            style={{ transform: interpolate([rot, scale], trans) }}
-          >
-            <Card
-              title={"テスト"}
-              description={"テスト本文です。"}
-              user={{
-                displayID: "",
-                displayName: "ドチャクソ卍太郎",
-                photoURL:
-                  "https://avatars.githubusercontent.com/u/135724197?s=96&v=4",
-              }}
-              opinionStatus="disagree"
-              className="bg-white pointer-events-none select-none"
-            />
-          </animated.div>
-        </animated.div>
-      ))}
-      <p className="mt-80">{text}</p>
-    </>
-  );
+  return item?.map(({ x, y, rot, scale }, i) => (
+    <animated.div
+      className="block absolute touch-none will-change-transform h-[calc(100%-116px)] w-[80%] left-[10%] z-10"
+      key={i}
+      style={{ x, y }}
+    >
+      <animated.div
+        {...bind(i)}
+        style={{ transform: interpolate([rot, scale], trans) }}
+        className="h-full"
+      >
+        <Card
+          title={"テスト"}
+          description={"テスト本文です。"}
+          user={{
+            displayID: "",
+            displayName: "ドチャクソ卍太郎",
+            photoURL:
+              "https://avatars.githubusercontent.com/u/135724197?s=96&v=4",
+          }}
+          opinionStatus="disagree"
+          className="bg-white pointer-events-none select-none h-full w-full"
+        />
+      </animated.div>
+    </animated.div>
+  ));
 }

@@ -17,7 +17,7 @@ type Card = {
 };
 
 const card = tv({
-  base: "card rounded-md border border-solid border-black p-4",
+  base: "rounded-md border border-solid border-black p-4",
 });
 
 function Card(
@@ -42,9 +42,9 @@ function Card(
         <p className="text-xs text-[#6d6c6a]">{user.displayName}</p>
       </div>
 
-      <button className="ml-auto">
+      {/* <button className="ml-auto">
         <RiMore2Fill className="card-meatball" size={24} />
-      </button>
+      </button> */}
 
       {children}
 

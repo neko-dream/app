@@ -11,7 +11,7 @@ export default function Route() {
 
   return (
     <>
-      <div className="flex h-[96px] flex-col justify-between p-3 pl-4">
+      <div className="shrink-0 flex h-[96px] flex-col justify-between p-3 pl-4">
         <p className="text-sm text-[#6d6c6a]">テーマ</p>
         <p>{session.theme}</p>
         <div className="flex items-center space-x-1">
