@@ -7,6 +7,7 @@ export type useSwipeHook = {
   item: Item;
   api: Api;
   bind: (...args: number[]) => ReactEventHandlers;
+  gone: Set<number>;
 };
 
 type Api = SpringRef<{
@@ -39,7 +40,7 @@ const to = (i: number) => ({
 const from = () => ({ x: 0, rot: 0, y: -1000, scale: 1.5 });
 
 export const useSwipe = (): useSwipeHook => {
-  const [gone] = useState(() => new Set()); // The set flags all the cards that are flicked out
+  const [gone] = useState(() => new Set<number>()); // The set flags all the cards that are flicked out
   const [item, api] = useSprings(cards.length, (i) => ({
     ...to(i),
     from: from(),
@@ -104,6 +105,7 @@ export const useSwipe = (): useSwipeHook => {
   );
 
   return {
+    gone,
     item,
     api,
     bind,

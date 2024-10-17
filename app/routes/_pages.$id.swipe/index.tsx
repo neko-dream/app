@@ -1,16 +1,3 @@
-// import {
-//   useLoaderData,
-//   useOutletContext,
-//   useRevalidator,
-// } from "@remix-run/react";
-// import { useCallback } from "react";
-// import Button from "~/components/Button";
-// import Card from "~/components/Card";
-// import Heading from "~/components/Heading";
-// import { OpinionStatus } from "~/feature/opinion/status";
-// import { SessionRouteContext } from "~/feature/session/context";
-// import { api } from "~/libs/api";
-// import { useLoaderData } from "@remix-run/react";
 import Button from "~/components/Button";
 import Heading from "~/components/Heading";
 import CardSwiper from "./components/CardSwiper";
@@ -22,25 +9,35 @@ export { loader };
 
 export default function Page() {
   // const { data } = useLoaderData<typeof loader>();
-  const props = useSwipe();
+  const swipe = useSwipe();
 
-  const handleClick = () => {
-    console.log("clicked");
+  const handleClick = (v: string) => {
+    swipe.api.start((i) => {
+      const current = 2 - swipe.gone.size;
+      if (i !== current) return;
+      swipe.gone.add(current);
+
+      return {
+        x: v === "agree" ? 800 : v == "disagree" ? -800 : 0,
+        y: v === "pass" ? 800 : 0,
+        scale: 1,
+        config: { friction: 50, tension: 200 },
+      };
+    });
   };
 
   return (
     <div className="w-full h-full relative z-30">
       <Heading className="mb-4">みんなの意見、どう思う？</Heading>
-
-      <CardSwiper {...props} />
+      <CardSwiper {...swipe} />
       <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
-        <Button variation="disagree" onClick={handleClick}>
+        <Button variation="disagree" onClick={() => handleClick("disagree")}>
           違うかも
         </Button>
-        <Button variation="pass" onClick={handleClick}>
+        <Button variation="pass" onClick={() => handleClick("pass")}>
           保留
         </Button>
-        <Button variation="agree" onClick={handleClick}>
+        <Button variation="agree" onClick={() => handleClick("agree")}>
           良さそう
         </Button>
       </div>
