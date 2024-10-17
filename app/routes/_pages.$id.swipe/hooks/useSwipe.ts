@@ -85,6 +85,10 @@ export const useSwipe = (): useSwipeHook => {
         ydir = -1;
       }
 
+      if (open) {
+        return;
+      }
+
       api.start((i) => {
         if (!down && trigger && (ydir !== 0 || xdir !== 0)) {
           if (ydir !== -1) {
