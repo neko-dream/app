@@ -126,6 +126,10 @@ export const useSwipe = (): useSwipeHook => {
               friction: 50,
               tension: down ? 800 : isGone ? 200 : 500,
             },
+            onRest: () => {
+              console.log("onRest");
+              api.pause();
+            },
           };
           // setText("上にスワイプした");
         }
