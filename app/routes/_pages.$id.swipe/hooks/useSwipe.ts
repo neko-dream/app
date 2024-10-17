@@ -8,12 +8,19 @@ export type useSwipeHook = {
   api: Api;
   bind: (...args: number[]) => ReactEventHandlers;
   gone: Set<number>;
+  state: {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  };
 };
 
 type Api = SpringRef<{
   x: number;
   rot: number;
   y: number;
+  w: string;
+  h: string;
+  left: string;
   scale: number;
 }>;
 
@@ -21,6 +28,9 @@ type Item = {
   x: SpringValue<number>;
   rot: SpringValue<number>;
   y: SpringValue<number>;
+  w: SpringValue<string>;
+  h: SpringValue<string>;
+  left: SpringValue<string>;
   scale: SpringValue<number>;
 }[];
 
@@ -31,16 +41,28 @@ const cards = [
 ];
 
 const to = (i: number) => ({
+  w: "80%",
+  h: "75%",
   x: 0,
   y: i * 6,
+  left: "10%",
   scale: 1,
   delay: i * 50,
 });
 
-const from = () => ({ x: 0, rot: 0, y: -1000, scale: 1.5 });
+const from = () => ({
+  x: 0,
+  w: "100%",
+  h: "100%",
+  left: "10%",
+  rot: 0,
+  y: -1000,
+  scale: 1.5,
+});
 
 export const useSwipe = (): useSwipeHook => {
-  const [gone] = useState(() => new Set<number>()); // The set flags all the cards that are flicked out
+  const [gone] = useState(() => new Set<number>());
+  const [open, setOpen] = useState(false);
   const [item, api] = useSprings(cards.length, (i) => ({
     ...to(i),
     from: from(),
@@ -48,7 +70,7 @@ export const useSwipe = (): useSwipeHook => {
 
   const bind = useDrag(
     ({ args: [index], down, movement: [mx, my], velocity }) => {
-      const trigger = velocity > 0.1; // If you flick hard enough it should trigger the card to fly out
+      const trigger = velocity > 0.1;
       let xdir = 0;
       if (100 < mx) {
         xdir = 1;
@@ -65,7 +87,9 @@ export const useSwipe = (): useSwipeHook => {
 
       api.start((i) => {
         if (!down && trigger && (ydir !== 0 || xdir !== 0)) {
-          gone.add(index);
+          if (ydir !== -1) {
+            gone.add(index);
+          }
         }
 
         if (i !== index) return;
@@ -84,16 +108,36 @@ export const useSwipe = (): useSwipeHook => {
 
           if (100 < my) {
             // setText("下にスワイプした");
-          } else if (my < -100) {
-            // setText("上にスワイプした");
           }
+        }
+        if (!down && my < -100) {
+          console.log("swipe");
+          setOpen(true);
+
+          return {
+            w: "95%",
+            h: "calc(30%)",
+            y: -130,
+            x: 0,
+            left: "2.5%",
+            rot,
+            delay: undefined,
+            config: {
+              friction: 50,
+              tension: down ? 800 : isGone ? 200 : 500,
+            },
+          };
+          // setText("上にスワイプした");
         }
 
         return {
+          w: "80%",
+          h: "75%",
           y: y + i * 6,
           x: x,
           rot,
           // scale,
+          left: "10%",
           delay: undefined,
           config: { friction: 50, tension: down ? 800 : isGone ? 200 : 500 },
         };
@@ -109,5 +153,9 @@ export const useSwipe = (): useSwipeHook => {
     item,
     api,
     bind,
+    state: {
+      open,
+      setOpen,
+    },
   };
 };

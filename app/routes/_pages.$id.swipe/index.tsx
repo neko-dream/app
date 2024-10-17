@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Button from "~/components/Button";
 import Heading from "~/components/Heading";
 import CardSwiper from "./components/CardSwiper";
@@ -10,6 +11,22 @@ export { loader };
 export default function Page() {
   // const { data } = useLoaderData<typeof loader>();
   const swipe = useSwipe();
+
+  const handleClose = () => {
+    swipe.api.start((i) => {
+      const current = 2 - swipe.gone.size;
+      if (i !== current) return;
+
+      return {
+        y: i * 6,
+        x: 0,
+        config: {
+          friction: 50,
+          tension: 200,
+        },
+      };
+    });
+  };
 
   const handleClick = (v: string) => {
     swipe.api.start((i) => {
