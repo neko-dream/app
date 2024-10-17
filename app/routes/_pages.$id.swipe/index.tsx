@@ -13,7 +13,8 @@
 // import { useLoaderData } from "@remix-run/react";
 import Button from "~/components/Button";
 import Heading from "~/components/Heading";
-import { Deck } from "./components/CardSwiper";
+import CardSwiper from "./components/CardSwiper";
+import { useSwipe } from "./hooks/useSwipe";
 import { loader } from "./modules/loader";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
@@ -21,16 +22,27 @@ export { loader };
 
 export default function Page() {
   // const { data } = useLoaderData<typeof loader>();
+  const props = useSwipe();
+
+  const handleClick = () => {
+    console.log("clicked");
+  };
 
   return (
     <div className="w-full h-full relative z-30">
       <Heading className="mb-4">みんなの意見、どう思う？</Heading>
 
-      <Deck />
+      <CardSwiper {...props} />
       <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
-        <Button variation="disagree">違うかも</Button>
-        <Button variation="pass">保留</Button>
-        <Button variation="agree">良さそう</Button>
+        <Button variation="disagree" onClick={handleClick}>
+          違うかも
+        </Button>
+        <Button variation="pass" onClick={handleClick}>
+          保留
+        </Button>
+        <Button variation="agree" onClick={handleClick}>
+          良さそう
+        </Button>
       </div>
     </div>
   );
