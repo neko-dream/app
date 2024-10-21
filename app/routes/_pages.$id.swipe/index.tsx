@@ -1,33 +1,51 @@
-import Button from "~/components/Button";
+import { Link, useLoaderData, useParams } from "@remix-run/react";
+import Button, { button } from "~/components/Button";
 import Heading from "~/components/Heading";
 import CardSwiper from "./components/CardSwiper";
 import { OpinionModal } from "./components/OpinonModal";
 import { useSwipe } from "./hooks/useSwipe";
+import { animations } from "./libs/animations";
 import { loader } from "./modules/loader";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
 
 export default function Page() {
-  // const { data } = useLoaderData<typeof loader>();
-  const swipe = useSwipe();
+  const params = useParams();
+  const { data } = useLoaderData<typeof loader>();
+  const swipe = useSwipe({ cards: data });
 
-  const handleClose = () => {
+  if (!data.length) {
+    return (
+      <>
+        <Heading className="mb-4">みんなの意見、どう思う？</Heading>
+        <div className="flex-1 flex flex-col justify-center items-center">
+          <p>全ての意見に意思表明しました🎉</p>
+          <Link
+            to={`/${params.id}/opinion`}
+            className={button({ color: "primary", className: "mt-8" })}
+          >
+            みんなの意見を見る
+          </Link>
+        </div>
+      </>
+    );
+  }
+
+  const handleClose = (v: string | null) => {
     swipe.api.resume();
-    swipe.state.setOpen(false);
+    swipe.state.setIsOpnionModalOpen(false);
     swipe.api.start((i) => {
-      const current = 2 - swipe.gone.size;
+      const current = data.length - swipe.gone.size - 1;
       if (i !== current) return;
 
       return {
-        w: "80%",
-        h: "75%",
+        ...animations.init(),
         y: i * 6,
-        x: 0,
-        left: "10%",
-        config: {
-          friction: 50,
-          tension: 200,
+        onStart: () => {
+          if (v) {
+            handleClick(v);
+          }
         },
       };
     });
@@ -35,8 +53,9 @@ export default function Page() {
 
   const handleClick = (v: string) => {
     swipe.api.start((i) => {
-      const current = 2 - swipe.gone.size;
+      const current = data.length - swipe.gone.size - 1;
       if (i !== current) return;
+
       swipe.gone.add(current);
 
       return {
@@ -52,7 +71,7 @@ export default function Page() {
     <>
       <div className="w-full h-full relative z-30">
         <Heading className="mb-4">みんなの意見、どう思う？</Heading>
-        <CardSwiper {...swipe} />
+        <CardSwiper {...swipe} itemLength={data.length} />
         <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
           <Button variation="disagree" onClick={() => handleClick("disagree")}>
             違うかも
@@ -64,8 +83,11 @@ export default function Page() {
             良さそう
           </Button>
         </div>
+        <OpinionModal
+          open={swipe.state.isOpinionModalOpen}
+          onOpenChange={handleClose}
+        />
       </div>
-      <OpinionModal onOpenChange={handleClose} open={swipe.state.open} />
     </>
   );
 }

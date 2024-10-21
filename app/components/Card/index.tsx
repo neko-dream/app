@@ -14,10 +14,11 @@ type Card = {
   children?: ReactNode;
   opinionStatus: keyof typeof OpinionJpMap;
   user: User;
+  isOpnionLink?: boolean;
 };
 
 const card = tv({
-  base: "rounded-md border border-solid border-black p-4",
+  base: "card rounded-md border border-solid border-black p-4",
 });
 
 function Card(
@@ -28,6 +29,7 @@ function Card(
     opinionStatus,
     children,
     className,
+    isOpnionLink,
     ...props
   }: Props,
   ref: ForwardedRef<HTMLDivElement>,
@@ -49,13 +51,15 @@ function Card(
       {children}
 
       <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
-      <button
-        onClick={() => console.log("コメント")}
-        className="card-link mt-1 flex items-center space-x-1 text-blue-500"
-      >
-        <RiChat1Line />
-        <p className="text-sm">コメント16件</p>
-      </button>
+      {isOpnionLink && (
+        <button
+          onClick={() => console.log("コメント")}
+          className="card-link mt-1 flex items-center space-x-1 text-blue-500 z-50"
+        >
+          <RiChat1Line />
+          <p className="text-sm">コメント16件</p>
+        </button>
+      )}
     </div>
   );
 }

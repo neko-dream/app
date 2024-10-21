@@ -448,7 +448,7 @@ paths:
       x-ogen-operation-group: Opinion
   /talksessions/{talkSessionId}:
     get:
-      summary: 🚧 トークセッションの詳細
+      summary: トークセッションの詳細
       deprecated: false
       description: ''
       operationId: getTalkSessionDetail
@@ -561,7 +561,7 @@ paths:
                       required:
                         - talkSession
                         - opinionCount
-                  pagination:
+                  pagination: &ref_5
                     $ref: '#/components/schemas/offsetPagination'
                 required:
                   - talkSessions
@@ -680,7 +680,7 @@ paths:
                     description: 終了予定日時
                   location:
                     anyOf:
-                      - &ref_5
+                      - &ref_6
                         $ref: '#/components/schemas/location'
                       - type: 'null'
                     description: 位置情報
@@ -810,6 +810,46 @@ paths:
                 required:
                   - code
                   - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: TalkSession
+  /talksessions/{talkSessionId}/report:
+    get:
+      summary: 🚧 トークセッションレポートを返す
+      deprecated: false
+      description: ''
+      operationId: getTalkSEssionReport
+      tags:
+        - talk_session
+      parameters:
+        - name: talkSessionId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
               examples:
                 '1':
                   summary: internal
@@ -1226,7 +1266,8 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
-      security: []
+      security:
+        - apikey-header-SessionId: []
       x-ogen-operation-group: User
   /talksessions/histories:
     get:
@@ -1236,7 +1277,40 @@ paths:
       operationId: sessionsHistory
       tags:
         - user
-      parameters: []
+      parameters:
+        - name: limit
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: integer
+        - name: theme
+          in: query
+          description: 'テーマ '
+          required: false
+          schema:
+            type: string
+            nullable: true
+        - name: status
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+            enum:
+              - open
+              - finished
+            x-apidog:
+              enumDescriptions:
+                open: ''
+                finished: ''
+            nullable: true
       responses:
         '200':
           description: ''
@@ -1244,7 +1318,22 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: {}
+                properties:
+                  pagination: *ref_5
+                  talkSessions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        opinionCount:
+                          type: integer
+                        talkSession: *ref_3
+                      required:
+                        - opinionCount
+                        - talkSession
+                required:
+                  - pagination
+                  - talkSessions
           headers: {}
         '400':
           description: ''
@@ -1274,7 +1363,8 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
-      security: []
+      security:
+        - apikey-header-SessionId: []
       x-ogen-operation-group: User
   /auth/token/info:
     get:
@@ -1462,7 +1552,7 @@ components:
           description: 終了予定日時
         location:
           anyOf:
-            - *ref_5
+            - *ref_6
             - type: 'null'
           description: 位置情報
         city:
@@ -1665,6 +1755,9 @@ components:
           type: string
         groupId:
           type: integer
+        perimeterIndex:
+          type: integer
+          description: 境界ポイントのインデックス
       required:
         - posX
         - posY

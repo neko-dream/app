@@ -3,22 +3,24 @@ import { api } from "~/libs/api";
 import { notfound } from "~/libs/notfound";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const sessionID = params.id!;
+
   const { data, error } = await api.GET(
     "/talksessions/{talkSessionID}/swipe_opinions",
     {
       headers: request.headers,
       params: {
         path: {
-          talkSessionID: params.id || "",
+          talkSessionID: sessionID!,
         },
         query: {
-          limit: 1,
+          limit: 3,
         },
       },
     },
   );
 
-  if (error) {
+  if (!data || error) {
     throw notfound();
   }
 

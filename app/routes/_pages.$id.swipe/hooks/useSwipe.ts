@@ -1,95 +1,43 @@
 import { useState } from "react";
-import { SpringRef, SpringValue, useSprings } from "react-spring";
+import { useSprings } from "react-spring";
 import { useDrag } from "react-use-gesture";
-import { ReactEventHandlers } from "react-use-gesture/dist/types";
+import { components } from "~/libs/api/openapi";
+import { animations } from "../libs/animations";
 
-export type useSwipeHook = {
-  item: Item;
-  api: Api;
-  bind: (...args: number[]) => ReactEventHandlers;
-  gone: Set<number>;
-  state: {
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  };
+type Props = {
+  cards: {
+    opinion: components["schemas"]["opinion"];
+    user: components["schemas"]["user"];
+    replyCount: number;
+  }[];
 };
 
-type Api = SpringRef<{
-  x: number;
-  rot: number;
-  y: number;
-  w: string;
-  h: string;
-  left: string;
-  scale: number;
-}>;
-
-type Item = {
-  x: SpringValue<number>;
-  rot: SpringValue<number>;
-  y: SpringValue<number>;
-  w: SpringValue<string>;
-  h: SpringValue<string>;
-  left: SpringValue<string>;
-  scale: SpringValue<number>;
-}[];
-
-const cards = [
-  "https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/RWS_Tarot_02_High_Priestess.jpg/690px-RWS_Tarot_02_High_Priestess.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",
-];
-
-const to = (i: number) => ({
-  w: "80%",
-  h: "75%",
-  x: 0,
-  y: i * 6,
-  left: "10%",
-  scale: 1,
-  delay: i * 50,
-});
-
-const from = () => ({
-  x: 0,
-  w: "100%",
-  h: "100%",
-  left: "10%",
-  rot: 0,
-  y: -1000,
-  scale: 1.5,
-});
-
-export const useSwipe = (): useSwipeHook => {
+export const useSwipe = ({ cards }: Props) => {
   const [gone] = useState(() => new Set<number>());
-  const [open, setOpen] = useState(false);
+  const [isOpinionModalOpen, setIsOpnionModalOpen] = useState(false);
   const [item, api] = useSprings(cards.length, (i) => ({
-    ...to(i),
-    from: from(),
+    ...animations.to(),
+    y: i * 6,
+    delay: i * 50,
+    from: animations.from(),
   }));
 
   const bind = useDrag(
-    ({ args: [index], down, movement: [mx, my], velocity }) => {
-      const trigger = velocity > 0.1;
-      let xdir = 0;
-      if (100 < mx) {
-        xdir = 1;
-      } else if (mx < -100) {
-        xdir = -1;
-      }
+    ({ args: [index], down, movement: [mx, my], velocity, tap }) => {
+      console.log(tap);
 
-      let ydir = 0;
-      if (100 < my) {
-        ydir = 1;
-      } else if (my < -100) {
-        ydir = -1;
-      }
-
-      if (open) {
+      // MEMO: 意見モーダルが開いている時はカードを動かさない
+      if (isOpinionModalOpen) {
         return;
       }
 
+      const trigger = velocity > 0.1;
+      // MEMO: 閾値を超えたらスワイプしたとみなす
+      const xdir = mx > 100 ? 1 : mx < -100 ? -1 : 0;
+      const ydir = my > 100 ? 1 : my < -100 ? -1 : 0;
+
       api.start((i) => {
+        // MEMO: ydir || xidr が 0 でない場合はどこかにスワイプしている
         if (!down && trigger && (ydir !== 0 || xdir !== 0)) {
           if (ydir !== -1) {
             gone.add(index);
@@ -99,9 +47,10 @@ export const useSwipe = (): useSwipeHook => {
         if (i !== index) return;
 
         const isGone = gone.has(index);
-        const x = isGone ? (200 + window.innerWidth) * xdir : down ? mx : 0; // When a card is gone it flys out left or right, otherwise goes back to zero
-        const y = isGone ? (200 + window.innerHeight) * ydir : down ? my : 0; // When a card is gone it flys out left or right, otherwise goes back to zero
-        const rot = down ? mx / 100 + (isGone ? xdir * 10 * velocity : 0) : 0; // How much the card tilts, flicking it harder makes it rotate faster
+        // MEMO: スワイプしたカードの位置を計算
+        const x = isGone ? (200 + window.innerWidth) * xdir : down ? mx : 0;
+        const y = isGone ? (200 + window.innerHeight) * ydir : down ? my : 0;
+        const rot = down ? mx / 100 + (isGone ? xdir * 10 * velocity : 0) : 0;
 
         if (isGone) {
           if (100 < mx) {
@@ -114,41 +63,34 @@ export const useSwipe = (): useSwipeHook => {
             // setText("下にスワイプした");
           }
         }
+
+        const config = {
+          friction: 50,
+          tension: down ? 800 : isGone ? 200 : 500,
+        };
+
         if (!down && my < -100) {
-          console.log("swipe");
-          setOpen(true);
+          setIsOpnionModalOpen(true);
 
           return {
-            w: "95%",
-            h: "calc(30%)",
-            y: -130,
-            x: 0,
-            left: "2.5%",
+            ...animations.opinion(),
             rot,
-            delay: undefined,
-            config: {
-              friction: 50,
-              tension: down ? 800 : isGone ? 200 : 500,
-            },
+            config,
             onRest: () => {
-              console.log("onRest");
               api.pause();
             },
           };
-          // setText("上にスワイプした");
         }
 
         return {
-          w: "80%",
-          h: "75%",
+          ...animations.init(),
           y: y + i * 6,
           x: x,
           rot,
-          left: "10%",
-          delay: undefined,
-          config: { friction: 50, tension: down ? 800 : isGone ? 200 : 500 },
+          config,
         };
       });
+
       if (!down && gone.size === cards.length) {
         // setText("終了");
       }
@@ -161,8 +103,8 @@ export const useSwipe = (): useSwipeHook => {
     api,
     bind,
     state: {
-      open,
-      setOpen,
+      isOpinionModalOpen,
+      setIsOpnionModalOpen,
     },
   };
 };
