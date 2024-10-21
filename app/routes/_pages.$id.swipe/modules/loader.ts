@@ -1,11 +1,11 @@
 import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
-
-// import { notfound } from "~/libs/notfound";
+import { notfound } from "~/libs/notfound";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const data = await api
-    .GET("/talksessions/{talkSessionID}/swipe_opinions", {
+  const { data, error } = await api.GET(
+    "/talksessions/{talkSessionID}/swipe_opinions",
+    {
       headers: request.headers,
       params: {
         path: {
@@ -15,11 +15,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
           limit: 1,
         },
       },
-    })
-    .then((res) => res.data?.[0]);
+    },
+  );
 
-  if (!data) {
-    // throw notfound();
+  if (error) {
+    throw notfound();
   }
 
   return json({ data });

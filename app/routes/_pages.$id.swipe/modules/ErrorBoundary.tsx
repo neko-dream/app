@@ -12,8 +12,7 @@ export function ErrorBoundary(): JSX.Element {
         <Heading>みんなの意見、どう思う？</Heading>
 
         <Error>
-          <p className="text-gray-700">ありがとうございます🙏</p>
-          <p className="text-gray-700">全ての意見に意思表明をしました🎉</p>
+          <p className="text-gray-700">正常にデータを取得できませんでした🙇‍♀️</p>
           <Link
             to={"../opinion"}
             className={button({
