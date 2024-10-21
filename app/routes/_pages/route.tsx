@@ -1,5 +1,5 @@
 import { Await, Link, Outlet, useLoaderData } from "@remix-run/react";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PenIcon from "~/assets/pen.svg";
@@ -14,7 +14,6 @@ export { loader };
 export default function Route() {
   const { $user } = useLoaderData<typeof loader>();
   const [isSearchMenuOpen, setIsSearchMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleClose = () => {
     setIsSearchMenuOpen(false);
@@ -24,16 +23,17 @@ export default function Route() {
     setIsSearchMenuOpen((prev) => !prev);
   };
 
-  useEffect(() => {
-    $user.then((v) => setIsLoggedIn(!!v));
-  }, [$user]);
-
   return (
     <>
       <header className="shrink-0 flex h-10 w-full items-center justify-between border-b-[1px] border-solid border-[#d6e3ed] px-4 space-x-6 z-20 bg-white">
-        <Link to={isLoggedIn ? "/home" : "/"} className="mr-auto">
+        <button
+          className="mr-auto"
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
           Kotohiro
-        </Link>
+        </button>
 
         <button onClick={handleOpenChange}>
           <img src={SearchIcon} alt="" loading="lazy" />
