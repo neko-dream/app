@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
-  const [item, api] = useOpinonModalAnimation({ open });
+  const [item, api] = useOpinonModalAnimation();
   const [opinionState, setOpinionState] = useState<string | null>(null);
 
   useEffect(() => {
