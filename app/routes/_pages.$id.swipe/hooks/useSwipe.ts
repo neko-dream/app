@@ -1,21 +1,28 @@
 import { useState } from "react";
 import { useSprings } from "react-spring";
 import { useDrag } from "react-use-gesture";
+import { OpinionStatus } from "~/feature/opinion/status";
 import { components } from "~/libs/api/openapi";
 import { animations } from "../libs/animations";
 
+type OnSwipeParam = {
+  opinionID: string;
+  opinionStatus: OpinionStatus;
+};
+
 type Props = {
-  cards: {
+  opinions: {
     opinion: components["schemas"]["opinion"];
     user: components["schemas"]["user"];
     replyCount: number;
   }[];
+  onSwipe: ({ opinionID, opinionStatus }: OnSwipeParam) => void;
 };
 
-export const useSwipe = ({ cards }: Props) => {
+export const useSwipe = ({ opinions, onSwipe }: Props) => {
   const [gone] = useState(() => new Set<number>());
   const [isOpinionModalOpen, setIsOpnionModalOpen] = useState(false);
-  const [item, api] = useSprings(cards.length, (i) => ({
+  const [item, api] = useSprings(opinions.length, (i) => ({
     ...animations.to(),
     y: i * 6,
     delay: i * 50,
@@ -34,14 +41,29 @@ export const useSwipe = ({ cards }: Props) => {
       const xdir = mx > 100 ? 1 : mx < -100 ? -1 : 0;
       const ydir = my > 100 ? 1 : my < -100 ? -1 : 0;
 
-      api.start((i) => {
-        // MEMO: ydir || xidr が 0 でない場合はどこかにスワイプしている
-        if (!down && trigger && (ydir !== 0 || xdir !== 0)) {
-          if (ydir !== -1) {
-            gone.add(index);
-          }
+      // MEMO: スワイプしたカードをコールバックに渡す
+      if (!down && trigger) {
+        const opinionID = opinions[opinions.length - gone.size - 1].opinion.id;
+        if (xdir >= 1) {
+          onSwipe({ opinionID, opinionStatus: "agree" });
+        } else if (xdir <= -1) {
+          onSwipe({ opinionID, opinionStatus: "disagree" });
         }
+        if (ydir >= 1) {
+          onSwipe({ opinionID, opinionStatus: "pass" });
+        } else if (ydir <= -1) {
+          setIsOpnionModalOpen(true);
+        }
+      }
 
+      // MEMO: ydir || xidr が 0 でない場合はどこかにスワイプしている
+      if (!down && trigger && (ydir !== 0 || xdir !== 0)) {
+        if (ydir !== -1) {
+          gone.add(index);
+        }
+      }
+
+      api.start((i) => {
         if (i !== index) return;
 
         const isGone = gone.has(index);
@@ -50,26 +72,12 @@ export const useSwipe = ({ cards }: Props) => {
         const y = isGone ? (200 + window.innerHeight) * ydir : down ? my : 0;
         const rot = down ? mx / 100 + (isGone ? xdir * 10 * velocity : 0) : 0;
 
-        if (isGone) {
-          if (100 < mx) {
-            // setText("右にスワイプした");
-          } else if (mx < -100) {
-            // setText("左にスワイプした");
-          }
-
-          if (100 < my) {
-            // setText("下にスワイプした");
-          }
-        }
-
         const config = {
           friction: 50,
           tension: down ? 800 : isGone ? 200 : 500,
         };
 
         if (!down && my < -100) {
-          setIsOpnionModalOpen(true);
-
           return {
             ...animations.opinion(),
             rot,
@@ -88,10 +96,6 @@ export const useSwipe = ({ cards }: Props) => {
           config,
         };
       });
-
-      if (!down && gone.size === cards.length) {
-        // setText("終了");
-      }
     },
   );
 

@@ -7,9 +7,7 @@ import { animations } from "../../libs/animations";
 const trans = (r: number, s: number) =>
   `rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
 
-type Props = ReturnType<typeof useSwipe> & {
-  itemLength: number;
-};
+type Props = ReturnType<typeof useSwipe>;
 
 export default function CardSwiper(props: Props) {
   return props.item?.map(({ x, y, w, h, left, rot, scale, zIndex }, i) => (
@@ -41,11 +39,10 @@ export default function CardSwiper(props: Props) {
           onClick={() => {
             props.state.setIsOpnionModalOpen(true);
             props.api.start((i) => {
-              const current = props.itemLength - props.gone.size - 1;
+              const current = props.item.length - props.gone.size - 1;
               if (current !== i) return;
               return {
                 ...animations.opinion(),
-                rot,
                 onRest: () => {
                   props.api.pause();
                 },

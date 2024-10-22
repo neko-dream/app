@@ -1,12 +1,11 @@
 import { animated } from "@react-spring/web";
-import { useEffect, useState } from "react";
-import { useGesture } from "react-use-gesture";
+import { useCallback, useEffect, useState } from "react";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
 import { OpinionStatus } from "~/feature/opinion/status";
-import { useOpinonModalAnimation } from "../../hooks/useOpinionModal";
+import { useOpinonModal } from "../../hooks/useOpinionModal";
 
 type Props = {
   open: boolean;
@@ -14,7 +13,9 @@ type Props = {
 };
 
 export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
-  const [item, api] = useOpinonModalAnimation();
+  const { item, api, bind } = useOpinonModal({
+    onCloseModal: () => handleCloseModal(),
+  });
   const [opinionState, setOpinionState] = useState<OpinionStatus | null>(null);
 
   useEffect(() => {
@@ -26,9 +27,9 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     setOpinionState(null);
   }, [api, open]);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     onOpenChange(opinionState);
-  };
+  }, [onOpenChange, opinionState]);
 
   const handleClick = (v: OpinionStatus) => {
     setOpinionState((prev) => {
@@ -38,32 +39,6 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
       return v;
     });
   };
-
-  const bind = useGesture({
-    onDrag: ({ down, movement: [, my] }) => {
-      api.start(() => {
-        if (!down) {
-          if (200 < my) {
-            handleCloseModal();
-            return {
-              opacity: 0,
-              y: 500,
-            };
-          } else {
-            return {
-              y: 0,
-            };
-          }
-        }
-
-        return {
-          to: {
-            y: my > 0 ? my : 0,
-          },
-        };
-      });
-    },
-  });
 
   return (
     <>
