@@ -72,7 +72,7 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     <>
       <animated.div
         style={item}
-        className="absolute will-change-transform bottom-0 h-[80%] w-[375px] bg-white z-30 border-t border-gray-200 rounded-t-xl"
+        className="touch-none absolute will-change-transform bottom-0 h-[80%] w-[375px] bg-white z-30 border-t border-gray-200 rounded-t-xl"
       >
         <div
           {...props}
