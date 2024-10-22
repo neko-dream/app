@@ -23,7 +23,7 @@ export default function Page() {
     const opinions = data?.groupOpinions.filter((opinion) => {
       return opinion.groupId === groupID;
     });
-    setOpinions(opinions?.[0].opinions || []);
+    setOpinions(opinions?.[0]?.opinions || []);
   }, [data?.groupOpinions, groupID]);
 
   return (

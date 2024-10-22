@@ -41,8 +41,9 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
   const bind = useGesture({
     onDrag: ({ down, movement: [, my] }) => {
       api.start(() => {
-        console.log(my, down);
-
+        return {
+          y: my,
+        };
         if (!down) {
           if (200 < my) {
             handleCloseModal();
