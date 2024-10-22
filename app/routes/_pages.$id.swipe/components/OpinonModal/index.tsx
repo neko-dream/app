@@ -5,16 +5,17 @@ import Button from "~/components/Button";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
+import { OpinionStatus } from "~/feature/opinion/status";
 import { useOpinonModalAnimation } from "../../hooks/useOpinionModal";
 
 type Props = {
   open: boolean;
-  onOpenChange: (state: string | null) => void;
+  onOpenChange: (state: OpinionStatus | null) => void;
 };
 
 export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
   const [item, api] = useOpinonModalAnimation();
-  const [opinionState, setOpinionState] = useState<string | null>(null);
+  const [opinionState, setOpinionState] = useState<OpinionStatus | null>(null);
 
   useEffect(() => {
     if (open) {
@@ -29,7 +30,7 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     onOpenChange(opinionState);
   };
 
-  const handleClick = (v: string) => {
+  const handleClick = (v: OpinionStatus) => {
     setOpinionState((prev) => {
       if (prev === v) {
         return null;
@@ -58,7 +59,6 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
         return {
           to: {
             y: my > 0 ? my : 0,
-            duration: 0,
           },
         };
       });
@@ -84,19 +84,19 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
           </animated.div>
           <div className="flex justify-center space-x-2">
             <Button
-              variation={opinionState !== "disagree" ? "pass" : "disagree"}
+              variation={opinionState !== "disagree" ? "disabled" : "disagree"}
               onClick={() => handleClick("disagree")}
             >
               違うかも
             </Button>
             <Button
-              variation={opinionState !== "pass" ? "pass" : "pass"}
+              variation={opinionState !== "pass" ? "disabled" : "pass"}
               onClick={() => handleClick("pass")}
             >
               保留
             </Button>
             <Button
-              variation={opinionState !== "agree" ? "pass" : "agree"}
+              variation={opinionState !== "agree" ? "disabled" : "agree"}
               onClick={() => handleClick("agree")}
             >
               良さそう

@@ -1,6 +1,9 @@
 import { Link, useLoaderData, useParams } from "@remix-run/react";
+import { toast } from "react-toastify";
 import Button, { button } from "~/components/Button";
 import Heading from "~/components/Heading";
+import { OpinionStatus } from "~/feature/opinion/status";
+import { api } from "~/libs/api";
 import CardSwiper from "./components/CardSwiper";
 import { OpinionModal } from "./components/OpinonModal";
 import { useSwipe } from "./hooks/useSwipe";
@@ -12,10 +15,10 @@ export { loader };
 
 export default function Page() {
   const params = useParams();
-  const { data } = useLoaderData<typeof loader>();
-  const swipe = useSwipe({ cards: data });
+  const { data: opinions } = useLoaderData<typeof loader>();
+  const swipe = useSwipe({ cards: opinions });
 
-  if (!data.length) {
+  if (!opinions.length) {
     return (
       <>
         <Heading className="mb-4">みんなの意見、どう思う？</Heading>
@@ -32,11 +35,11 @@ export default function Page() {
     );
   }
 
-  const handleClose = (v: string | null) => {
+  const handleClose = (v: OpinionStatus | null) => {
     swipe.api.resume();
     swipe.state.setIsOpnionModalOpen(false);
     swipe.api.start((i) => {
-      const current = data.length - swipe.gone.size - 1;
+      const current = opinions.length - swipe.gone.size - 1;
       if (i !== current) return;
 
       return {
@@ -44,16 +47,37 @@ export default function Page() {
         y: i * 6,
         onStart: () => {
           if (v) {
-            handleClick(v);
+            handleSubmitVote(v);
           }
         },
       };
     });
   };
 
-  const handleClick = (v: string) => {
+  const handleSubmitVote = async (v: OpinionStatus) => {
+    const { error } = await api.POST(
+      "/talksessions/{talkSessionID}/opinions/{opinionID}/votes",
+      {
+        credentials: "include",
+        params: {
+          path: {
+            talkSessionID: params.id!,
+            opinionID:
+              opinions[opinions.length - swipe.gone.size - 1].opinion.id,
+          },
+        },
+        body: {
+          voteStatus: v,
+        },
+      },
+    );
+
+    if (error) {
+      return toast.error(error.message);
+    }
+
     swipe.api.start((i) => {
-      const current = data.length - swipe.gone.size - 1;
+      const current = opinions.length - swipe.gone.size - 1;
       if (i !== current) return;
 
       swipe.gone.add(current);
@@ -71,15 +95,18 @@ export default function Page() {
     <>
       <div className="w-full h-full relative z-30">
         <Heading className="mb-4">みんなの意見、どう思う？</Heading>
-        <CardSwiper {...swipe} itemLength={data.length} />
+        <CardSwiper {...swipe} itemLength={opinions.length} />
         <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
-          <Button variation="disagree" onClick={() => handleClick("disagree")}>
+          <Button
+            variation="disagree"
+            onClick={() => handleSubmitVote("disagree")}
+          >
             違うかも
           </Button>
-          <Button variation="pass" onClick={() => handleClick("pass")}>
+          <Button variation="pass" onClick={() => handleSubmitVote("pass")}>
             保留
           </Button>
-          <Button variation="agree" onClick={() => handleClick("agree")}>
+          <Button variation="agree" onClick={() => handleSubmitVote("agree")}>
             良さそう
           </Button>
         </div>
