@@ -1,4 +1,4 @@
-import { easings, useSpring } from "react-spring";
+import { useSpring } from "react-spring";
 
 export const useOpinonModalAnimation = () => {
   return useSpring(() => ({
@@ -9,18 +9,10 @@ export const useOpinonModalAnimation = () => {
     enter: {
       opacity: 1,
       y: 0,
-      config: {
-        duration: 400,
-        easing: easings.easeInOutExpo,
-      },
     },
     leave: {
       opacity: 0,
       y: 800,
-      config: {
-        duration: 200,
-        easing: easings.easeInOutExpo,
-      },
     },
   }));
 };
