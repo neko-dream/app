@@ -77,11 +77,11 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
         >
           <animated.div
             {...bind()}
-            className="cursor-pointer w-full mx-auto pb-4 pt-2"
+            className="cursor-pointer w-full mx-auto py-2"
           >
             <div className="h-1 w-[50%] bg-slate-400 mx-auto rounded-full" />
+            <p className="mt-2 select-none text-center">あなたはどう思う？</p>
           </animated.div>
-          <p className="mx-auto !my-0 select-none">あなたはどう思う？</p>
           <div className="flex justify-center space-x-2">
             <Button
               variation={opinionState !== "disagree" ? "pass" : "disagree"}
