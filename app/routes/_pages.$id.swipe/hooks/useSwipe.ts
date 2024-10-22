@@ -23,9 +23,7 @@ export const useSwipe = ({ cards }: Props) => {
   }));
 
   const bind = useDrag(
-    ({ args: [index], down, movement: [mx, my], velocity, tap }) => {
-      console.log(tap);
-
+    ({ args: [index], down, movement: [mx, my], velocity }) => {
       // MEMO: 意見モーダルが開いている時はカードを動かさない
       if (isOpinionModalOpen) {
         return;
