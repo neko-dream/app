@@ -42,7 +42,7 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     onDrag: ({ down, movement: [, my] }) => {
       api.start(() => {
         return {
-          y: my,
+          y: down ? my : 0,
         };
         if (!down) {
           if (200 < my) {
