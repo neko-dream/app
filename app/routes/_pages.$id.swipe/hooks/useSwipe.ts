@@ -104,6 +104,7 @@ export const useSwipe = ({ opinions, onSwipe }: Props) => {
     item,
     api,
     bind,
+    opinions,
     state: {
       isOpinionModalOpen,
       setIsOpnionModalOpen,

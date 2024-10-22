@@ -22,15 +22,14 @@ export default function CardSwiper(props: Props) {
         className="h-full w-full"
       >
         <Card
-          title={"テスト"}
-          description={"テスト本文です。"}
+          title={props.opinions[i].opinion.title || ""}
+          description={props.opinions[i].opinion.content || ""}
           user={{
             displayID: "",
-            displayName: "ドチャクソ卍太郎",
-            photoURL:
-              "https://avatars.githubusercontent.com/u/135724197?s=96&v=4",
+            displayName: props.opinions[i].user.displayName || "",
+            photoURL: props.opinions[i].user.iconURL || "",
           }}
-          opinionStatus="disagree"
+          opinionStatus={props.opinions[i].opinion.voteType!}
           className="bg-white pointer-events-none select-none h-full w-full"
         />
       </animated.div>
