@@ -3,6 +3,9 @@ import EefaultIcon from "~/assets/default/avator-1.png";
 import FacebookLoginButton from "~/components/Button/template/FacebookLoginButton";
 import GoogleLoginButton from "~/components/Button/template/GoogleLoginButton";
 import { generateMetaTag } from "~/modules/generateMetaTag";
+import { loader } from "./modules/loader";
+
+export { loader };
 
 export const meta = generateMetaTag({
   title: "トップページ",
