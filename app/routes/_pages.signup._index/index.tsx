@@ -16,7 +16,6 @@ import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
 import { handleDisabled, isFieldsError } from "~/feature/form/libs";
 import { signupFormSchema } from "~/feature/user/schemas/form";
 import { api } from "~/libs/api";
-import { scrolled } from "~/variants/scrolled-component";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader } from "./modules/loader";
@@ -53,9 +52,7 @@ export default function Page() {
   };
 
   return (
-    <div
-      className={scrolled({ className: "flex flex-1 flex-col items-center" })}
-    >
+    <div className="flex flex-1 flex-col items-center">
       <p className="mt-8 font-bold">ユーザー登録する</p>
       <p className="mt-3">打っていいのは打たれる覚悟のある奴だけだ</p>
       <Form

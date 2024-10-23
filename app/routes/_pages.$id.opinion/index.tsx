@@ -4,7 +4,6 @@ import { button } from "~/components/Button";
 import Card from "~/components/Card";
 import Heading from "~/components/Heading";
 import { components } from "~/libs/api/openapi";
-import { scrolled } from "~/variants/scrolled-component";
 import { loader } from "./modules/loader";
 
 export { loader };
@@ -55,7 +54,7 @@ export default function Page() {
           );
         })}
       </select>
-      <div className={scrolled({ class: "mx-4 space-y-4" })}>
+      <div className="mx-4 space-y-4">
         {opinions.map((opinion, i) => {
           return (
             <Card

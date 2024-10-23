@@ -40,6 +40,10 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     });
   };
 
+  if (!open) {
+    return null;
+  }
+
   return (
     <>
       <animated.div
@@ -96,13 +100,11 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
         </div>
       </animated.div>
 
-      {open && (
-        <animated.div
-          style={{ opacity: item.opacity, y: -96 }}
-          className="w-[375px] top-0 absolute bg-slate-600/60 h-screen z-10"
-          onClick={handleCloseModal}
-        ></animated.div>
-      )}
+      <animated.div
+        style={{ opacity: item.opacity, y: -96 }}
+        className="w-[375px] top-0 absolute bg-slate-600/60 h-full z-10"
+        onClick={handleCloseModal}
+      />
     </>
   );
 };

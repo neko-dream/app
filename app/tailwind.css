@@ -14,7 +14,6 @@ body {
   height: 100dvh;
   margin-inline: auto;
   background-color: white;
-  overflow: hidden;
 }
 
 .card {

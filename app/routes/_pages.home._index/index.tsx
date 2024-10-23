@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import Heading from "~/components/Heading";
 import Session from "~/components/Session";
 import Tabs from "~/components/Tabs";
-import { scrolled } from "~/variants/scrolled-component";
 import { loader } from "./modules/loader";
 
 export { loader };
@@ -24,7 +23,7 @@ export default function Page() {
         active={isFinished ? "終了" : "開催中"}
         className="shrink-0"
       />
-      <div className={scrolled({ className: "space-y-2 bg-gray-100 pt-2" })}>
+      <div className="space-y-2 bg-gray-100 pt-2">
         <Suspense>
           <Await resolve={$session}>
             {(data) => {
