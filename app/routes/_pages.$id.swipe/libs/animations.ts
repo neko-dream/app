@@ -36,7 +36,7 @@ export const animations = {
     h: "50%",
     x: 0,
     left: "10%",
-    zIndex: 100,
+    zIndex: 0,
     delay: undefined,
   }),
 };

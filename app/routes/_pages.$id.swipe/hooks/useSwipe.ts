@@ -51,9 +51,10 @@ export const useSwipe = ({ opinions, onSwipe }: Props) => {
         }
         if (ydir >= 1) {
           onSwipe({ opinionID, opinionStatus: "pass" });
-        } else if (ydir <= -1) {
-          setIsOpnionModalOpen(true);
         }
+      }
+      if (!down && ydir <= -1) {
+        setIsOpnionModalOpen(true);
       }
 
       // MEMO: ydir || xidr が 0 でない場合はどこかにスワイプしている
@@ -93,6 +94,7 @@ export const useSwipe = ({ opinions, onSwipe }: Props) => {
           y: y + i * 6,
           x: x,
           rot,
+          zIndex: down ? 100 : 0,
           config,
         };
       });

@@ -12,7 +12,7 @@ type Props = ReturnType<typeof useSwipe>;
 export default function CardSwiper(props: Props) {
   return props.item?.map(({ x, y, w, h, left, rot, scale, zIndex }, i) => (
     <animated.div
-      className="block absolute touch-none will-change-transform z-10"
+      className="block absolute touch-none will-change-transform"
       key={i}
       style={{ x, y, width: w, height: h, left, zIndex }}
     >

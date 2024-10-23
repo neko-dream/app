@@ -63,7 +63,7 @@ export default function Page() {
 
   if (!opinions.length) {
     return (
-      <div className="w-full h-full relative z-30">
+      <div className="w-full h-full relative">
         <Heading className="mb-4">みんなの意見、どう思う？</Heading>
         <div className="flex flex-col justify-center items-center h-full space-y-4 -mt-40">
           <p>全ての意見に意思表明しました🎉</p>
@@ -162,7 +162,7 @@ export default function Page() {
 
   if (isOpinionEnd) {
     return (
-      <div className="w-full h-full relative z-30">
+      <div className="w-full h-full relative">
         <Heading className="mb-4">みんなの意見、どう思う？</Heading>
         <div className="flex flex-col justify-center items-center h-full space-y-4 -mt-40">
           <p>３件の意見に意思表明しました🎉</p>
@@ -181,7 +181,7 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full h-full relative z-30">
+    <div className="w-full h-full relative">
       <Heading className="mb-4">みんなの意見、どう思う？</Heading>
       <CardSwiper {...swipe} />
       <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
