@@ -63,9 +63,9 @@ export default function Page() {
 
   if (!opinions.length) {
     return (
-      <div className="w-full h-full relative">
+      <div className="w-full relative flex-1">
         <Heading className="mb-4">みんなの意見、どう思う？</Heading>
-        <div className="flex flex-col justify-center items-center h-full space-y-4 -mt-40">
+        <div className="flex flex-col justify-center items-center h-full space-y-4">
           <p>全ての意見に意思表明しました🎉</p>
           <Link
             to={`/${params.id}/opinion`}
@@ -78,7 +78,7 @@ export default function Page() {
     );
   }
 
-  const handleClose = (v: OpinionStatus | null) => {
+  const handleClose = () => {
     swipe.api.resume();
     swipe.state.setIsOpnionModalOpen(false);
     // MEMO: 元の位置に戻す
@@ -89,12 +89,6 @@ export default function Page() {
       return {
         ...animations.init(),
         y: i * 6,
-        onStart: () => {
-          // MEMO: 意思表明をしていた場合はスワイプさせる
-          if (v) {
-            handleSubmitVote(v);
-          }
-        },
       };
     });
   };
@@ -162,9 +156,9 @@ export default function Page() {
 
   if (isOpinionEnd) {
     return (
-      <div className="w-full h-full relative">
+      <div className="w-full relative flex-1">
         <Heading className="mb-4">みんなの意見、どう思う？</Heading>
-        <div className="flex flex-col justify-center items-center h-full space-y-4 -mt-40">
+        <div className="flex flex-col justify-center items-center h-full space-y-4">
           <p>３件の意見に意思表明しました🎉</p>
           <Button variation="primary" onClick={handleRevalidate}>
             さらに意思表明する
@@ -181,7 +175,7 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full relative flex-1">
       <Heading className="mb-4">みんなの意見、どう思う？</Heading>
       <CardSwiper {...swipe} />
       <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">

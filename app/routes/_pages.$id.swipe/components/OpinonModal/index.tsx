@@ -1,22 +1,53 @@
+import { getFormProps, getInputProps } from "@conform-to/react";
 import { animated } from "@react-spring/web";
-import { useCallback, useEffect, useState } from "react";
+import { Form, useParams } from "@remix-run/react";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
-import { OpinionStatus } from "~/feature/opinion/status";
+import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
+import { api as apiClient } from "~/libs/api";
 import { useOpinonModal } from "../../hooks/useOpinionModal";
+import { opinionFormSchema } from "../../schemas/opinionForm.schema";
 
 type Props = {
   open: boolean;
-  onOpenChange: (state: OpinionStatus | null) => void;
+  onOpenChange: () => void;
 };
 
 export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
   const { item, api, bind } = useOpinonModal({
     onCloseModal: () => handleCloseModal(),
   });
-  const [opinionState, setOpinionState] = useState<OpinionStatus | null>(null);
+  const params = useParams();
+
+  const { form, fields } = useCustomForm({
+    schema: opinionFormSchema,
+    onSubmit: async ({ value }) => {
+      const { data, error } = await apiClient.POST(
+        "/talksessions/{talkSessionID}/opinions",
+        {
+          params: {
+            path: {
+              talkSessionID: params.id as never,
+            },
+          },
+          credentials: "include",
+          body: value as never,
+        },
+      );
+
+      if (data) {
+        toast.success("意見を送信しました");
+        onOpenChange();
+      }
+      if (error) {
+        toast.error(error.message);
+      }
+    },
+  });
 
   useEffect(() => {
     if (open) {
@@ -24,20 +55,10 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     } else {
       api.start({ opacity: 1, y: 800 });
     }
-    setOpinionState(null);
   }, [api, open]);
 
-  const handleCloseModal = useCallback(() => {
-    onOpenChange(opinionState);
-  }, [onOpenChange, opinionState]);
-
-  const handleClick = (v: OpinionStatus) => {
-    setOpinionState((prev) => {
-      if (prev === v) {
-        return null;
-      }
-      return v;
-    });
+  const handleCloseModal = () => {
+    onOpenChange();
   };
 
   if (!open) {
@@ -50,8 +71,11 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
         style={item}
         className="touch-none absolute will-change-transform bottom-0 h-[80%] w-[375px] bg-white z-30 border-t border-gray-200 rounded-t-xl"
       >
-        <div
+        <Form
           {...props}
+          {...getFormProps(form)}
+          method="post"
+          onSubmit={form.onSubmit}
           className="flex flex-col space-y-4 w-full h-full max-w-[375px] z-10 px-4"
         >
           <animated.div
@@ -61,43 +85,31 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
             <div className="h-1 w-[50%] bg-slate-400 mx-auto rounded-full" />
             <p className="mt-2 select-none text-center">あなたはどう思う？</p>
           </animated.div>
-          <div className="flex justify-center space-x-2">
-            <Button
-              variation={opinionState !== "disagree" ? "disabled" : "disagree"}
-              onClick={() => handleClick("disagree")}
-            >
-              違うかも
-            </Button>
-            <Button
-              variation={opinionState !== "pass" ? "disabled" : "pass"}
-              onClick={() => handleClick("pass")}
-            >
-              保留
-            </Button>
-            <Button
-              variation={opinionState !== "agree" ? "disabled" : "agree"}
-              onClick={() => handleClick("agree")}
-            >
-              良さそう
-            </Button>
-          </div>
           <Label title="タイトル" optional>
-            <Input className="h-12 w-full px-4" />
+            <Input
+              {...getInputProps(fields.title, { type: "text" })}
+              className="h-12 w-full px-4"
+            />
           </Label>
           <Label title="意見" optional>
-            <Textarea />
+            <Textarea
+              {...getInputProps(fields.opinionContent, { type: "text" })}
+            />
           </Label>
           <Label title="参考文献" optional>
-            <Input className="h-12 w-full px-4" />
+            <Input
+              className="h-12 w-full px-4"
+              {...getInputProps(fields.referenceURL, { type: "text" })}
+            />
           </Label>
           <Button
-            onClick={handleCloseModal}
+            type="submit"
             variation="primary"
             className="mx-auto !mt-auto !mb-8"
           >
             送信する
           </Button>
-        </div>
+        </Form>
       </animated.div>
 
       <animated.div
