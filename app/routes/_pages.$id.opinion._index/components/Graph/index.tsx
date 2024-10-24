@@ -11,10 +11,16 @@ const DotPlot = ({ dots, polygons }: { dots: any; polygons: any }) => {
     },
     x: any,
     y: any,
+    colorIdx: any,
     radius = 5,
-    color = 0x0000ff,
+    // color = 0x0000ff,
   ) => {
-    g.beginFill(color);
+    const colorList = [
+      0xff9393, 0xffc993, 0xff93ff, 0x93ff93, 0xffff93, 0xc9ff93, 0xc993ff,
+      0x9393ff, 0x93c9ff, 0x93ffff,
+    ];
+    // g.beginFill(color);
+    g.beginFill(colorList[colorIdx]);
     g.drawCircle(x, y, radius);
     g.endFill();
   };
@@ -42,8 +48,8 @@ const DotPlot = ({ dots, polygons }: { dots: any; polygons: any }) => {
       endFill: () => void;
     }) => {
       g.clear();
-      dots.forEach((dot: { x: any; y: any }) => {
-        drawDot(g, dot.x, dot.y);
+      dots.forEach((dot: { x: any; y: any; groupId: number }) => {
+        drawDot(g, dot.x, dot.y, dot.groupId);
       });
 
       polygons.forEach((polygon: { points: any }) => {
@@ -58,29 +64,88 @@ const DotPlot = ({ dots, polygons }: { dots: any; polygons: any }) => {
 
 type Props = {
   polygons: any;
+  positions: any;
 };
 
-const Dots = ({ polygons }: Props) => {
-  const dots = [
-    { x: 840, y: 687 },
-    { x: 844, y: 715 },
-    { x: 844, y: 711 },
-    { x: 842, y: 700 },
-  ];
+const Dots = ({ positions }: Props) => {
+  let _minX = 100000000000;
+  let _minY = 100000000000;
+  let _maxX = -100000000000;
+  let _maxY = -100000000000;
 
-  const fa = [
-    {
-      points: [84, 68, 84, 71, 84, 71, 84, 70],
+  const groupIds = new Set();
+  const hasPerimeterIndexGroup = new Set();
+  const idxToGroupId = [];
+  positions.forEach((v: { groupId: string; posX: number; posY: any }) => {
+    _minX = Math.min(_minX, v.posX);
+    _minY = Math.min(_minY, v.posY);
+    _maxX = Math.max(_maxX, v.posX);
+    _maxY = Math.max(_maxY, v.posY);
+    idxToGroupId.push(v.groupId);
+    groupIds.add(v.groupId);
+    if ("perimeterIndex" in v) {
+      hasPerimeterIndexGroup.add(v.groupId);
+    }
+  });
+
+  const width = 375;
+  const height = 300;
+  const originalWidth = _maxX - _minX;
+  const originalHeight = _maxY - _minY;
+
+  const dots = positions.map(
+    (v: { groupId: string; posX: number; posY: any }) => {
+      return {
+        x: (v.posX - _minX) * ((width - 30) / originalWidth) + 15,
+        y: (v.posY - _minY) * ((height - 50) / originalHeight) + 25,
+        groupId: v.groupId,
+      };
     },
-    // 元データ
-    // { points: [50, 50, 150, 100, 250, 150, 250, 100] }, // 4つの点からなる多角形
-  ];
+  );
 
-  console.log(polygons);
+  // const hasNoPerimeteraIndexGroup = new Set(
+  //   [...groupIds].filter((e) => !hasPerimeterIndexGroup.has(e)),
+  // );
 
+  const resultPolygons = [];
+  for (const groupId of hasPerimeterIndexGroup) {
+    // poligonsを扱う
+    const polygons = positions
+      .filter((opinion: { groupId: number; perimeterIndex: number }) => {
+        return (
+          opinion.groupId === groupId &&
+          (opinion.perimeterIndex || opinion.perimeterIndex === 0)
+        );
+      })
+      .sort(
+        (a: { perimeterIndex: any }, b: { perimeterIndex: any }) =>
+          (a.perimeterIndex || 0) - (b.perimeterIndex || 0),
+      );
+
+    const ho = polygons.flatMap((v: { posX: number; posY: any }) => {
+      return [
+        (v.posX - _minX) * ((width - 30) / originalWidth) + 15,
+        (v.posY - _minY) * ((height - 50) / originalHeight) + 25,
+      ];
+    });
+    resultPolygons.push({ points: ho });
+  }
+
+  // for (const groupId of hasNoPerimeteraIndexGroup) {
+  //   // dotを取り扱う
+  //   groupId;
+  // }
+
+  console.log("result!!!");
+  console.log(resultPolygons);
+  console.log(dots);
   return (
-    <Stage width={375} height={300} options={{ backgroundColor: 0xffffff }}>
-      <DotPlot dots={dots} polygons={fa} />
+    <Stage
+      width={width}
+      height={height}
+      options={{ backgroundColor: 0xffffff }}
+    >
+      <DotPlot dots={dots} polygons={resultPolygons} />
       {/* <Sprite
         onClick={() => {
           console.log("ON CLICKING!!");

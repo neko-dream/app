@@ -258,9 +258,12 @@ export default function Page() {
     .sort((a, b) => (a.perimeterIndex || 0) - (b.perimeterIndex || 0));
 
   // 拡大する
-  const ho = fa?.flatMap((v) => {
-    return [Math.floor(v.posX * 500 + 1000), Math.floor(v.posY * 500 + 1000)];
-  });
+  // const ho = fa?.flatMap((v) => {
+  //   return [v.posX, v.posY];
+  //   // return [Math.floor(v.posX * 500 + 1000), Math.floor(v.posY * 500 + 1000)];
+  // });
+  // console.log("ho");
+  // console.log(ho);
 
   return (
     <>
@@ -275,7 +278,7 @@ export default function Page() {
         意見を投稿する
       </Link>
       <Heading className="mt-6">あなたのポジション</Heading>
-      <Graph polygons={ho} />
+      <Graph polygons={fa} positions={data?.positions} />
       <Heading className="mt-6">みんなの意見</Heading>
       <select
         className="h-6 w-32 m-2 border border-gray-300 rounded-full py-0.5 px-2 text-xs"
