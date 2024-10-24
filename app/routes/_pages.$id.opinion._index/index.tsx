@@ -295,25 +295,18 @@ export default function Page() {
       <div className="mx-4 space-y-4">
         {opinions.map((opinion, i) => {
           return (
-            <div key={i}>
-              <Card
-                title={opinion.opinion.title || ""}
-                description={opinion.opinion.content || ""}
-                user={{
-                  displayID: "",
-                  displayName: opinion.user.displayName || "",
-                  photoURL: opinion.user.iconURL || "",
-                }}
-                opinionStatus={opinion.opinion.voteType!}
-                isOpnionLink={{
-                  to: `/${params.id}/opinion/${opinion.opinion.id}`,
-                  count: 16,
-                }}
-              />
-              <Link to={`/${params.id}/opinion/${opinion.opinion.id}`}>
-                返信画面にいく
-              </Link>
-            </div>
+            <Card
+              key={i}
+              title={opinion.opinion.title || ""}
+              description={opinion.opinion.content || ""}
+              user={{
+                displayID: "",
+                displayName: opinion.user.displayName || "",
+                photoURL: opinion.user.iconURL || "",
+              }}
+              opinionStatus={opinion.opinion.voteType!}
+              isOpnionLink={`/${params.id}/opinion/${opinion.opinion.id}`}
+            />
           );
         })}
       </div>

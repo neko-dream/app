@@ -1,5 +1,5 @@
 import { getFormProps, getInputProps } from "@conform-to/react";
-import { Form, Link, useLoaderData, useParams } from "@remix-run/react";
+import { Form, useLoaderData, useParams } from "@remix-run/react";
 import { toast } from "react-toastify";
 import Button from "~/components/Button";
 import Card from "~/components/Card";
@@ -8,8 +8,8 @@ import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
 import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
+import { createOpinionFormSchema } from "~/feature/opinion/schemas/createOpinionFormSchema";
 import { api } from "~/libs/api";
-import { opinionFormSchema } from "../_pages.$id.swipe/schemas/opinionForm.schema";
 import { loader } from "./modules/loader";
 
 export { loader };
@@ -19,7 +19,7 @@ export default function Page() {
   const params = useParams();
 
   const { form, fields } = useCustomForm({
-    schema: opinionFormSchema,
+    schema: createOpinionFormSchema,
     onSubmit: async ({ value }) => {
       const { data, error } = await api.POST(
         "/talksessions/{talkSessionID}/opinions",
@@ -69,12 +69,6 @@ export default function Page() {
           onSubmit={form.onSubmit}
           className="flex flex-col space-y-4 mt-4 w-full h-full max-w-[375px] z-10 px-4"
         >
-          <Label title="タイトル" optional>
-            <Input
-              {...getInputProps(fields.title, { type: "text" })}
-              className="h-12 w-full px-4"
-            />
-          </Label>
           <Label title="意見" optional>
             <Textarea
               {...getInputProps(fields.opinionContent, { type: "text" })}
@@ -93,23 +87,19 @@ export default function Page() {
 
         {data?.opinions.map(({ opinion, user }, i) => {
           return (
-            <div key={i}>
-              <Card
-                title={opinion.title || ""}
-                description={opinion.content || ""}
-                user={{
-                  displayID: "",
-                  displayName: user.displayName,
-                  photoURL: user.iconURL || "",
-                }}
-                opinionStatus={opinion.voteType!}
-                className="bg-white pointer-events-none select-none h-full w-full mt-2"
-              />
-
-              <Link to={`/${params.id}/opinion/${opinion.id}`}>
-                返信画面にいく
-              </Link>
-            </div>
+            <Card
+              key={i}
+              title={opinion.title || ""}
+              description={opinion.content || ""}
+              user={{
+                displayID: "",
+                displayName: user.displayName,
+                photoURL: user.iconURL || "",
+              }}
+              opinionStatus={opinion.voteType!}
+              className="bg-white pointer-events-none select-none h-full w-full mt-2"
+              isOpnionLink={`/${params.id}/opinion/${opinion.id}`}
+            />
           );
         })}
       </div>

@@ -10,9 +10,9 @@ import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
 import UploadArea from "~/components/Uploadarea";
 import { handleDisabled, isFieldsError } from "~/feature/form/libs";
+import { createOpinionFormSchema } from "~/feature/opinion/schemas/createOpinionFormSchema";
 import { SessionRouteContext } from "~/feature/session/context";
 import { api } from "~/libs/api";
-import { createOpinionFormSchema } from "./schemas/createOpinionForm.schema";
 
 export default function Page() {
   const { session } = useOutletContext<SessionRouteContext>();
@@ -76,20 +76,6 @@ export default function Page() {
       <Heading>あなたはどう思う？</Heading>
 
       <Form {...getFormProps(form)} method="post" className="mx-4">
-        <Label
-          title="タイトル"
-          optional
-          className="mt-4"
-          errors={fields.title.errors}
-        >
-          <Input
-            {...getInputProps(fields.title, { type: "text" })}
-            error={isFieldsError(fields.title.errors)}
-            placeholder="意見を一言で（タイトル）"
-            className="h-12 px-4"
-          />
-        </Label>
-
         <Label
           title="意見"
           className="mt-4"

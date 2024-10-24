@@ -138,7 +138,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** 🚧 セッションレポートを返す */
+        /** セッションレポートを返す */
         get: operations["getTalkSessionReport"];
         put?: never;
         post?: never;
@@ -157,6 +157,23 @@ export interface paths {
         };
         /** 意見に対するリプライ意見一覧 */
         get: operations["opinionComments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/talksessions/{talkSessionID}/opinions/{opinionID}/replies2": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 意見に対するリプライ意見一覧 Copy */
+        get: operations["opinionComments2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -393,6 +410,11 @@ export interface components {
             /** @description 境界ポイントのインデックス */
             perimeterIndex?: number;
         };
+        Report: {
+            talkSessionID: string;
+            /** @description レポート本文 */
+            content: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -536,6 +558,8 @@ export interface operations {
                             /** @description 作成ユーザー */
                             user: components["schemas"]["user"];
                             replyCount: number;
+                            /** @description 意見投稿主の意見。ルート意見の場合はここには何も入らない */
+                            myVoteType: components["schemas"]["voteType"];
                         }[];
                         pagination: {
                             totalCount: number;
@@ -856,6 +880,9 @@ export interface operations {
                                 opinion: components["schemas"]["opinion"];
                                 /** @description 作成ユーザー */
                                 user: components["schemas"]["user"];
+                                agreeCount: number;
+                                disagreeCount: number;
+                                passCount: number;
                             }[];
                         }[];
                     };
@@ -901,7 +928,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "*/*": string;
                 };
             };
             500: {
@@ -944,6 +971,71 @@ export interface operations {
                             /** @description 作成ユーザー */
                             user: components["schemas"]["user"];
                             myVoteType?: components["schemas"]["voteType"] | null;
+                        }[];
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
+                };
+            };
+        };
+    };
+    opinionComments2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                talkSessionID: string;
+                /** @description 親意見のID */
+                opinionID: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        rootOpinion: {
+                            /** @description 作成ユーザー */
+                            user: components["schemas"]["user"];
+                            opinion: components["schemas"]["opinion"];
+                        };
+                        replyOpinions: {
+                            opinion: components["schemas"]["opinion"];
+                            /** @description 作成ユーザー */
+                            user: components["schemas"]["user"];
+                            myVoteType?: components["schemas"]["voteType"] | null;
+                        }[];
+                        parentOpinions: {
+                            opinion: components["schemas"]["opinion"];
+                            /** @description 作成ユーザー */
+                            user: components["schemas"]["user"];
+                            /** @description 意見投稿主の意見。ルート意見の場合はここには何も入らない */
+                            myVoteType: components["schemas"]["voteType"];
+                            level: number;
                         }[];
                     };
                 };

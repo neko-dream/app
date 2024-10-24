@@ -1,7 +1,8 @@
 export const OpinionJpMap = {
-  agree: "賛成",
-  disagree: "反対",
-  pass: "保留",
+  agree: "違うかも",
+  disagree: "保留",
+  pass: "良さそう",
+  uncategorized: "未分類",
 } as const;
 
 /**

@@ -10,12 +10,13 @@ type Badge = {
 };
 
 const badge = tv({
-  base: "flex h-6 w-10 items-center justify-center rounded-full text-center text-xs text-white",
+  base: "flex h-6 w-16 items-center justify-center rounded-full text-center text-xs text-white",
   variants: {
     color: {
       agree: "bg-blue-500",
       disagree: "bg-red-500",
       pass: "bg-gray-500",
+      uncategorized: "bg-gray-500",
     },
     isSelect: {
       true: "border-2 border-solid border-gray-400 bg-white text-gray-500",
@@ -32,12 +33,12 @@ function Badge(
       {...props}
       ref={ref}
       className={badge({
-        color: status,
+        color: status || "uncategorized",
         isSelect: isSelectStyle,
         class: className,
       })}
     >
-      {OpinionJpMap[status]}
+      {OpinionJpMap[status] || OpinionJpMap["uncategorized"]}
     </button>
   );
 }

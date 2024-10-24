@@ -354,10 +354,14 @@ paths:
                         user: *ref_1
                         replyCount:
                           type: integer
+                        myVoteType: &ref_4
+                          $ref: '#/components/schemas/voteType'
+                          description: 意見投稿主の意見。ルート意見の場合はここには何も入らない
                       required:
                         - opinion
                         - user
                         - replyCount
+                        - myVoteType
                   pagination:
                     type: object
                     properties:
@@ -769,9 +773,18 @@ paths:
                             properties:
                               opinion: *ref_0
                               user: *ref_1
+                              agreeCount:
+                                type: integer
+                              disagreeCount:
+                                type: integer
+                              passCount:
+                                type: integer
                             required:
                               - opinion
                               - user
+                              - agreeCount
+                              - disagreeCount
+                              - passCount
                       required:
                         - groupId
                         - opinions
@@ -825,7 +838,7 @@ paths:
       x-ogen-operation-group: TalkSession
   /talksessions/{talkSessionId}/report:
     get:
-      summary: 🚧 セッションレポートを返す
+      summary: セッションレポートを返す
       deprecated: false
       description: ''
       operationId: getTalkSessionReport
@@ -842,10 +855,9 @@ paths:
         '200':
           description: ''
           content:
-            application/json:
+            '*/*':
               schema:
-                type: object
-                properties: {}
+                type: string
           headers: {}
         '500':
           description: ''
@@ -902,9 +914,7 @@ paths:
                       - opinion
                   myVoteType:
                     anyOf:
-                      - &ref_4
-                        $ref: '#/components/schemas/voteType'
-                        description: 意見投稿主の意見。ルート意見の場合はここには何も入らない
+                      - *ref_4
                       - type: 'null'
                   opinions:
                     type: array
@@ -923,6 +933,121 @@ paths:
                 required:
                   - rootOpinion
                   - opinions
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                required:
+                  - code
+                  - message
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionID}/opinions/{opinionID}/replies2:
+    get:
+      summary: 意見に対するリプライ意見一覧 Copy
+      deprecated: false
+      description: ''
+      operationId: opinionComments2
+      tags:
+        - opinion
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: opinionID
+          in: path
+          description: 親意見のID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rootOpinion:
+                    type: object
+                    properties:
+                      user: *ref_1
+                      opinion: *ref_0
+                    required:
+                      - user
+                      - opinion
+                  replyOpinions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        opinion: *ref_0
+                        user: *ref_1
+                        myVoteType:
+                          anyOf:
+                            - *ref_4
+                            - type: 'null'
+                      required:
+                        - opinion
+                        - user
+                  parentOpinions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        opinion: *ref_0
+                        user: *ref_1
+                        myVoteType: *ref_4
+                        level:
+                          type: integer
+                      required:
+                        - opinion
+                        - user
+                        - myVoteType
+                        - level
+                required:
+                  - rootOpinion
+                  - replyOpinions
+                  - parentOpinions
           headers: {}
         '400':
           description: ''
@@ -1940,6 +2065,17 @@ components:
         - posY
         - displayId
         - groupId
+    Report:
+      type: object
+      properties:
+        talkSessionID:
+          type: string
+        content:
+          type: string
+          description: レポート本文
+      required:
+        - talkSessionID
+        - content
   securitySchemes:
     apikey-header-SessionId:
       type: apiKey

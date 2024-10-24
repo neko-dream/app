@@ -10,25 +10,20 @@ import Badge from "../Badge";
 type Props = Card & ComponentProps<"div">;
 
 type Card = {
-  title: string;
   description: string;
   children?: ReactNode;
   opinionStatus: keyof typeof OpinionJpMap;
   user: User;
-  isOpnionLink?: {
-    to: string;
-    count: number;
-  };
+  isOpnionLink?: string;
 };
 
 const card = tv({
-  base: "card rounded-md border border-solid border-black p-4",
+  base: "rounded-md border border-solid border-black p-4",
 });
 
 function Card(
   {
     user,
-    title,
     description,
     opinionStatus,
     children,
@@ -40,32 +35,37 @@ function Card(
 ) {
   return (
     <div {...props} ref={ref} className={card({ class: className })}>
-      <Avator src={user.photoURL} className="card-avator" />
-      <p className="card-title">{title}</p>
-
-      <div className="card-status flex items-center space-x-2">
-        <Badge status={opinionStatus} />
-        <p className="text-xs text-[#6d6c6a]">{user.displayName}</p>
+      <div className="flex items-center">
+        <Avator src={user.photoURL} className="" />
+        <p className="text-xs ml-2 mr-auto text-[#6d6c6a]">
+          {user.displayName}
+        </p>
+        <Badge status={opinionStatus} className="ml-2" />
       </div>
-
-      {/* <button className="ml-auto">
-        <RiMore2Fill className="card-meatball" size={24} />
-      </button> */}
 
       {children}
 
       <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
-      {isOpnionLink && (
-        <Link
-          to={isOpnionLink.to}
-          onClick={() => console.log("コメント")}
-          className="card-link mt-1 flex items-center space-x-1 text-blue-500 z-50"
-        >
-          <RiChat1Line />
-          <p className="text-sm">コメント{isOpnionLink.count}件</p>
-        </Link>
-      )}
+
+      <RpleyLink to={isOpnionLink} />
     </div>
+  );
+}
+
+type RpleyLinkProps = {
+  to?: string;
+};
+
+function RpleyLink({ to }: RpleyLinkProps) {
+  if (!to) {
+    return null;
+  }
+
+  return (
+    <Link to={to} className="mt-2 flex items-center text-blue-500 justify-end">
+      <RiChat1Line />
+      <p className="text-sm ml-1">返信画面にいく</p>
+    </Link>
   );
 }
 

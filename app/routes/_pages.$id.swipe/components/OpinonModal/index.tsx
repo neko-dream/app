@@ -8,9 +8,9 @@ import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
 import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
+import { createOpinionFormSchema } from "~/feature/opinion/schemas/createOpinionFormSchema";
 import { api as apiClient } from "~/libs/api";
 import { useOpinonModal } from "../../hooks/useOpinionModal";
-import { opinionFormSchema } from "../../schemas/opinionForm.schema";
 
 type Props = {
   open: boolean;
@@ -24,7 +24,7 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
   const params = useParams();
 
   const { form, fields } = useCustomForm({
-    schema: opinionFormSchema,
+    schema: createOpinionFormSchema,
     onSubmit: async ({ value }) => {
       const { data, error } = await apiClient.POST(
         "/talksessions/{talkSessionID}/opinions",
@@ -85,12 +85,6 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
             <div className="h-1 w-[50%] bg-slate-400 mx-auto rounded-full" />
             <p className="mt-2 select-none text-center">あなたはどう思う？</p>
           </animated.div>
-          <Label title="タイトル" optional>
-            <Input
-              {...getInputProps(fields.title, { type: "text" })}
-              className="h-12 w-full px-4"
-            />
-          </Label>
           <Label title="意見" optional>
             <Textarea
               {...getInputProps(fields.opinionContent, { type: "text" })}
