@@ -178,6 +178,16 @@ export default function Page() {
     <div className="w-full relative flex-1">
       <Heading className="mb-4">みんなの意見、どう思う？</Heading>
       <CardSwiper {...swipe} />
+      <Link
+        to={`/${params.id}/opinion`}
+        className={button({
+          color: "primary",
+          className: "absolute bottom-24 left-1/2 transform -translate-x-1/2",
+        })}
+      >
+        みんなの意見を見る
+      </Link>
+
       <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
         <Button
           variation="disagree"
