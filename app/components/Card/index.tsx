@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { RiChat1Line } from "react-icons/ri";
 import { tv } from "tailwind-variants";
@@ -14,7 +15,10 @@ type Card = {
   children?: ReactNode;
   opinionStatus: keyof typeof OpinionJpMap;
   user: User;
-  isOpnionLink?: boolean;
+  isOpnionLink?: {
+    to: string;
+    count: number;
+  };
 };
 
 const card = tv({
@@ -52,13 +56,14 @@ function Card(
 
       <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
       {isOpnionLink && (
-        <button
+        <Link
+          to={isOpnionLink.to}
           onClick={() => console.log("コメント")}
           className="card-link mt-1 flex items-center space-x-1 text-blue-500 z-50"
         >
           <RiChat1Line />
-          <p className="text-sm">コメント16件</p>
-        </button>
+          <p className="text-sm">コメント{isOpnionLink.count}件</p>
+        </Link>
       )}
     </div>
   );

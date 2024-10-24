@@ -48,30 +48,14 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** セッションに対する意見一覧 */
+        get: operations["getOpinionsForTalkSession"];
         put?: never;
         /**
          * セッションに対して意見投稿
          * @description parentOpinionIDがなければルートの意見として投稿される
          */
         post: operations["postOpinionPost"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/talksessions/{talkSessionID}/opinions/{opinionID}/replies": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 意見に対するコメント一覧を返す */
-        get: operations["opinionComments"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -119,10 +103,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** トークセッションコレクション */
+        /** セッション一覧 */
         get: operations["getTalkSessionList"];
         put?: never;
-        /** トークセッション作成 */
+        /** セッション作成 */
         post: operations["createTalkSession"];
         delete?: never;
         options?: never;
@@ -154,8 +138,25 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** 🚧 トークセッションレポートを返す */
-        get: operations["getTalkSEssionReport"];
+        /** 🚧 セッションレポートを返す */
+        get: operations["getTalkSessionReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/talksessions/{talkSessionID}/opinions/{opinionID}/replies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 意見に対するリプライ意見一覧 */
+        get: operations["opinionComments"];
         put?: never;
         post?: never;
         delete?: never;
@@ -245,6 +246,23 @@ export interface paths {
         get: operations["test"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/test/dummy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** mudai */
+        post: operations["dummiInit"];
         delete?: never;
         options?: never;
         head?: never;
@@ -490,6 +508,59 @@ export interface operations {
             };
         };
     };
+    getOpinionsForTalkSession: {
+        parameters: {
+            query?: {
+                sort?: "latest" | "mostReply" | "oldest" | null;
+                /** @example 10 */
+                limit?: number | null;
+                /** @example 0 */
+                offset?: number | null;
+            };
+            header?: never;
+            path: {
+                talkSessionID: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        opinions: {
+                            opinion: components["schemas"]["opinion"];
+                            /** @description 作成ユーザー */
+                            user: components["schemas"]["user"];
+                            replyCount: number;
+                        }[];
+                        pagination: {
+                            totalCount: number;
+                        };
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
     postOpinionPost: {
         parameters: {
             query?: never;
@@ -529,64 +600,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": Record<string, never>;
-                };
-            };
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        code: string;
-                        message: string;
-                    };
-                };
-            };
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        code: string;
-                        message: string;
-                    };
-                };
-            };
-        };
-    };
-    opinionComments: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                talkSessionID: string;
-                /** @description 親意見のID */
-                opinionID: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        rootOpinion: {
-                            /** @description 作成ユーザー */
-                            user: components["schemas"]["user"];
-                            opinion: components["schemas"]["opinion"];
-                        };
-                        myVoteType?: components["schemas"]["voteType"] | null;
-                        opinions: {
-                            opinion: components["schemas"]["opinion"];
-                            /** @description 作成ユーザー */
-                            user: components["schemas"]["user"];
-                            myVoteType?: components["schemas"]["voteType"] | null;
-                        }[];
-                    };
                 };
             };
             400: {
@@ -872,7 +885,7 @@ export interface operations {
             };
         };
     };
-    getTalkSEssionReport: {
+    getTalkSessionReport: {
         parameters: {
             query?: never;
             header?: never;
@@ -897,6 +910,64 @@ export interface operations {
                 };
                 content: {
                     "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    opinionComments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                talkSessionID: string;
+                /** @description 親意見のID */
+                opinionID: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        rootOpinion: {
+                            /** @description 作成ユーザー */
+                            user: components["schemas"]["user"];
+                            opinion: components["schemas"]["opinion"];
+                        };
+                        myVoteType?: components["schemas"]["voteType"] | null;
+                        opinions: {
+                            opinion: components["schemas"]["opinion"];
+                            /** @description 作成ユーザー */
+                            user: components["schemas"]["user"];
+                            myVoteType?: components["schemas"]["voteType"] | null;
+                        }[];
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        code: string;
+                        message: string;
+                    };
                 };
             };
         };
@@ -1131,6 +1202,8 @@ export interface operations {
             query?: {
                 /** @description ソートきー */
                 sort?: "latest" | "mostReply" | "oldest" | null;
+                limit?: number;
+                offset?: number;
             };
             header?: never;
             path?: never;
@@ -1150,6 +1223,9 @@ export interface operations {
                             opinion: components["schemas"]["opinion"];
                             replyCount: number;
                         }[];
+                        pagination: {
+                            totalCount: number;
+                        };
                     };
                 };
             };
@@ -1304,6 +1380,41 @@ export interface operations {
                         /** Format: url */
                         optNilUrl?: string | null;
                     };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    dummiInit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
                 };
             };
             400: {
