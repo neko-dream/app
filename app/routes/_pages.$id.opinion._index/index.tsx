@@ -56,7 +56,11 @@ export default function Page() {
         意見を投稿する
       </Link>
       <Heading className="mt-6">あなたのポジション</Heading>
-      <Graph polygons={positions} positions={data?.positions} />
+      <Graph
+        polygons={positions}
+        positions={data?.positions}
+        myPosition={data?.myPosition}
+      />
       <Heading className="mt-6">みんなの意見</Heading>
       <select
         className="h-6 w-32 m-2 border border-gray-300 rounded-full py-0.5 px-2 text-xs"

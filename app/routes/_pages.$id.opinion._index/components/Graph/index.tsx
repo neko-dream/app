@@ -48,9 +48,11 @@ const DotPlot = ({ dots, polygons }: { dots: any; polygons: any }) => {
       endFill: () => void;
     }) => {
       g.clear();
-      dots.forEach((dot: { x: any; y: any; groupId: number }) => {
-        drawDot(g, dot.x, dot.y, dot.groupId);
-      });
+      dots.forEach(
+        (dot: { x: any; y: any; groupId: number; radius: number }) => {
+          drawDot(g, dot.x, dot.y, dot.groupId, dot.radius ?? 5);
+        },
+      );
 
       polygons.forEach((polygon: { points: any }) => {
         drawPolygon(g, polygon.points);
@@ -65,9 +67,10 @@ const DotPlot = ({ dots, polygons }: { dots: any; polygons: any }) => {
 type Props = {
   polygons: any;
   positions: any;
+  myPosition: any;
 };
 
-const Dots = ({ positions }: Props) => {
+const Dots = ({ positions, myPosition }: Props) => {
   let _minX = 100000000000;
   let _minY = 100000000000;
   let _maxX = -100000000000;
@@ -92,13 +95,24 @@ const Dots = ({ positions }: Props) => {
   const height = 300;
   const originalWidth = _maxX - _minX;
   const originalHeight = _maxY - _minY;
-
+  let myPositionFlag = false;
   const dots = positions.map(
     (v: { groupId: string; posX: number; posY: any }) => {
+      let radius: number = 5;
+      if (
+        myPosition?.posX == v.posX &&
+        myPosition?.posY == v.posY &&
+        myPosition?.groupId == v.groupId &&
+        !myPositionFlag
+      ) {
+        radius = 10;
+        myPositionFlag = true;
+      }
       return {
         x: (v.posX - _minX) * ((width - 30) / originalWidth) + 15,
         y: (v.posY - _minY) * ((height - 50) / originalHeight) + 25,
         groupId: v.groupId,
+        radius: radius,
       };
     },
   );
