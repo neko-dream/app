@@ -103,10 +103,6 @@ const Dots = ({ positions }: Props) => {
     },
   );
 
-  // const hasNoPerimeteraIndexGroup = new Set(
-  //   [...groupIds].filter((e) => !hasPerimeterIndexGroup.has(e)),
-  // );
-
   const resultPolygons = [];
   for (const groupId of hasPerimeterIndexGroup) {
     // poligonsを扱う
@@ -122,23 +118,15 @@ const Dots = ({ positions }: Props) => {
           (a.perimeterIndex || 0) - (b.perimeterIndex || 0),
       );
 
-    const ho = polygons.flatMap((v: { posX: number; posY: any }) => {
+    const points = polygons.flatMap((v: { posX: number; posY: any }) => {
       return [
         (v.posX - _minX) * ((width - 30) / originalWidth) + 15,
         (v.posY - _minY) * ((height - 50) / originalHeight) + 25,
       ];
     });
-    resultPolygons.push({ points: ho });
+    resultPolygons.push({ points: points });
   }
 
-  // for (const groupId of hasNoPerimeteraIndexGroup) {
-  //   // dotを取り扱う
-  //   groupId;
-  // }
-
-  console.log("result!!!");
-  console.log(resultPolygons);
-  console.log(dots);
   return (
     <Stage
       width={width}
@@ -146,15 +134,6 @@ const Dots = ({ positions }: Props) => {
       options={{ backgroundColor: 0xffffff }}
     >
       <DotPlot dots={dots} polygons={resultPolygons} />
-      {/* <Sprite
-        onClick={() => {
-          console.log("ON CLICKING!!");
-        }}
-        interactive={true}
-        image={bunnyUrl}
-        x={400}
-        y={200}
-      /> */}
     </Stage>
   );
 };

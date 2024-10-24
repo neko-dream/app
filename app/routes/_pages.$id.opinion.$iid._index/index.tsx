@@ -1,5 +1,10 @@
 import { getFormProps, getInputProps } from "@conform-to/react";
-import { Form, useLoaderData, useParams } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useParams,
+  useRevalidator,
+} from "@remix-run/react";
 import { toast } from "react-toastify";
 import Button from "~/components/Button";
 import Card from "~/components/Card";
@@ -12,11 +17,13 @@ import { createOpinionFormSchema } from "~/feature/opinion/schemas/createOpinion
 import { api } from "~/libs/api";
 import { loader } from "./modules/loader";
 
+export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
 
 export default function Page() {
-  const { data } = useLoaderData<typeof loader>();
+  const { rootOpinion, opinions } = useLoaderData<typeof loader>();
   const params = useParams();
+  const { revalidate } = useRevalidator();
 
   const { form, fields } = useCustomForm({
     schema: createOpinionFormSchema,
@@ -39,6 +46,7 @@ export default function Page() {
 
       if (data) {
         toast.success("意見を送信しました");
+        revalidate();
       }
       if (error) {
         toast.error(error.message);
@@ -48,18 +56,18 @@ export default function Page() {
 
   return (
     <>
-      <Heading className="mt-6">みんなの意見、どう思う？</Heading>
+      <Heading>みんなの意見、どう思う？</Heading>
 
-      <div className="mx-4 mt-4">
+      <div className="m-4">
         <Card
-          title={data?.rootOpinion.opinion.title || ""}
-          description={data?.rootOpinion.opinion.content || ""}
+          title={rootOpinion.opinion.title || ""}
+          description={rootOpinion.opinion.content || ""}
           user={{
             displayID: "",
-            displayName: data?.rootOpinion.user.displayName || "",
-            photoURL: data?.rootOpinion.user.iconURL || "",
+            displayName: rootOpinion.user.displayName || "",
+            photoURL: rootOpinion.user.iconURL || "",
           }}
-          opinionStatus={data?.rootOpinion.opinion.voteType as never}
+          opinionStatus={rootOpinion.opinion.voteType}
           className="bg-white pointer-events-none w-full"
         />
 
@@ -67,7 +75,7 @@ export default function Page() {
           {...getFormProps(form)}
           method="post"
           onSubmit={form.onSubmit}
-          className="flex flex-col space-y-4 mt-4 w-full h-full max-w-[375px] z-10 px-4"
+          className="flex flex-col space-y-4 mb-12 mt-4 w-full h-full max-w-[375px] z-10 px-4"
         >
           <Label title="意見" optional>
             <Textarea
@@ -85,19 +93,19 @@ export default function Page() {
           </Button>
         </Form>
 
-        {data?.opinions.map(({ opinion, user }, i) => {
+        {opinions.map(({ opinion, user }, i) => {
           return (
             <Card
               key={i}
-              title={opinion.title || ""}
-              description={opinion.content || ""}
+              title={opinion.title}
+              description={opinion.content}
               user={{
                 displayID: "",
                 displayName: user.displayName,
-                photoURL: user.iconURL || "",
+                photoURL: user.iconURL,
               }}
               opinionStatus={opinion.voteType!}
-              className="bg-white pointer-events-none select-none h-full w-full mt-2"
+              className="bg-white select-none h-full w-full mt-2"
               isOpnionLink={`/${params.id}/opinion/${opinion.id}`}
             />
           );
