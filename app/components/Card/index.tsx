@@ -6,6 +6,7 @@ import { OpinionJpMap } from "~/feature/opinion/constants";
 import { User } from "~/feature/user/types";
 import Avator from "../Avator";
 import Badge from "../Badge";
+import Button from "../Button";
 
 type Props = Card & ComponentProps<"div">;
 
@@ -15,6 +16,8 @@ type Card = {
   opinionStatus?: keyof typeof OpinionJpMap;
   user: User;
   isOpnionLink?: string;
+  isJegde?: boolean;
+  onClickVoteButton?: (v: string) => void;
 };
 
 const card = tv({
@@ -29,6 +32,8 @@ function Card(
     children,
     className,
     isOpnionLink,
+    isJegde,
+    onClickVoteButton,
     ...props
   }: Props,
   ref: ForwardedRef<HTMLDivElement>,
@@ -48,6 +53,32 @@ function Card(
       <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
 
       <RpleyLink to={isOpnionLink} />
+
+      {isJegde && (
+        <div className="flex justify-between mt-2">
+          <Button
+            className="w-24 h-8 p-1"
+            variation="disagree"
+            onClick={() => onClickVoteButton?.("disagree")}
+          >
+            違うかも
+          </Button>
+          <Button
+            className="w-24 h-8 p-1"
+            variation="pass"
+            onClick={() => onClickVoteButton?.("pass")}
+          >
+            保留
+          </Button>
+          <Button
+            className="w-24 h-8 p-1"
+            variation="agree"
+            onClick={() => onClickVoteButton?.("agree")}
+          >
+            良さそう
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
