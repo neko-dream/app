@@ -85,16 +85,39 @@ export default function Page() {
 
       <div className="m-4">
         <Card
-          title={rootOpinion.opinion.title || ""}
-          description={rootOpinion.opinion.content || ""}
+          title={rootOpinion.opinion.title}
+          description={rootOpinion.opinion.content}
           user={{
             displayID: "",
-            displayName: rootOpinion.user.displayName || "",
-            photoURL: rootOpinion.user.iconURL || "",
+            displayName: rootOpinion.user.displayName,
+            photoURL: rootOpinion.user.iconURL,
           }}
           opinionStatus={rootOpinion.opinion.voteType}
           className="bg-white pointer-events-none w-full"
         />
+        <div className="flex justify-between mt-2">
+          <Button
+            className="w-24 h-8 p-1"
+            variation="disagree"
+            onClick={() => handleSubmitVote(rootOpinion.opinion.id, "disagree")}
+          >
+            違うかも
+          </Button>
+          <Button
+            className="w-24 h-8 p-1"
+            variation="pass"
+            onClick={() => handleSubmitVote(rootOpinion.opinion.id, "pass")}
+          >
+            保留
+          </Button>
+          <Button
+            className="w-24 h-8 p-1"
+            variation="agree"
+            onClick={() => handleSubmitVote(rootOpinion.opinion.id, "agree")}
+          >
+            良さそう
+          </Button>
+        </div>
 
         <Form
           {...getFormProps(form)}
