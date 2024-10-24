@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { RiChat1Line } from "react-icons/ri";
 import { tv } from "tailwind-variants";
-import { OpinionJpMap } from "~/constants/opinion";
+import { OpinionJpMap } from "~/feature/opinion/constants";
 import { User } from "~/feature/user/types";
 import Avator from "../Avator";
 import Badge from "../Badge";
@@ -12,7 +12,7 @@ type Props = Card & ComponentProps<"div">;
 type Card = {
   description: string;
   children?: ReactNode;
-  opinionStatus: keyof typeof OpinionJpMap;
+  opinionStatus?: keyof typeof OpinionJpMap;
   user: User;
   isOpnionLink?: string;
 };

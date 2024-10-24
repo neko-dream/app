@@ -32,7 +32,7 @@ export default function Route() {
             window.location.reload();
           }}
         >
-          Kotohiro
+          ことひろ
         </button>
 
         <button onClick={handleOpenChange}>
