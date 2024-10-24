@@ -54,6 +54,31 @@ export default function Page() {
     },
   });
 
+  const handleSubmitVote = async (opinionID: string, voteStatus: string) => {
+    const { data, error } = await api.POST(
+      "/talksessions/{talkSessionID}/opinions/{opinionID}/votes",
+      {
+        credentials: "include",
+        params: {
+          path: {
+            talkSessionID: params.id!,
+            opinionID: opinionID,
+          },
+        },
+        body: {
+          voteStatus: voteStatus as never,
+        },
+      },
+    );
+
+    if (data) {
+      toast.success("意思表明を行いました");
+    }
+    if (error) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <>
       <Heading>みんなの意見、どう思う？</Heading>
@@ -107,6 +132,10 @@ export default function Page() {
               opinionStatus={opinion.voteType!}
               className="bg-white select-none h-full w-full mt-2"
               isOpnionLink={`/${params.id}/opinion/${opinion.id}`}
+              isJegde={true}
+              onClickVoteButton={(voteStatus) => {
+                handleSubmitVote(opinion.id, voteStatus);
+              }}
             />
           );
         })}
