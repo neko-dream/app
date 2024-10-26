@@ -8,7 +8,6 @@ import {
 import { toast } from "react-toastify";
 import Button from "~/components/Button";
 import Card from "~/components/Card";
-import Heading from "~/components/Heading";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
@@ -81,8 +80,6 @@ export default function Page() {
 
   return (
     <>
-      <Heading>みんなの意見、どう思う？</Heading>
-
       <div className="m-4">
         <Card
           title={rootOpinion.opinion.title}

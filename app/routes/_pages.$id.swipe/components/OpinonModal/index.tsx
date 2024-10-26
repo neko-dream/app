@@ -108,7 +108,8 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
 
       <animated.div
         style={{ opacity: item.opacity, y: -96 }}
-        className="w-[375px] top-0 absolute bg-slate-600/60 h-full z-10"
+        // FIXME: -mt-8 直したい
+        className="w-[375px] top-0 absolute bg-slate-600/60 h-full z-10 -mt-8"
         onClick={handleCloseModal}
       />
     </>

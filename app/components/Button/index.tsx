@@ -14,9 +14,9 @@ export const button = tv({
   variants: {
     color: {
       primary: "bg-green-500 text-white border-green-500",
-      agree: "text-white bg-blue-500 border-blue-500",
-      disagree: "text-white bg-red-500 border-red-500",
-      pass: "text-white bg-purple-500 border-purple-500",
+      agree: "text-white bg-[#32ADE6] border-[#32ADE6]",
+      disagree: "text-white bg-[#FF2D55] border-[#FF2D55]",
+      pass: "text-white bg-[#AF52DE] border-[#AF52DE]",
       disabled: "text-white bg-gray-200 border-gray-200",
     } satisfies { [x in variants]: string },
     outline: {
