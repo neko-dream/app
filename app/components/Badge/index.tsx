@@ -16,7 +16,6 @@ const badge = tv({
       agree: "bg-[#32ADE6]",
       disagree: "bg-[#FF2D55]",
       pass: "bg-[#AF52DE]",
-      unvote: "bg-gray-500",
     },
     isSelect: {
       true: "border-2 border-solid border-gray-400 bg-white text-gray-500",
@@ -33,13 +32,13 @@ function Badge(
       {...props}
       ref={ref}
       className={badge({
-        color: status || "unvote",
+        color: status,
         isSelect: isSelectStyle,
         class: className,
       })}
     >
       {/* FIXME: ここやばい */}
-      {OpinionJpMap[status as never] || OpinionJpMap["unvote"]}
+      {OpinionJpMap[status as never]}
     </button>
   );
 }
