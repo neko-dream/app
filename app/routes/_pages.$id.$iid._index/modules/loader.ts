@@ -2,10 +2,11 @@ import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
 import { notfound } from "~/libs/notfound";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { data } = await api.GET(
     "/talksessions/{talkSessionID}/opinions/{opinionID}/replies",
     {
+      headers: request.headers,
       params: {
         path: {
           talkSessionID: params.id!,
@@ -23,6 +24,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     const { data: parentOpinion } = await api.GET(
       "/talksessions/{talkSessionID}/opinions/{opinionID}/replies",
       {
+        headers: request.headers,
         params: {
           path: {
             talkSessionID: params.id!,
