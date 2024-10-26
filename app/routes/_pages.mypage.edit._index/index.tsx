@@ -6,7 +6,7 @@ import {
 } from "@conform-to/react";
 import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { parseWithValibot } from "conform-to-valibot";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import CameraIcon from "~/assets/camera.svg";
 import bathday from "~/assets/data/birthday.json";
@@ -26,6 +26,7 @@ import {
 } from "~/feature/form/libs";
 import { userEditFormSchema } from "~/feature/user/schemas/form";
 import { api } from "~/libs/api";
+import { fileCompress } from "~/libs/compressor";
 import { loader } from "./modules/loader";
 
 export { loader };
@@ -47,9 +48,13 @@ export default function Page() {
       setLoading(true);
 
       try {
+        const body = deleteDashValues(form.value);
         const { error } = await api.PUT("/user", {
           credentials: "include",
-          body: deleteDashValues(form.value) as never,
+          body: {
+            ...body,
+            icon: body.icon ? await fileCompress(body.icon) : undefined,
+          } as never,
         });
 
         if (error) {
@@ -59,7 +64,8 @@ export default function Page() {
           toast.success("登録情報の編集が完了しました");
           navigate("/mypage");
         }
-      } catch {
+      } catch (e) {
+        console.log(e);
         toast.error("エラーが発生しました");
         setLoading(false);
       }
@@ -72,6 +78,11 @@ export default function Page() {
 
   const [preview, setPreview] = useState<string>();
   const inputFileRef = useRef<HTMLInputElement>(null);
+
+  // 初期値
+  useEffect(() => {
+    setPreview(user.iconURL || undefined);
+  }, [user]);
 
   const handleOnChangeInputFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {

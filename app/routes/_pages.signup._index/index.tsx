@@ -13,9 +13,14 @@ import Select from "~/components/Select";
 import Uploadarea from "~/components/Uploadarea";
 import AdressInputs from "~/feature/form/components/AdressInputs";
 import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
-import { handleDisabled, isFieldsError } from "~/feature/form/libs";
+import {
+  deleteDashValues,
+  handleDisabled,
+  isFieldsError,
+} from "~/feature/form/libs";
 import { signupFormSchema } from "~/feature/user/schemas/form";
 import { api } from "~/libs/api";
+import { fileCompress } from "~/libs/compressor";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader } from "./modules/loader";
@@ -26,9 +31,13 @@ export default function Page() {
   const { form, fields, loading } = useCustomForm({
     schema: signupFormSchema,
     onSubmit: async ({ value }) => {
+      const body = deleteDashValues(value);
       const { error } = await api.POST("/user", {
         credentials: "include",
-        body: value as never,
+        body: {
+          ...body,
+          icon: await fileCompress(body.icon),
+        } as never,
       });
 
       if (error) {

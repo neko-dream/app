@@ -11,6 +11,7 @@ export default function Page() {
   const { user, opinions, sessions } = useLoaderData<typeof loader>();
   const [params] = useSearchParams();
   const isFavorite = params.get("q") === "favorite";
+  console.log(user);
 
   return (
     <div className="flex-1 flex flex-col items-center mt-2">
