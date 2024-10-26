@@ -2,7 +2,7 @@ import { defer, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
 import { httpCacheHeader } from "~/libs/api/cache-header";
 
-const setQuery = (requestURL: string) => {
+const setStatus = (requestURL: string) => {
   try {
     const query = new URL(requestURL).searchParams.get("q");
     if (query === "open" || query === "finished") {
@@ -13,13 +13,47 @@ const setQuery = (requestURL: string) => {
   }
 };
 
+const setSortKey = (requestURL: string) => {
+  try {
+    const query = new URL(requestURL).searchParams.get("q");
+    if (query === "latest" || query === "oldest" || query === "mostReplies") {
+      return query;
+    }
+  } catch {
+    return;
+  }
+
+  return undefined;
+};
+
+const setTheme = (requestURL: string) => {
+  try {
+    const query = new URL(requestURL).searchParams.get("q");
+    if (
+      query !== "latest" &&
+      query !== "oldest" &&
+      query !== "mostReplies" &&
+      query !== "open" &&
+      query !== "finished"
+    ) {
+      return query;
+    }
+  } catch {
+    return;
+  }
+
+  return undefined;
+};
+
 export const loader = ({ request }: LoaderFunctionArgs) => {
   const $session = api
     .GET("/talksessions", {
       headers: request.headers,
       params: {
         query: {
-          status: setQuery(request.url),
+          status: setStatus(request.url),
+          sortKey: setSortKey(request.url),
+          theme: setTheme(request.url),
         },
       },
     })

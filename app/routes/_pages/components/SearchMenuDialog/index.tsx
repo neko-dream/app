@@ -60,28 +60,21 @@ export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
               </button>
             </div>
             <Link
-              to={"/home?q=finished"}
+              to={"/home?q=latest"}
               className={link()}
               onClick={handleCloseModal}
             >
               新着のセッション
             </Link>
             <Link
-              to={"/home?q=finished"}
+              to={"/home?q=mostReplies"}
               className={link()}
               onClick={handleCloseModal}
             >
               盛り上がってるセッション
             </Link>
             <Link
-              to={"/home?q=finished"}
-              className={link()}
-              onClick={handleCloseModal}
-            >
-              地元のセッション
-            </Link>
-            <Link
-              to={"/home?q=finished"}
+              to={"/home?q=oldest"}
               className={link()}
               onClick={handleCloseModal}
             >
