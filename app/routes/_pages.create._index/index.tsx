@@ -8,7 +8,7 @@ import { Form, useNavigate } from "@remix-run/react";
 import { parseWithValibot } from "conform-to-valibot";
 import dayjs from "dayjs";
 import { useControl } from "node_modules/@conform-to/react/integrations";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState, lazy, useCallback } from "react";
 import { toast } from "react-toastify";
 import municipality from "~/assets/data/adress/municipality.json";
 import prefectures from "~/assets/data/adress/prefectures.json";
@@ -25,12 +25,14 @@ import { isFieldsError } from "~/feature/user/libs/is-fields-error";
 import { isMunicipality } from "~/feature/user/libs/is-municipality";
 import { api } from "~/libs/api";
 import { createSessionFormSchema } from "./schemas/createSessionForm.schema";
+import { ClientOnly } from "remix-utils/client-only";
+const MapSelector = lazy(() => import("./map"));
 
 // ログイン済みじゃないとここには来れない
 export default function Page() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
+  const [zoom, setZoom] = useState(18);
   const [form, fields] = useForm({
     onSubmit: async (e) => {
       e.preventDefault();
@@ -67,6 +69,17 @@ export default function Page() {
     shouldValidate: "onInput",
   });
 
+  const handlePositionChange = useCallback((lat: number, lng: number) => {
+    form.update({
+      name: fields.latitude.name,
+      value: lat,
+    });
+    form.update({
+      name: fields.longitude.name,
+      value: lng,
+    });
+  }, [form]);
+
   const prefecturesControl = useControl(fields.prefectures);
 
   // 都道府県が選択されたら市町村の選択肢を変更
@@ -88,8 +101,29 @@ export default function Page() {
     );
   };
 
+
+  function LazyMap() {
+    return (
+      <Suspense fallback={<div>Loading map...</div>}>
+        <MapSelector
+          onLatLngChange={handlePositionChange}
+          onZoomChange={setZoom}
+          zoom={zoom}
+          initialPosition={
+            fields.latitude.valid && fields.longitude.valid
+              ? {
+                lat: Number(fields.latitude.value) || 35.6768927,
+                lng: Number(fields.longitude.value) || 139.752275,
+              }
+              : undefined
+          }
+        />
+      </Suspense>
+    );
+  }
+
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" >
       <Heading className="h-10">投稿されたセッション</Heading>
       <Form
         {...getFormProps(form)}
@@ -165,6 +199,21 @@ export default function Page() {
           />
         </Label>
 
+        <Label title="位置情報" optional>
+          <ClientOnly fallback={<p>Loading...</p>}>
+            {() => <LazyMap />}
+          </ClientOnly>
+          {fields.latitude.valid && fields.longitude.valid && (
+            <p className="text-sm text-gray-600 mt-2">
+              選択された位置: 緯度 {fields.latitude.value},
+              経度 {fields.longitude.value}
+            </p>
+          )}
+
+          <input {...getInputProps(fields.latitude, { type: "number" })} hidden />
+          <input  {...getInputProps(fields.longitude, { type: "number" })} hidden />
+        </Label>
+
         <Button
           variation="primary"
           type="submit"
@@ -174,6 +223,6 @@ export default function Page() {
           登録する
         </Button>
       </Form>
-    </div>
+    </div >
   );
 }

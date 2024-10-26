@@ -24,6 +24,9 @@ export default ({ mode }: UserConfig) => {
       host: "local.kotohiro.com",
       port: 3000,
     },
+    ssr: {
+      noExternal: ["remix-utils"],
+    },
     plugins: [
       basicSsl({
         name: "test",

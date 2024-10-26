@@ -9,4 +9,6 @@ export const createSessionFormSchema = v.object({
   description: v.optional(v.string()),
   municipality: v.optional(v.string()),
   prefectures: v.optional(v.string()),
+  latitude: v.optional(v.number()),
+  longitude: v.optional(v.number())
 });
