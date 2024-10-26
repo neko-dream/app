@@ -550,6 +550,21 @@ paths:
                 value: finished
                 description: 終了済み
             nullable: true
+        - name: sortKey
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+            enum:
+              - latest
+              - oldest
+              - mostReplies
+            x-apidog:
+              enumDescriptions:
+                latest: ''
+                oldest: ''
+                mostReplies: ''
       responses:
         '200':
           description: ''
@@ -855,9 +870,14 @@ paths:
         '200':
           description: ''
           content:
-            '*/*':
+            application/json:
               schema:
-                type: string
+                type: object
+                properties:
+                  report:
+                    type: string
+                required:
+                  - report
           headers: {}
         '500':
           description: ''
@@ -2055,6 +2075,11 @@ components:
           type: number
         displayId:
           type: string
+        displayName:
+          type: string
+        iconURL:
+          type: string
+          nullable: true
         groupId:
           type: integer
         perimeterIndex:
@@ -2065,6 +2090,7 @@ components:
         - posY
         - displayId
         - groupId
+        - displayName
     Report:
       type: object
       properties:

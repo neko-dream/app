@@ -406,6 +406,8 @@ export interface components {
             posX: number;
             posY: number;
             displayId: string;
+            displayName: string;
+            iconURL?: string | null;
             groupId: number;
             /** @description 境界ポイントのインデックス */
             perimeterIndex?: number;
@@ -731,6 +733,7 @@ export interface operations {
                 offset?: number | null;
                 theme?: string | null;
                 status?: "open" | "finished";
+                sortKey?: "latest" | "oldest" | "mostReplies";
             };
             header?: never;
             path?: never;
@@ -928,7 +931,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": string;
+                    "application/json": {
+                        report: string;
+                    };
                 };
             };
             500: {
