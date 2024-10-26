@@ -1,6 +1,5 @@
-import { Link, useLoaderData, useParams } from "@remix-run/react";
+import { useLoaderData, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { button } from "~/components/Button";
 import Card from "~/components/Card";
 import Heading from "~/components/Heading";
 import { components } from "~/libs/api/openapi";
@@ -45,16 +44,6 @@ export default function Page() {
 
   return (
     <>
-      <Link
-        to={"./post"}
-        className={button({
-          color: "primary",
-          className: "block mx-auto mt-6",
-        })}
-      >
-        意見を投稿する
-      </Link>
-      <Heading className="mt-6">あなたのポジション</Heading>
       <Graph
         polygons={positions}
         positions={data?.positions}
