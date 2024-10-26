@@ -23,5 +23,17 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     },
   );
 
-  return defer({ data, opinions });
+  const { data: report } = await api.GET(
+    "/talksessions/{talkSessionId}/report",
+    {
+      headers: request.headers,
+      params: {
+        path: {
+          talkSessionId: params.id || "",
+        },
+      },
+    },
+  );
+
+  return defer({ data, opinions, report });
 };

@@ -1,5 +1,6 @@
 import { useLoaderData, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import Card from "~/components/Card";
 import Heading from "~/components/Heading";
 import { components } from "~/libs/api/openapi";
@@ -14,7 +15,11 @@ type Card = {
 };
 
 export default function Page() {
-  const { data, opinions: allOpinions } = useLoaderData<typeof loader>();
+  const {
+    data,
+    opinions: allOpinions,
+    report,
+  } = useLoaderData<typeof loader>();
 
   const params = useParams();
   const [groupID, setGroupID] = useState<number>(1000);
@@ -49,6 +54,11 @@ export default function Page() {
         positions={data?.positions}
         myPosition={data?.myPosition}
       />
+      <Heading className="mt-6">レポート</Heading>
+      <details className="prose-sm px-2">
+        <summary className="pt-4">レポートを見る</summary>
+        <ReactMarkdown className="pt-4">{report?.report}</ReactMarkdown>
+      </details>
       <Heading className="mt-6">みんなの意見</Heading>
       <select
         className="h-6 w-32 m-2 border border-gray-300 rounded-full py-0.5 px-2 text-xs"
