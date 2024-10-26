@@ -1,5 +1,6 @@
 import { Await, Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { Suspense } from "react";
+import Error from "~/components/Error";
 import Heading from "~/components/Heading";
 import Session from "~/components/Session";
 import Tabs from "~/components/Tabs";
@@ -23,23 +24,37 @@ export default function Page() {
         active={isFinished ? "終了" : "開催中"}
         className="shrink-0"
       />
-      <div className="space-y-2 bg-gray-100 pt-2">
-        <Suspense>
-          <Await resolve={$session}>
-            {(data) => {
-              return data?.talkSessions.map((session, i) => (
-                <Link
-                  to={`/${session.talkSession.id}/swipe`}
-                  className="block"
-                  key={i}
-                >
-                  <Session {...session} />
-                </Link>
-              ));
-            }}
-          </Await>
-        </Suspense>
-      </div>
+      <Suspense>
+        <Await resolve={$session}>
+          {(data) => {
+            if (!data?.talkSessions.length) {
+              return (
+                <Error>
+                  <p>お探しのトークセッションは </p>
+                  <p>見つかりませんでした...</p>
+                  <p className="text-xs mt-2 text-gray-700">
+                    右上の 🔍 から探せるよ！
+                  </p>
+                </Error>
+              );
+            }
+
+            return (
+              <div className="space-y-2 bg-gray-100 pt-2">
+                {data?.talkSessions.map((session, i) => (
+                  <Link
+                    to={`/${session.talkSession.id}/swipe`}
+                    className="block"
+                    key={i}
+                  >
+                    <Session {...session} />
+                  </Link>
+                ))}
+              </div>
+            );
+          }}
+        </Await>
+      </Suspense>
     </>
   );
 }
