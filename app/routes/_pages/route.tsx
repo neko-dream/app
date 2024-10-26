@@ -26,14 +26,9 @@ export default function Route() {
   return (
     <>
       <header className="shrink-0 flex h-10 w-full items-center justify-between border-b-[1px] border-solid border-[#d6e3ed] px-4 space-x-6 z-20 bg-white">
-        <button
-          className="mr-auto"
-          onClick={() => {
-            window.location.reload();
-          }}
-        >
+        <Link to="/home" className="mr-auto">
           ことひろ
-        </button>
+        </Link>
 
         <button onClick={handleOpenChange}>
           <img src={SearchIcon} alt="" loading="lazy" />
