@@ -12,6 +12,7 @@ export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
 
 const body = tv({
+  base: "flex-1 flex flex-col",
   variants: {
     open: { true: "overflow-hidden h-[calc(100vh-40px)]" },
   },

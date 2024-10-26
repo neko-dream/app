@@ -1,13 +1,14 @@
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import SettinIcon from "~/assets/setting.svg";
 import Avator from "~/components/Avator";
+import Card from "~/components/Card";
 import Tabs from "~/components/Tabs";
 import { loader } from "./modules/loader";
 
 export { loader };
 
 export default function Page() {
-  const { user } = useLoaderData<typeof loader>();
+  const { user, opinions, sessions } = useLoaderData<typeof loader>();
   const [params] = useSearchParams();
   const isFavorite = params.get("q") === "favorite";
 
@@ -26,7 +27,29 @@ export default function Page() {
         ]}
         active={isFavorite ? "リアクション済セッション" : "今まで投稿した意見"}
       />
-      <div className="bg-gray-100 w-full flex-1"></div>
+      <div className="bg-gray-100 w-full flex-1 p-2 box-border space-y-2">
+        {isFavorite &&
+          sessions?.map(({ talkSession }, i) => {
+            return <div key={i}>{talkSession.id}</div>;
+          })}
+        {!isFavorite &&
+          opinions?.map(({ opinion }, i) => {
+            return (
+              <Card
+                key={i}
+                title={opinion.title}
+                description={opinion.content}
+                user={{
+                  displayID: "",
+                  displayName: user.displayName,
+                  photoURL: user.iconURL,
+                }}
+                opinionStatus={opinion.voteType!}
+                className="bg-white"
+              />
+            );
+          })}
+      </div>
     </div>
   );
 }
