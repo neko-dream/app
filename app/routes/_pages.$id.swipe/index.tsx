@@ -7,7 +7,6 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Button, { button } from "~/components/Button";
-import Heading from "~/components/Heading";
 import { OpinionStatus } from "~/feature/opinion/status";
 import { api } from "~/libs/api";
 import CardSwiper from "./components/CardSwiper";
@@ -63,17 +62,14 @@ export default function Page() {
 
   if (!opinions.length) {
     return (
-      <div className="w-full relative flex-1">
-        <Heading className="mb-4">みんなの意見、どう思う？</Heading>
-        <div className="flex flex-col justify-center items-center h-full space-y-4">
-          <p>全ての意見に意思表明しました🎉</p>
-          <Link
-            to={`/${params.id}/opinion`}
-            className={button({ color: "primary" })}
-          >
-            みんなの意見を見る
-          </Link>
-        </div>
+      <div className="w-full flex flex-col justify-center items-center relative flex-1">
+        <p>全ての意見に意思表明しました🎉</p>
+        <Link
+          to={`/${params.id}/opinion`}
+          className={button({ color: "primary", className: "mt-4" })}
+        >
+          みんなの意見を見る
+        </Link>
       </div>
     );
   }
@@ -156,27 +152,23 @@ export default function Page() {
 
   if (isOpinionEnd) {
     return (
-      <div className="w-full relative flex-1">
-        <Heading className="mb-4">みんなの意見、どう思う？</Heading>
-        <div className="flex flex-col justify-center items-center h-full space-y-4">
-          <p>３件の意見に意思表明しました🎉</p>
-          <Button variation="primary" onClick={handleRevalidate}>
-            さらに意思表明する
-          </Button>
-          <Link
-            to={`/${params.id}/opinion`}
-            className={button({ color: "primary" })}
-          >
-            みんなの意見を見る
-          </Link>
-        </div>
+      <div className="w-full flex flex-col justify-center items-center relative flex-1 space-y-4">
+        <p>３件の意見に意思表明しました🎉</p>
+        <Button variation="primary" onClick={handleRevalidate}>
+          さらに意思表明する
+        </Button>
+        <Link
+          to={`/${params.id}/opinion`}
+          className={button({ color: "primary" })}
+        >
+          みんなの意見を見る
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="w-full relative flex-1">
-      <Heading className="mb-4">みんなの意見、どう思う？</Heading>
+    <div className="w-full relative flex-1 pt-4">
       <CardSwiper {...swipe} />
       <Link
         to={`/${params.id}/opinion`}

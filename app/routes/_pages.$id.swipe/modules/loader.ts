@@ -1,6 +1,6 @@
 import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
-import { notfound } from "~/libs/notfound";
+import { forbidden, notfound } from "~/libs/notfound";
 import { OPINIONS_LIMIT } from "../constants";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -22,6 +22,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   );
 
   if (!data || error) {
+    if (error?.code === "AUTH-0000") {
+      throw forbidden();
+    }
+
     throw notfound();
   }
 

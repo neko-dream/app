@@ -1,5 +1,6 @@
 import { Outlet, useLoaderData } from "@remix-run/react";
 import Avator from "~/components/Avator";
+import Heading from "~/components/Heading";
 import { SessionRouteContext } from "~/feature/session/context";
 import { loader } from "./modules/loader";
 
@@ -19,6 +20,7 @@ export default function Route() {
           <p className="text-sm text-[#6d6c6a]">{session.owner.displayName}</p>
         </div>
       </div>
+      <Heading>みんなの意見、どう思う？</Heading>
 
       <Outlet context={{ session } satisfies SessionRouteContext} />
     </>

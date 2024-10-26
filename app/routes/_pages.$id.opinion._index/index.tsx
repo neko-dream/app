@@ -45,7 +45,6 @@ export default function Page() {
 
   return (
     <>
-      <Heading>あなたの意見</Heading>
       <Link
         to={"../post"}
         className={button({
