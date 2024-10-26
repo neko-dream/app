@@ -65,7 +65,7 @@ export default function Page() {
       <div className="w-full flex flex-col justify-center items-center relative flex-1">
         <p>全ての意見に意思表明しました🎉</p>
         <Link
-          to={`/${params.id}/opinion`}
+          to={`/${params.id}`}
           className={button({ color: "primary", className: "mt-4" })}
         >
           みんなの意見を見る
@@ -157,10 +157,7 @@ export default function Page() {
         <Button variation="primary" onClick={handleRevalidate}>
           さらに意思表明する
         </Button>
-        <Link
-          to={`/${params.id}/opinion`}
-          className={button({ color: "primary" })}
-        >
+        <Link to={`/${params.id}`} className={button({ color: "primary" })}>
           みんなの意見を見る
         </Link>
       </div>
@@ -171,7 +168,7 @@ export default function Page() {
     <div className="w-full relative flex-1 pt-4">
       <CardSwiper {...swipe} />
       <Link
-        to={`/${params.id}/opinion`}
+        to={`/${params.id}`}
         className={button({
           color: "primary",
           className: "absolute bottom-24 left-1/2 transform -translate-x-1/2",

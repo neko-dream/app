@@ -19,8 +19,31 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     return notfound();
   }
 
+  if (data.rootOpinion?.opinion.parentID) {
+    const { data: parentOpinion } = await api.GET(
+      "/talksessions/{talkSessionID}/opinions/{opinionID}/replies",
+      {
+        params: {
+          path: {
+            talkSessionID: params.id!,
+            opinionID: data.rootOpinion.opinion.parentID!,
+          },
+        },
+      },
+    );
+
+    return json({
+      ...data,
+      parentOpinion,
+      rootOpinion: data?.rootOpinion,
+      opinions: data?.opinions.reverse(),
+    });
+  }
+
   return json({
     ...data,
+    parentOpinion: undefined,
+    rootOpinion: data?.rootOpinion,
     opinions: data?.opinions.reverse(),
   });
 };

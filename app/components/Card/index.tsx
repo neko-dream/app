@@ -48,9 +48,9 @@ function Card(
         <Badge status={opinionStatus} className="ml-2" />
       </div>
 
-      {children}
-
       <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
+
+      {children}
 
       <RpleyLink to={isOpnionLink} />
 
