@@ -75,7 +75,7 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     <>
       <animated.div
         style={item}
-        className="touch-none absolute will-change-transform bottom-0 h-[80%] w-[375px] bg-white z-30 border-t border-gray-200 rounded-t-xl"
+        className="touch-none absolute will-change-transform bottom-0 w-[375px] h-[calc(100vh-112px-40px-32px-16px)] bg-white z-30 border-t border-gray-200 rounded-t-xl"
       >
         <Form
           {...props}
@@ -115,7 +115,7 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
       <animated.div
         style={{ opacity: item.opacity }}
         // FIXME: -mt-8 直したい
-        className="w-[375px] bottom-0 absolute bg-slate-600/60 h-[calc(100vh-96px-40px)]"
+        className="w-[375px] bottom-0 absolute bg-slate-600/60 h-[calc(100vh-112px-40px-32px)]"
         onClick={handleCloseModal}
       />
     </>

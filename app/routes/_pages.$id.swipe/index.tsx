@@ -153,7 +153,7 @@ export default function Page() {
   if (isOpinionEnd) {
     return (
       <div className="w-full flex flex-col justify-center items-center relative flex-1 space-y-4">
-        <p>３件の意見に意思表明しました🎉</p>
+        <p>{opinions.length}件の意見に意思表明しました🎉</p>
         <Button variation="primary" onClick={handleRevalidate}>
           さらに意思表明する
         </Button>
