@@ -1,6 +1,7 @@
 import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
 import { notfound } from "~/libs/notfound";
+import { OPINIONS_LIMIT } from "../constants";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const sessionID = params.id!;
@@ -14,7 +15,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
           talkSessionID: sessionID!,
         },
         query: {
-          limit: 3,
+          limit: OPINIONS_LIMIT,
         },
       },
     },
