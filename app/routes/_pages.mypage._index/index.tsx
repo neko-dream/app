@@ -2,6 +2,7 @@ import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import SettinIcon from "~/assets/setting.svg";
 import Avator from "~/components/Avator";
 import Card from "~/components/Card";
+import Session from "~/components/Session";
 import Tabs from "~/components/Tabs";
 import { loader } from "./modules/loader";
 
@@ -11,7 +12,6 @@ export default function Page() {
   const { user, opinions, sessions } = useLoaderData<typeof loader>();
   const [params] = useSearchParams();
   const isFavorite = params.get("q") === "favorite";
-  console.log(user);
 
   return (
     <div className="flex-1 flex flex-col items-center mt-2">
@@ -30,9 +30,10 @@ export default function Page() {
       />
       <div className="bg-gray-100 w-full flex-1 p-2 box-border space-y-2">
         {isFavorite &&
-          sessions?.map(({ talkSession }, i) => {
-            return <div key={i}>{talkSession.id}</div>;
+          sessions?.map((session, i) => {
+            return <Session {...session} key={i} />;
           })}
+
         {!isFavorite &&
           opinions?.map(({ opinion }, i) => {
             return (
