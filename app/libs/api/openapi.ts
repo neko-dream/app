@@ -340,9 +340,10 @@ export interface components {
         };
         /**
          * @description 意見の3種のステータス
+         * @default unvote
          * @enum {string}
          */
-        voteType: "agree" | "disagree" | "pass";
+        voteType: "agree" | "disagree" | "pass" | "unvote";
         location: {
             /** @description 緯度 */
             latitude: number;
@@ -408,6 +409,7 @@ export interface components {
             displayId: string;
             displayName: string;
             iconURL?: string | null;
+            groupName: string;
             groupId: number;
             /** @description 境界ポイントのインデックス */
             perimeterIndex?: number;
@@ -878,6 +880,7 @@ export interface operations {
                         myPosition?: components["schemas"]["userGroupPosition"];
                         positions: components["schemas"]["userGroupPosition"][];
                         groupOpinions: {
+                            groupName: string;
                             groupId: number;
                             opinions: {
                                 opinion: components["schemas"]["opinion"];
@@ -968,9 +971,10 @@ export interface operations {
                         rootOpinion: {
                             /** @description 作成ユーザー */
                             user: components["schemas"]["user"];
+                            /** @description 意見投稿主の意見。ルート意見の場合はここには何も入らない */
+                            myVoteType: components["schemas"]["voteType"];
                             opinion: components["schemas"]["opinion"];
                         };
-                        myVoteType?: components["schemas"]["voteType"] | null;
                         opinions: {
                             opinion: components["schemas"]["opinion"];
                             /** @description 作成ユーザー */
@@ -1122,6 +1126,11 @@ export interface operations {
                      */
                     icon?: string;
                     /**
+                     * @default false
+                     * @example false
+                     */
+                    deleteIcon?: boolean | null;
+                    /**
                      * @description 生まれ年
                      * @example 0
                      */
@@ -1152,7 +1161,7 @@ export interface operations {
                      * @description 都道府県
                      * @example
                      */
-                    prefectures?: string | null;
+                    prefecture?: string | null;
                 };
             };
         };

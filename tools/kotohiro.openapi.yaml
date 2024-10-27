@@ -779,6 +779,8 @@ paths:
                     items:
                       type: object
                       properties:
+                        groupName:
+                          type: string
                         groupId:
                           type: integer
                         opinions:
@@ -801,8 +803,9 @@ paths:
                               - disagreeCount
                               - passCount
                       required:
-                        - groupId
+                        - groupName
                         - opinions
+                        - groupId
                 required:
                   - positions
                   - groupOpinions
@@ -928,14 +931,12 @@ paths:
                     type: object
                     properties:
                       user: *ref_1
+                      myVoteType: *ref_4
                       opinion: *ref_0
                     required:
                       - user
                       - opinion
-                  myVoteType:
-                    anyOf:
-                      - *ref_4
-                      - type: 'null'
+                      - myVoteType
                   opinions:
                     type: array
                     items:
@@ -1138,6 +1139,11 @@ paths:
                   format: binary
                   description: ユーザーアイコン
                   example: ''
+                deleteIcon:
+                  type: boolean
+                  default: false
+                  example: 'false'
+                  nullable: true
                 yearOfBirth:
                   type: integer
                   description: 生まれ年
@@ -1180,7 +1186,7 @@ paths:
                   description: 世帯人数
                   example: 0
                   nullable: true
-                prefectures:
+                prefecture:
                   type: string
                   description: 都道府県
                   example: ''
@@ -1966,6 +1972,8 @@ components:
         - agree
         - disagree
         - pass
+        - unvote
+      default: unvote
     location:
       type: object
       properties:
@@ -2080,6 +2088,8 @@ components:
         iconURL:
           type: string
           nullable: true
+        groupName:
+          type: string
         groupId:
           type: integer
         perimeterIndex:
@@ -2089,8 +2099,9 @@ components:
         - posX
         - posY
         - displayId
-        - groupId
+        - groupName
         - displayName
+        - groupId
     Report:
       type: object
       properties:
