@@ -2,7 +2,7 @@ import { LoaderFunctionArgs, defer } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
 import { components } from "~/libs/api/openapi";
 
-type User = components["schemas"]["user"] &
+export type User = components["schemas"]["user"] &
   components["schemas"]["userDemographics"];
 
 /**

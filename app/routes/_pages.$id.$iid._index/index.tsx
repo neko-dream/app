@@ -1,20 +1,14 @@
 import { getFormProps, getInputProps } from "@conform-to/react";
-import {
-  Form,
-  useLoaderData,
-  useParams,
-  useRevalidator,
-} from "@remix-run/react";
+import { Form, useLoaderData, useParams } from "@remix-run/react";
 import { toast } from "react-toastify";
 import Button from "~/components/Button";
 import Card from "~/components/Card";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
-import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
-import { createOpinionFormSchema } from "~/feature/opinion/schemas/createOpinionFormSchema";
 import { api } from "~/libs/api";
 import { loader } from "./modules/loader";
+import { useCreateOpinionsForm } from "./hooks/useCreateOpinionsForm";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
@@ -24,35 +18,10 @@ export default function Page() {
     useLoaderData<typeof loader>();
 
   const params = useParams();
-  const { revalidate } = useRevalidator();
 
-  const { form, fields } = useCustomForm({
-    schema: createOpinionFormSchema,
-    onSubmit: async ({ value }) => {
-      const { data, error } = await api.POST(
-        "/talksessions/{talkSessionID}/opinions",
-        {
-          params: {
-            path: {
-              talkSessionID: params.id as never,
-            },
-          },
-          credentials: "include",
-          body: {
-            parentOpinionID: params.iid,
-            ...value,
-          } as never,
-        },
-      );
-
-      if (data) {
-        toast.success("意見を送信しました");
-        revalidate();
-      }
-      if (error) {
-        toast.error(error.message);
-      }
-    },
+  const { form, fields, isDisabled } = useCreateOpinionsForm({
+    talkSessionID: params.id!,
+    parentOpinionID: params.iid,
   });
 
   const handleSubmitVote = async (opinionID: string, voteStatus: string) => {
@@ -134,7 +103,12 @@ export default function Page() {
             })}
           />
         </Label>
-        <Button type="submit" variation="primary" className="mx-auto my-4">
+        <Button
+          type="submit"
+          variation="primary"
+          className="mx-auto my-4"
+          disabled={isDisabled}
+        >
           送信する
         </Button>
       </Form>

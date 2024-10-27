@@ -1,4 +1,5 @@
 import * as v from "valibot";
+import { str2num } from "~/schemas/str2num";
 
 const alphanumericSchema = v.regex(
   /^[a-zA-Z0-9]*$/,
@@ -37,20 +38,8 @@ const baseSchema = v.object({
   icon: v.optional(v.instance(File)),
   gender: v.optional(genderSchema),
   occupation: v.optional(occupationSchema),
-  householdSize: v.optional(
-    v.pipe(
-      v.string(),
-      v.transform((str) => Number(str)),
-      v.number(),
-    ),
-  ),
-  yearOfBirth: v.optional(
-    v.pipe(
-      v.string(),
-      v.transform((str) => Number(str)),
-      v.number(),
-    ),
-  ),
+  householdSize: str2num,
+  yearOfBirth: str2num,
 });
 
 export const adressFormSchema = v.object({

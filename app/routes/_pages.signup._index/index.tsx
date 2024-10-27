@@ -11,16 +11,16 @@ import Label from "~/components/Label";
 import Select from "~/components/Select";
 import Uploadarea from "~/components/Uploadarea";
 import AdressInputs from "~/feature/form/components/AdressInputs";
-import { handleDisabled, isFieldsError } from "~/feature/form/libs";
 import { useCreateUserForm } from "./hooks/useCreateUserForm";
 import { toast } from "react-toastify";
+import { isFieldsError } from "~/libs/form";
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader } from "./modules/loader";
 
 export default function Page() {
   const [preview, setPreview] = useState<string>();
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const { form, fields, loading } = useCreateUserForm();
+  const { form, fields, isDisabled } = useCreateUserForm();
 
   const handleOnChangeInputFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
@@ -124,7 +124,7 @@ export default function Page() {
         variation="primary"
         type="submit"
         className="mx-auto !mt-12 block"
-        disabled={handleDisabled(form.value, form.allErrors) || loading}
+        disabled={isDisabled}
       >
         登録する
       </Button>

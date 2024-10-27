@@ -1,13 +1,6 @@
-import {
-  useForm,
-  getFormProps,
-  getInputProps,
-  getSelectProps,
-} from "@conform-to/react";
-import { Form, useLoaderData, useNavigate } from "@remix-run/react";
-import { parseWithValibot } from "conform-to-valibot";
+import { getFormProps, getInputProps, getSelectProps } from "@conform-to/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
 import CameraIcon from "~/assets/camera.svg";
 import bathday from "~/assets/data/birthday.json";
 import gender from "~/assets/data/gender.json";
@@ -19,62 +12,16 @@ import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Select from "~/components/Select";
 import AdressInputs from "~/feature/form/components/AdressInputs";
-import {
-  deleteDashValues,
-  handleDisabled,
-  isFieldsError,
-} from "~/feature/form/libs";
-import { userEditFormSchema } from "~/feature/user/schemas/form";
-import { api } from "~/libs/api";
-import { fileCompress } from "~/libs/compressor";
 import { loader } from "./modules/loader";
+import { useEditUserForm } from "./hooks/useEditUserForm";
+import { isFieldsError } from "~/libs/form";
 
 export { loader };
 
 export default function Page() {
   const { user } = useLoaderData<typeof loader>();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
-  const [form, fields] = useForm({
-    defaultValue: {
-      ...user,
-      icon: null,
-    },
-    onSubmit: async (e) => {
-      e.preventDefault();
-
-      if (loading) return;
-      setLoading(true);
-
-      try {
-        const body = deleteDashValues(form.value);
-        const { error } = await api.PUT("/user", {
-          credentials: "include",
-          body: {
-            ...body,
-            icon: body.icon ? await fileCompress(body.icon) : undefined,
-          } as never,
-        });
-
-        if (error) {
-          toast.error(error.message);
-          setLoading(false);
-        } else {
-          toast.success("登録情報の編集が完了しました");
-          navigate("/mypage");
-        }
-      } catch (e) {
-        console.log(e);
-        toast.error("エラーが発生しました");
-        setLoading(false);
-      }
-    },
-    onValidate: ({ formData }) => {
-      return parseWithValibot(formData, { schema: userEditFormSchema });
-    },
-    shouldValidate: "onInput",
-  });
+  const { form, fields, isDisabled } = useEditUserForm({ user });
+  console.log(isDisabled);
 
   const [preview, setPreview] = useState<string>();
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -181,7 +128,7 @@ export default function Page() {
           variation="primary"
           type="submit"
           className="mx-auto !mt-12 block"
-          disabled={handleDisabled(form.value, form.allErrors) || loading}
+          disabled={isDisabled}
         >
           保存する
         </Button>

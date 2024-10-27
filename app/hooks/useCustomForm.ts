@@ -1,10 +1,10 @@
-import { useForm } from "@conform-to/react";
+import { DefaultValue, useForm } from "@conform-to/react";
 import { parseWithValibot } from "conform-to-valibot";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { ObjectEntries, ObjectSchema } from "valibot";
-import { deleteDashValues } from "../libs";
 import * as v from "valibot";
+import { deleteDashValues } from "~/libs/form";
 
 /**
  * valibot の共通のスキーマの型
@@ -21,7 +21,8 @@ type OnSubmitProps<T extends U> = {
 
 type Props<T extends U> = {
   schema: T;
-  onSubmit: ({ e, value }: OnSubmitProps<T>) => void;
+  onSubmit: ({ e, value }: OnSubmitProps<T>) => Promise<void>;
+  defaultValue?: DefaultValue<v.InferOutput<T>>;
 };
 
 /**
@@ -32,14 +33,21 @@ type Props<T extends U> = {
  * MEMO: 引数のスキーマで値のチェックを行ったものを onSubmit で返しています。
  * MEMO: "---"の値は送信時に必要がないので削除しています。
  */
-export const useCustomForm = <T extends U>({ schema, onSubmit }: Props<T>) => {
+export const useCustomForm = <T extends U>({
+  schema,
+  onSubmit,
+  defaultValue,
+}: Props<T>) => {
   const [loading, setLoading] = useState(false);
 
   const [form, fields] = useForm({
+    defaultValue,
     onSubmit: async (e) => {
       e.preventDefault();
 
-      if (loading) return;
+      if (loading) {
+        return;
+      }
       setLoading(true);
 
       const parse = v.safeParse(schema, form.value);
@@ -50,8 +58,9 @@ export const useCustomForm = <T extends U>({ schema, onSubmit }: Props<T>) => {
       }
 
       try {
-        onSubmit({ e, value: deleteDashValues(parse.output) });
-      } catch {
+        await onSubmit({ e, value: deleteDashValues(parse.output) });
+      } catch (e) {
+        console.error(e);
         toast.error("エラーが発生しました");
       } finally {
         setLoading(false);
@@ -60,8 +69,31 @@ export const useCustomForm = <T extends U>({ schema, onSubmit }: Props<T>) => {
     onValidate: ({ formData }) => {
       return parseWithValibot(formData, { schema });
     },
-    shouldValidate: "onBlur",
+    shouldValidate: "onInput",
   });
 
-  return { form, fields, loading };
+  const isDisabled = handleDisabled(form.value, form.allErrors) || loading;
+
+  return { form, fields, isDisabled };
+};
+
+/**
+ *
+ * conform のフォームでボタンを押せるかどうかを判定する
+ *
+ * 1. "---"を削除した後Formに値があるかどうか
+ * 2. フォームのエラー配列にエラーがあるかどうか
+ * @param value Form の内容を object で受け取る
+ * ```
+ * {
+ *   name: "name",
+ *   age: "---",
+ * }
+ * ```
+ */
+const handleDisabled = (value?: object, errors?: object) => {
+  return (
+    Object.keys(deleteDashValues(value)).length === 0 ||
+    Object.keys(errors || {}).length !== 0
+  );
 };

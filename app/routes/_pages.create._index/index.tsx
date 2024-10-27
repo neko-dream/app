@@ -1,65 +1,17 @@
-import { getFormProps, getInputProps, useForm } from "@conform-to/react";
-import { Form, useNavigate } from "@remix-run/react";
-import { parseWithValibot } from "conform-to-valibot";
-import dayjs from "dayjs";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import { getFormProps, getInputProps } from "@conform-to/react";
+import { Form } from "@remix-run/react";
 import Button from "~/components/Button";
 import Heading from "~/components/Heading";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
 import AdressInputs from "~/feature/form/components/AdressInputs";
-import {
-  deleteDashValues,
-  handleDisabled,
-  isFieldsError,
-} from "~/feature/form/libs";
-import { api } from "~/libs/api";
-import { createSessionFormSchema } from "./schemas/createSessionForm.schema";
+import { useCreateSessionForm } from "./hooks/useCreateSessionForm";
+import { isFieldsError } from "~/libs/form";
 
 // ログイン済みじゃないとここには来れない
 export default function Page() {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
-  const [form, fields] = useForm({
-    onSubmit: async (e) => {
-      e.preventDefault();
-
-      if (loading) return;
-      setLoading(true);
-
-      try {
-        console.log(form.value?.scheduledEndTime);
-
-        const { error } = await api.POST("/talksessions", {
-          credentials: "include",
-          body: deleteDashValues({
-            ...form.value,
-            scheduledEndTime: dayjs(form.value?.scheduledEndTime).toISOString(),
-          }) as never,
-        });
-
-        if (error) {
-          toast.error(error.message);
-        } else {
-          toast.success("登録が完了しました");
-          navigate("/home");
-        }
-      } catch {
-        toast.error("エラーが発生しました");
-      } finally {
-        setLoading(false);
-      }
-    },
-    onValidate: ({ formData }) => {
-      return parseWithValibot(formData, {
-        schema: createSessionFormSchema,
-      });
-    },
-    shouldValidate: "onInput",
-  });
+  const { fields, form, isDisabled } = useCreateSessionForm();
 
   return (
     <div className="flex flex-col">
@@ -110,7 +62,7 @@ export default function Page() {
           variation="primary"
           type="submit"
           className="mx-auto !mt-12 block"
-          disabled={handleDisabled(form.value, form.allErrors) || loading}
+          disabled={isDisabled}
         >
           登録する
         </Button>

@@ -7,7 +7,7 @@ import Button from "~/components/Button";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
-import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
+import { useCustomForm } from "~/hooks/useCustomForm";
 import { createOpinionFormSchema } from "~/feature/opinion/schemas/createOpinionFormSchema";
 import { api as apiClient } from "~/libs/api";
 import { useOpinonModal } from "../../hooks/useOpinionModal";
