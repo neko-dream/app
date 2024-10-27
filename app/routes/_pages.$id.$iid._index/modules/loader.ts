@@ -1,6 +1,6 @@
 import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
-import { notfound } from "~/libs/notfound";
+import { notfound } from "~/libs/response";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { data: user } = await api.GET("/auth/token/info", {

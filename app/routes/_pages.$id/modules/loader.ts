@@ -1,6 +1,6 @@
 import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
-import { notfound } from "~/libs/notfound";
+import { notfound } from "~/libs/response";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { data: session } = await api.GET("/talksessions/{talkSessionId}", {

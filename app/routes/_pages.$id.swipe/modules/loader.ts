@@ -1,6 +1,6 @@
 import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
-import { forbidden, notfound } from "~/libs/notfound";
+import { forbidden, notfound } from "~/libs/response";
 import { OPINIONS_LIMIT } from "../constants";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
