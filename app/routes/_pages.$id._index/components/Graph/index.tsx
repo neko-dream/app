@@ -208,7 +208,7 @@ const Dots = ({ positions, myPosition, selectGroupId }: Props) => {
       (v: { displayId: string; groupId: string; posX: number; posY: any }) => {
         let radius: number = 1; // 5
         let myPositionFlag = false;
-        if (myPosition.displayId === v.displayId && !isUsedMyPosition) {
+        if (myPosition?.displayId === v?.displayId && !isUsedMyPosition) {
           radius = 0.07; // 10 // 自分の位置の画像のサイズを変更する(倍率)
           isUsedMyPosition = true;
           myPositionFlag = true;
