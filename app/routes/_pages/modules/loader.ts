@@ -6,7 +6,8 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
     .GET("/auth/token/info", {
       headers: request.headers,
     })
-    .then((res) => res?.data || null);
+    .then((res) => res?.data || null)
+    .catch(console.error);
 
   return defer({ $user });
 };
