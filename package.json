@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@conform-to/react": "^1.2.2",
+    "@pixi/events": "^7.4.2",
     "@pixi/react": "^7.1.2",
     "@remix-run/cloudflare": "2.13.0",
     "@remix-run/cloudflare-pages": "2.13.0",

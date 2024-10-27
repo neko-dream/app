@@ -53,6 +53,9 @@ export default function Page() {
         polygons={positions}
         positions={data?.positions}
         myPosition={data?.myPosition}
+        selectGroupId={(id: number) => {
+          setGroupID(id);
+        }}
       />
       <Heading className="mt-6">レポート</Heading>
       <details className="prose-sm px-2">
@@ -68,6 +71,7 @@ export default function Page() {
           onChange={(e) => {
             setGroupID(Number(e.currentTarget.value));
           }}
+          value={groupID}
         >
           <option value={1000}>すべて</option>
           {data?.groupOpinions.map((opinion, i) => {
