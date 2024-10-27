@@ -1,4 +1,3 @@
-import { Link } from "@remix-run/react";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { RiChat1Line } from "react-icons/ri";
 import { tv } from "tailwind-variants";
@@ -95,10 +94,10 @@ function RpleyLink({ to }: RpleyLinkProps) {
   }
 
   return (
-    <Link to={to} className="mt-2 flex items-center justify-end text-blue-500">
+    <div className="mt-2 flex items-center justify-end text-blue-500">
       <RiChat1Line />
       <p className="ml-1 text-sm">返信画面にいく</p>
-    </Link>
+    </div>
   );
 }
 
