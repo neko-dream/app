@@ -118,10 +118,10 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
     myPosition = false,
   ) => {
     const images = [
-      "/avatar-circle/avatar-circle-red.jpg",
-      "/avatar-circle/avatar-circle-yellow.jpg",
-      "/avatar-circle/avatar-circle-purple.jpg",
-      "/avatar-circle/avatar-circle-green.jpg",
+      "/avatar-circle/avatar-circle-red.png",
+      "/avatar-circle/avatar-circle-yellow.png",
+      "/avatar-circle/avatar-circle-purple.png",
+      "/avatar-circle/avatar-circle-green.png",
     ];
     const zIndex = myPosition ? 100 : 10;
     if (myPosition) {
