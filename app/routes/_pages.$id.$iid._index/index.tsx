@@ -2,7 +2,7 @@ import { getFormProps, getInputProps } from "@conform-to/react";
 import {
   Form,
   useLoaderData,
-  useParams,
+  useOutletContext,
   useRevalidator,
 } from "@remix-run/react";
 import { toast } from "react-toastify";
@@ -11,9 +11,10 @@ import Card from "~/components/Card";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
-import { api } from "~/libs/api";
 import { loader } from "./modules/loader";
 import { useCreateOpinionsForm } from "~/feature/opinion/hooks/useCreateOpinionForm";
+import { SessionRouteContext } from "../_pages.$id/types";
+import { postVote } from "~/feature/opinion/libs/postVote";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
@@ -21,34 +22,24 @@ export { loader };
 export default function Page() {
   const { rootOpinion, opinions, parentOpinion, user } =
     useLoaderData<typeof loader>();
+  const { session } = useOutletContext<SessionRouteContext>();
 
-  const params = useParams();
   const { revalidate } = useRevalidator();
 
   const { form, fields, isDisabled } = useCreateOpinionsForm({
-    talkSessionID: params.id!,
-    parentOpinionID: params.iid,
+    talkSessionID: session.id!,
+    parentOpinionID: rootOpinion.opinion.id,
     onFinishedProcess: () => {
       revalidate();
     },
   });
 
   const handleSubmitVote = async (opinionID: string, voteStatus: string) => {
-    const { data, error } = await api.POST(
-      "/talksessions/{talkSessionID}/opinions/{opinionID}/votes",
-      {
-        credentials: "include",
-        params: {
-          path: {
-            talkSessionID: params.id!,
-            opinionID: opinionID,
-          },
-        },
-        body: {
-          voteStatus: voteStatus as never,
-        },
-      },
-    );
+    const { data, error } = await postVote({
+      talkSessionID: session.id,
+      opinionID,
+      voteStatus: voteStatus as never,
+    });
 
     if (data) {
       toast.success("意思表明を行いました");
@@ -86,7 +77,7 @@ export default function Page() {
             }}
             opinionStatus={parentOpinion.rootOpinion.opinion.voteType}
             className="w-full bg-white"
-            isOpnionLink={`/${params.id}/${parentOpinion.rootOpinion.opinion.id}`}
+            isOpnionLink={`/${session.id}/${parentOpinion.rootOpinion.opinion.id}`}
           />
         )}
       </Card>
@@ -135,7 +126,7 @@ export default function Page() {
             }}
             opinionStatus={opinion.voteType!}
             className="mt-2 h-full w-full select-none bg-white"
-            isOpnionLink={`/${params.id}/${opinion.id}`}
+            isOpnionLink={`/${session.id}/${opinion.id}`}
             isJegde={opinionUser.displayID !== user?.displayId}
             myVoteType={myVoteType}
             onClickVoteButton={(voteStatus) => {

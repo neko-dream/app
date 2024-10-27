@@ -1,4 +1,4 @@
-import { Link, useLoaderData, useParams } from "@remix-run/react";
+import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import Card from "~/components/Card";
@@ -6,6 +6,7 @@ import Heading from "~/components/Heading";
 import { components } from "~/libs/api/openapi";
 import Graph from "./components/Graph";
 import { loader } from "./modules/loader";
+import { SessionRouteContext } from "../_pages.$id/types";
 
 export { loader };
 
@@ -20,8 +21,8 @@ export default function Page() {
     opinions: allOpinions,
     report,
   } = useLoaderData<typeof loader>();
+  const { session } = useOutletContext<SessionRouteContext>();
 
-  const params = useParams();
   const [groupID, setGroupID] = useState<number>(1000);
   const [opinions, setOpinions] = useState<Card[]>([]);
 
@@ -85,12 +86,12 @@ export default function Page() {
           })}
         </select>
       </div>
-      <div className="mx-4 space-y-4">
+      <div className="mx-4 mb-16 space-y-4">
         {opinions.map((opinion, i) => {
           return (
             <Link
               key={i}
-              to={`/${params.id}/${opinion.opinion.id}`}
+              to={`/${session.id}/${opinion.opinion.id}`}
               className="block"
             >
               <Card
@@ -102,7 +103,7 @@ export default function Page() {
                   iconURL: opinion.user.iconURL || "",
                 }}
                 opinionStatus={opinion.opinion.voteType!}
-                isOpnionLink={`/${params.id}/${opinion.opinion.id}`}
+                isOpnionLink={`/${session.id}/${opinion.opinion.id}`}
               />
             </Link>
           );

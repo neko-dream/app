@@ -9,13 +9,13 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Button, { button } from "~/components/Button";
 import { OpinionType } from "~/feature/opinion/types";
-import { api } from "~/libs/api";
 import CardSwiper from "./components/CardSwiper";
 import { useSwipe } from "./hooks/useSwipe";
 import { animations } from "./libs/animations";
 import { loader } from "./modules/loader";
 import { OpinionModal } from "~/feature/opinion/components/OpinionModal";
 import { SessionRouteContext } from "../_pages.$id/types";
+import { postVote } from "~/feature/opinion/libs/postVote";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
@@ -28,21 +28,11 @@ export default function Page() {
   const swipe = useSwipe({
     opinions,
     onSwipe: async ({ opinionID, opinionStatus }) => {
-      const { error } = await api.POST(
-        "/talksessions/{talkSessionID}/opinions/{opinionID}/votes",
-        {
-          credentials: "include",
-          params: {
-            path: {
-              talkSessionID: params.id!,
-              opinionID: opinionID,
-            },
-          },
-          body: {
-            voteStatus: opinionStatus as never,
-          },
-        },
-      );
+      const { error } = await postVote({
+        talkSessionID: session.id,
+        opinionID,
+        voteStatus: opinionStatus as never,
+      });
 
       if (error) {
         return toast.error(error.message);
@@ -103,21 +93,11 @@ export default function Page() {
     const opinionID =
       opinions[opinions.length - swipe.gone.size - 1].opinion.id;
 
-    const { error } = await api.POST(
-      "/talksessions/{talkSessionID}/opinions/{opinionID}/votes",
-      {
-        credentials: "include",
-        params: {
-          path: {
-            talkSessionID: params.id!,
-            opinionID: opinionID,
-          },
-        },
-        body: {
-          voteStatus: v as never,
-        },
-      },
-    );
+    const { error } = await postVote({
+      talkSessionID: session.id,
+      opinionID,
+      voteStatus: v as never,
+    });
 
     if (error) {
       return toast.error(error.message);
