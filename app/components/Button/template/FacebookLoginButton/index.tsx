@@ -11,12 +11,12 @@ function FacebookLoginButton(
       {...props}
       ref={ref}
       outline
-      className="border border-gray-700 max-w-80"
+      className="max-w-80 border border-gray-700"
     >
-      <span className="flex font-normal relative justify-center box-content">
+      <span className="relative box-content flex justify-center font-normal">
         <img
           src={FacebookIcon}
-          className="w-6 h-6 absolute inset-0 left-6"
+          className="absolute inset-0 left-6 h-6 w-6"
           alt=""
         />
         <p className="text-center">Facebookでログイン</p>

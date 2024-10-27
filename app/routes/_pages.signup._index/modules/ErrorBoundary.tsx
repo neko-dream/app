@@ -8,7 +8,7 @@ export function ErrorBoundary(): JSX.Element {
     return (
       <Error>
         <p>ログイン後使用可能です！</p>
-        <Link to={"/"} className="underline mt-2 text-blue-500">
+        <Link to={"/"} className="mt-2 text-blue-500 underline">
           ログイン画面へ
         </Link>
       </Error>

@@ -9,7 +9,7 @@ type Props = ComponentProps<"p"> & {
 };
 
 const tip = tv({
-  base: "w-8 rounded text-center text-xs text-white p-0.5",
+  base: "w-8 rounded p-0.5 text-center text-xs text-white",
   variants: {
     optional: { true: "bg-gray-500" },
     required: { true: "bg-red-500" },

@@ -1,59 +1,104 @@
+import { Link } from "@remix-run/react";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
-import { RiChat1Line, RiMore2Fill } from "react-icons/ri";
+import { RiChat1Line } from "react-icons/ri";
 import { tv } from "tailwind-variants";
-import { OpinionJpMap } from "~/constants/opinion";
+import { OpinionType } from "~/feature/opinion/status";
 import { User } from "~/feature/user/types";
 import Avator from "../Avator";
 import Badge from "../Badge";
+import Button from "../Button";
 
 type Props = Card & ComponentProps<"div">;
 
 type Card = {
-  title: string;
   description: string;
   children?: ReactNode;
-  opinionStatus: keyof typeof OpinionJpMap;
+  opinionStatus?: OpinionType;
   user: User;
+  isOpnionLink?: string;
+  isJegde?: boolean;
+  onClickVoteButton?: (v: string) => void;
+  myVoteType?: OpinionType;
 };
 
 const card = tv({
-  base: "card rounded-md border border-solid border-black p-4",
+  base: "rounded-md border border-solid border-black p-4",
 });
 
 function Card(
   {
     user,
-    title,
     description,
     opinionStatus,
     children,
     className,
+    isOpnionLink,
+    isJegde,
+    onClickVoteButton,
+    myVoteType,
     ...props
   }: Props,
   ref: ForwardedRef<HTMLDivElement>,
 ) {
   return (
     <div {...props} ref={ref} className={card({ class: className })}>
-      <Avator src={user.photoURL} className="card-avator" />
-      <p className="card-title">{title}</p>
-
-      <div className="card-status flex items-center space-x-2">
-        <Badge status={opinionStatus} />
-        <p className="text-xs text-[#6d6c6a]">{user.displayName}</p>
+      <div className="flex items-center">
+        <Avator src={user.photoURL} className="" />
+        <p className="ml-2 mr-auto text-xs text-[#6d6c6a]">
+          {user.displayName}
+        </p>
+        <Badge status={opinionStatus} className="ml-2" />
       </div>
 
-      <button className="ml-auto">
-        <RiMore2Fill className="card-meatball" size={24} />
-      </button>
+      <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
 
       {children}
 
-      <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
-      <div className="card-link mt-1 flex items-center space-x-1 text-blue-500">
-        <RiChat1Line />
-        <p className="text-sm">コメント16件</p>
-      </div>
+      <RpleyLink to={isOpnionLink} />
+
+      {isJegde && (
+        <div className="mt-2 flex justify-between">
+          <Button
+            className="h-8 w-24 p-1"
+            variation={myVoteType === "disagree" ? "disagree" : "disabled"}
+            onClick={() => onClickVoteButton?.("disagree")}
+          >
+            違うかも
+          </Button>
+          <Button
+            className="h-8 w-24 p-1"
+            variation={myVoteType === "pass" ? "pass" : "disabled"}
+            onClick={() => onClickVoteButton?.("pass")}
+          >
+            保留
+          </Button>
+          <Button
+            className="h-8 w-24 p-1"
+            variation={myVoteType === "agree" ? "agree" : "disabled"}
+            onClick={() => onClickVoteButton?.("agree")}
+          >
+            良さそう
+          </Button>
+        </div>
+      )}
     </div>
+  );
+}
+
+type RpleyLinkProps = {
+  to?: string;
+};
+
+function RpleyLink({ to }: RpleyLinkProps) {
+  if (!to) {
+    return null;
+  }
+
+  return (
+    <Link to={to} className="mt-2 flex items-center justify-end text-blue-500">
+      <RiChat1Line />
+      <p className="ml-1 text-sm">返信画面にいく</p>
+    </Link>
   );
 }
 

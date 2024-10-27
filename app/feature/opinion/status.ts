@@ -1,1 +1,1 @@
-export type OpinionStatus = "agree" | "disagree" | "pass";
+export type OpinionType = "agree" | "disagree" | "pass" | "unvote" | null;

@@ -1,21 +1,22 @@
 import { ComponentProps, ForwardedRef, forwardRef } from "react";
 import { tv } from "tailwind-variants";
-import { OpinionJpMap } from "~/constants/opinion";
+import { OpinionJpMap } from "~/feature/opinion/constants";
+import { OpinionType } from "~/feature/opinion/status";
 
 type Props = Badge & ComponentProps<"button">;
 
 type Badge = {
-  status: keyof typeof OpinionJpMap;
+  status?: OpinionType;
   isSelectStyle?: boolean;
 };
 
 const badge = tv({
-  base: "flex h-6 w-10 items-center justify-center rounded-full text-center text-xs text-white",
+  base: "flex h-6 w-16 items-center justify-center rounded-full text-center text-xs text-white",
   variants: {
     color: {
-      agree: "bg-blue-500",
-      disagree: "bg-red-500",
-      pass: "bg-gray-500",
+      agree: "bg-[#32ADE6]",
+      disagree: "bg-[#FF2D55]",
+      pass: "bg-[#AF52DE]",
     },
     isSelect: {
       true: "border-2 border-solid border-gray-400 bg-white text-gray-500",
@@ -32,12 +33,13 @@ function Badge(
       {...props}
       ref={ref}
       className={badge({
-        color: status,
+        color: status as never,
         isSelect: isSelectStyle,
         class: className,
       })}
     >
-      {OpinionJpMap[status]}
+      {/* FIXME: ここやばい */}
+      {OpinionJpMap[status as never]}
     </button>
   );
 }

@@ -1,23 +1,31 @@
 import { json, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { api } from "~/libs/api";
-import { notfound } from "~/libs/notfound";
+import { forbidden, notfound } from "~/libs/notfound";
+import { OPINIONS_LIMIT } from "../constants";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const data = await api
-    .GET("/talksessions/{talkSessionID}/swipe_opinions", {
+  const sessionID = params.id!;
+
+  const { data, error } = await api.GET(
+    "/talksessions/{talkSessionID}/swipe_opinions",
+    {
       headers: request.headers,
       params: {
         path: {
-          talkSessionID: params.id || "",
+          talkSessionID: sessionID!,
         },
         query: {
-          limit: 1,
+          limit: OPINIONS_LIMIT,
         },
       },
-    })
-    .then((res) => res.data?.[0]);
+    },
+  );
 
-  if (!data) {
+  if (!data || error) {
+    if (error?.code === "AUTH-0000") {
+      throw forbidden();
+    }
+
     throw notfound();
   }
 

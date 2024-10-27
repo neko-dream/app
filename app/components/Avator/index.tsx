@@ -19,7 +19,11 @@ function Avator(
   return (
     <picture ref={ref} {...props} className={avator({ className })}>
       <source srcSet={props.src || ""} />
-      <img src={defaultImage} alt="" className="w-full rounded-full" />
+      <img
+        src={defaultImage}
+        alt=""
+        className="aspect-square w-full rounded-full object-cover"
+      />
     </picture>
   );
 }

@@ -1,7 +1,7 @@
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { tv } from "tailwind-variants";
 
-type variants = "primary" | "agree" | "disagree" | "pass";
+type variants = "primary" | "agree" | "disagree" | "pass" | "disabled";
 
 type Props = ComponentProps<"button"> & {
   variation?: variants;
@@ -10,13 +10,14 @@ type Props = ComponentProps<"button"> & {
 };
 
 export const button = tv({
-  base: "text-center w-full max-w-[175px] rounded-full p-2 font-bold disabled:opacity-30",
+  base: "w-full max-w-[175px] rounded-full p-2 text-center font-bold disabled:opacity-30",
   variants: {
     color: {
-      primary: "bg-green-500 text-white border-green-500",
-      agree: "text-white bg-blue-500 border-blue-500",
-      disagree: "text-white bg-red-500 border-red-500",
-      pass: "text-white bg-gray-300 border-gray-300",
+      primary: "border-green-500 bg-green-500 text-white",
+      agree: "border-[#32ADE6] bg-[#32ADE6] text-white",
+      disagree: "border-[#FF2D55] bg-[#FF2D55] text-white",
+      pass: "border-[#AF52DE] bg-[#AF52DE] text-white",
+      disabled: "border-gray-200 bg-gray-200 text-white",
     } satisfies { [x in variants]: string },
     outline: {
       true: "border-2 border-solid bg-white text-gray-500",

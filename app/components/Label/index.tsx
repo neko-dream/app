@@ -12,7 +12,7 @@ type Props = ComponentProps<"div"> & {
 };
 
 const label = tv({
-  base: "space-y-1 w-full",
+  base: "w-full space-y-1",
 });
 
 function Label(
@@ -21,21 +21,19 @@ function Label(
 ) {
   return (
     <div {...props} className={label({ className })} ref={ref}>
-      <div className="flex items-center space-x-1">
+      <div className="mb-1 flex items-center space-x-1">
         <p className="text-xs">{title}</p>
         <Tip required={required} optional={optional} />
       </div>
       {children}
-      <div>
-        {errors?.map((v, i) => {
-          return (
-            <div key={i} className="flex items-center space-x-1">
-              <RiAlertFill color="red" />
-              <p className="text-red-500 text-xs pt-0.5">{v}</p>
-            </div>
-          );
-        })}
-      </div>
+      {errors?.map((v, i) => {
+        return (
+          <div key={i} className="flex items-center space-x-1">
+            <RiAlertFill color="red" />
+            <p className="pt-0.5 text-xs text-red-500">{v}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }

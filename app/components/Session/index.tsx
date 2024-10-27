@@ -12,26 +12,26 @@ export default function Session({ talkSession, opinionCount }: Props) {
   const isFinished = JST(talkSession.scheduledEndTime).isBefore();
 
   return (
-    <div className="h-[156px] p-4 border-b border-gray-400 bg-white">
+    <div className="h-[156px] border-b border-gray-400 bg-white p-4">
       <p className="text-xs text-gray-500">テーマ</p>
-      <p className="text-[14px] mt-1">{talkSession.theme}</p>
-      <div className="flex space-x-2 items-center mt-1">
+      <p className="mt-1 text-[14px]">{talkSession.theme}</p>
+      <div className="mt-1 flex items-center space-x-2">
         <Avator
           src={talkSession.owner.iconURL || undefined}
-          className="block shrink-0 h-5 w-5"
+          className="block h-5 w-5 shrink-0"
         />
-        <p className="text-gray-500 text-xs">{talkSession.owner.displayName}</p>
+        <p className="text-xs text-gray-500">{talkSession.owner.displayName}</p>
       </div>
       {isFinished ? (
-        <p className="text-xs text-white bg-gray-500 rounded-full px-2 py-1 inline-block whitespace-nowrap mt-4">
+        <p className="mt-4 inline-block whitespace-nowrap rounded-full bg-gray-500 px-2 py-1 text-xs text-white">
           終了
         </p>
       ) : (
-        <p className="text-xs text-white bg-blue-500 rounded-full px-2 py-1 inline-block whitespace-nowrap mt-4">
+        <p className="mt-4 inline-block whitespace-nowrap rounded-full bg-blue-500 px-2 py-1 text-xs text-white">
           {JST(talkSession.scheduledEndTime).format("MM/DD(ddd)まで")}
         </p>
       )}
-      <div className="flex justify-between mt-2">
+      <div className="mt-2 flex justify-between">
         <div className="flex items-center space-x-1">
           <RiMapPinLine className="text-gray-500" />
           <p className="text-xs text-gray-500">{talkSession.city}</p>
