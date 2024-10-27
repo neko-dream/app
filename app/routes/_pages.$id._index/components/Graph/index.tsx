@@ -2,6 +2,45 @@
 import { Stage, Graphics, Sprite } from "@pixi/react";
 import React, { Fragment } from "react";
 
+const Axes = ({
+  width,
+  height,
+  xLength,
+  yLength,
+  color = 0x000000,
+  thickness = 2,
+}: {
+  width: number;
+  height: number;
+  xLength: number;
+  yLength: number;
+  color: number;
+  thickness: number;
+}) => {
+  const drawAxes = React.useCallback(
+    (g: {
+      clear: () => void;
+      lineStyle: (arg0: number, arg1: number) => void;
+      moveTo: (arg0: number, arg1: number) => void;
+      lineTo: (arg0: number, arg1: number) => void;
+    }) => {
+      g.clear();
+      g.lineStyle(thickness, color);
+
+      // X軸
+      g.moveTo(0, height / 2);
+      g.lineTo(xLength, height / 2);
+
+      // Y軸
+      g.moveTo(width / 2, 0);
+      g.lineTo(width / 2, yLength);
+    },
+    [width, height, xLength, yLength, color, thickness],
+  );
+
+  return <Graphics draw={drawAxes} />;
+};
+
 const DotPlot = ({ polygons }: { polygons: any }) => {
   const drawPolygon = (
     g: {
@@ -207,6 +246,14 @@ const Dots = ({ positions, myPosition }: Props) => {
       height={height}
       options={{ backgroundColor: 0xffffff }}
     >
+      <Axes
+        width={width}
+        height={height}
+        xLength={width}
+        yLength={height}
+        color={0xd9d9d9}
+        thickness={2}
+      />
       <DotPlot polygons={resultPolygons} />
       <AvatarPlot dots={dots} myPositionData={myPositionData}></AvatarPlot>
     </Stage>
