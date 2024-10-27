@@ -1,30 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Stage, Graphics } from "@pixi/react";
+import { Stage, Graphics, Sprite } from "@pixi/react";
 import React from "react";
 
-const DotPlot = ({ dots, polygons }: { dots: any; polygons: any }) => {
-  const drawDot = (
-    g: {
-      beginFill: (arg0: number) => void;
-      drawCircle: (arg0: any, arg1: any, arg2: number) => void;
-      endFill: () => void;
-    },
-    x: any,
-    y: any,
-    colorIdx: any,
-    radius = 5,
-    // color = 0x0000ff,
-  ) => {
-    const colorList = [
-      0xff9393, 0xffc993, 0xff93ff, 0x93ff93, 0xffff93, 0xc9ff93, 0xc993ff,
-      0x9393ff, 0x93c9ff, 0x93ffff,
-    ];
-    // g.beginFill(color);
-    g.beginFill(colorList[colorIdx]);
-    g.drawCircle(x, y, radius);
-    g.endFill();
-  };
-
+const DotPlot = ({ polygons }: { polygons: any }) => {
   const drawPolygon = (
     g: {
       beginFill: (arg0: number, arg1: number) => void;
@@ -32,9 +10,11 @@ const DotPlot = ({ dots, polygons }: { dots: any; polygons: any }) => {
       endFill: () => void;
     },
     points: any,
-    color = 0xff0000,
+    colorIdx: any,
   ) => {
-    g.beginFill(color, 0.5); // 色と透明度
+    const colorList = [0xff453a, 0xffd60a, 0xbf5af2, 0x30d158];
+
+    g.beginFill(colorList[colorIdx], 0.3); // 色と透明度
     g.drawPolygon(points);
     g.endFill();
   };
@@ -48,20 +28,91 @@ const DotPlot = ({ dots, polygons }: { dots: any; polygons: any }) => {
       endFill: () => void;
     }) => {
       g.clear();
-      dots.forEach(
-        (dot: { x: any; y: any; groupId: number; radius: number }) => {
-          drawDot(g, dot.x, dot.y, dot.groupId, dot.radius ?? 5);
-        },
-      );
-
-      polygons.forEach((polygon: { points: any }) => {
-        drawPolygon(g, polygon.points);
+      polygons.forEach((polygon: { points: any; groupId: any }) => {
+        drawPolygon(g, polygon.points, polygon.groupId);
       });
     },
-    [dots, polygons],
+    [polygons],
   );
 
   return <Graphics pointertap={console.log} draw={draw} />;
+};
+
+const AvatarPlot = ({ dots, myPositionData }: any) => {
+  let avatarWithZindex: any[][] = [];
+
+  const drawAvatarBackground = React.useCallback(
+    (g: {
+      clear?: any;
+      beginFill: (arg0: number) => void;
+      drawCircle: (arg0: any, arg1: any, arg2: number) => void;
+      drawPolygon: (arg0: any) => void;
+      endFill: () => void;
+    }) => {
+      g.clear();
+      // bg-slate-500
+      g.beginFill(0x64748b);
+      g.drawCircle(myPositionData.x, myPositionData.y, 10);
+      g.endFill();
+    },
+    [myPositionData],
+  );
+
+  const drawAvatar = (
+    x: any,
+    y: any,
+    colorIdx: any,
+    radiusRate = 1,
+    myPosition = false,
+  ) => {
+    const images = [
+      "/avatar-circle/avatar-circle-red.svg",
+      "/avatar-circle/avatar-circle-yellow.svg",
+      "/avatar-circle/avatar-circle-purple.svg",
+      "/avatar-circle/avatar-circle-green.svg",
+    ];
+    const zIndex = myPosition ? 100 : 10;
+    if (myPosition) {
+      avatarWithZindex.push([
+        // eslint-disable-next-line react/jsx-key
+        <Graphics
+          zIndex={zIndex}
+          pointertap={console.log}
+          draw={drawAvatarBackground}
+        />,
+        zIndex,
+      ]);
+    }
+    avatarWithZindex.push([
+      // eslint-disable-next-line react/jsx-key
+      <Sprite
+        image={myPosition ? "/avatar-icon/avator-1.png" : images[colorIdx]}
+        x={x}
+        y={y}
+        zIndex={zIndex + 10}
+        scale={[0.15 * radiusRate, 0.15 * radiusRate]}
+        anchor={[0.5, 0.5]}
+      />,
+      zIndex + 10,
+    ]);
+  };
+
+  dots.forEach(
+    (dot: {
+      x: any;
+      y: any;
+      groupId: number;
+      radius: number;
+      myPosition: boolean;
+    }) => {
+      drawAvatar(dot.x, dot.y, dot.groupId, dot.radius ?? 1, dot.myPosition);
+    },
+  );
+
+  avatarWithZindex = avatarWithZindex.sort(function (a, b) {
+    return a[1] - b[1];
+  });
+  return <>{avatarWithZindex.map((avatar) => avatar[0])}</>;
 };
 
 type Props = {
@@ -95,27 +146,34 @@ const Dots = ({ positions, myPosition }: Props) => {
   const height = 300;
   const originalWidth = _maxX - _minX;
   const originalHeight = _maxY - _minY;
-  let myPositionFlag = false;
-  const dots = positions.map(
-    (v: { groupId: string; posX: number; posY: any }) => {
-      let radius: number = 5;
+  let isUsedMyPosition = false;
+  const myPositionData: any = {};
+  const dots =
+    positions.map((v: { groupId: string; posX: number; posY: any }) => {
+      let radius: number = 1; // 5
+      let myPositionFlag = false;
       if (
         myPosition?.posX == v.posX &&
         myPosition?.posY == v.posY &&
         myPosition?.groupId == v.groupId &&
-        !myPositionFlag
+        !isUsedMyPosition
       ) {
-        radius = 10;
+        radius = 0.07; // 10 // 自分の位置の画像のサイズを変更する(倍率)
+        isUsedMyPosition = true;
         myPositionFlag = true;
+        myPositionData["x"] =
+          (v.posX - _minX) * ((width - 30) / originalWidth) + 15;
+        myPositionData["y"] =
+          (v.posY - _minY) * ((height - 50) / originalHeight) + 25;
       }
       return {
         x: (v.posX - _minX) * ((width - 30) / originalWidth) + 15,
         y: (v.posY - _minY) * ((height - 50) / originalHeight) + 25,
         groupId: v.groupId,
         radius: radius,
+        myPosition: myPositionFlag,
       };
-    },
-  );
+    }) || [];
 
   const resultPolygons = [];
   for (const groupId of hasPerimeterIndexGroup) {
@@ -138,7 +196,7 @@ const Dots = ({ positions, myPosition }: Props) => {
         (v.posY - _minY) * ((height - 50) / originalHeight) + 25,
       ];
     });
-    resultPolygons.push({ points: points });
+    resultPolygons.push({ points: points, groupId: groupId });
   }
 
   return (
@@ -147,7 +205,8 @@ const Dots = ({ positions, myPosition }: Props) => {
       height={height}
       options={{ backgroundColor: 0xffffff }}
     >
-      <DotPlot dots={dots} polygons={resultPolygons} />
+      <DotPlot polygons={resultPolygons} />
+      <AvatarPlot dots={dots} myPositionData={myPositionData}></AvatarPlot>
     </Stage>
   );
 };
