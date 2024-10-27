@@ -7,10 +7,12 @@ import { paths } from "./openapi";
 const convertFormData = (params: object): FormData => {
   const formData = new FormData();
 
-  for (const entries of Object.entries(params)) {
-    const value =
-      typeof entries[1] === "number" ? String(entries[1]) : entries[1];
-    formData.append(entries[0], value);
+  for (const [k, v] of Object.entries(params)) {
+    const value = typeof v === "number" ? String(v) : v;
+
+    if (value) {
+      formData.append(k, value);
+    }
   }
 
   return formData;
