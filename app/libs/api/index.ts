@@ -22,4 +22,5 @@ const convertFormData = (params: object): FormData => {
 export const api = createClient<paths>({
   baseUrl: API_BASE_URL,
   bodySerializer: (body) => body && convertFormData(body),
+  credentials: "include",
 });
