@@ -42,7 +42,7 @@ function Card(
   return (
     <div {...props} ref={ref} className={card({ class: className })}>
       <div className="flex items-center">
-        <Avator src={user.photoURL} className="" />
+        <Avator src={user.iconURL} className="" />
         <p className="ml-2 mr-auto text-xs text-[#6d6c6a]">
           {user.displayName}
         </p>

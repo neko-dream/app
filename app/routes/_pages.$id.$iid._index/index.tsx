@@ -57,7 +57,7 @@ export default function Page() {
         user={{
           displayID: "",
           displayName: rootOpinion.user.displayName,
-          photoURL: rootOpinion.user.iconURL,
+          iconURL: rootOpinion.user.iconURL || "",
         }}
         opinionStatus={rootOpinion.opinion.voteType}
         className="w-full bg-white"
@@ -73,7 +73,7 @@ export default function Page() {
             user={{
               displayID: "",
               displayName: parentOpinion.rootOpinion.user.displayName,
-              photoURL: parentOpinion.rootOpinion.user.iconURL,
+              iconURL: parentOpinion.rootOpinion.user.iconURL,
             }}
             opinionStatus={parentOpinion.rootOpinion.opinion.voteType}
             className="w-full bg-white"
@@ -122,7 +122,7 @@ export default function Page() {
             user={{
               displayID: "",
               displayName: opinionUser.displayName,
-              photoURL: opinionUser.iconURL,
+              iconURL: opinionUser.iconURL,
             }}
             opinionStatus={opinion.voteType!}
             className="mt-2 h-full w-full select-none bg-white"

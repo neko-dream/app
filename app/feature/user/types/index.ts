@@ -1,5 +1,4 @@
-export type User = {
-  displayName?: string | null;
-  displayID?: string | null;
-  photoURL?: string | null;
-};
+import { components } from "~/libs/api/openapi";
+
+export type User = components["schemas"]["user"] &
+  Partial<components["schemas"]["userDemographics"]>;

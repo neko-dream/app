@@ -4,7 +4,7 @@ import { useCustomForm } from "~/hooks/useCustomForm";
 import { userEditFormSchema } from "~/feature/user/schemas/form";
 import { api } from "~/libs/api";
 import { fileCompress } from "~/libs/compressor";
-import { User } from "~/modules/requireLoginLoader";
+import { User } from "~/feature/user/types";
 
 type Props = {
   user: User;

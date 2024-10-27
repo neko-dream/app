@@ -52,6 +52,8 @@ export default function Page() {
     },
   });
 
+  console.log(opinions);
+
   const revalidate = useRevalidator();
 
   useEffect(() => {

@@ -1,9 +1,6 @@
 import { LoaderFunctionArgs, defer } from "@remix-run/cloudflare";
+import { User } from "~/feature/user/types";
 import { api } from "~/libs/api";
-import { components } from "~/libs/api/openapi";
-
-export type User = components["schemas"]["user"] &
-  components["schemas"]["userDemographics"];
 
 /**
  * ログインが必須のページのローダー関数を生成する関数

@@ -21,7 +21,6 @@ export { loader };
 export default function Page() {
   const { user } = useLoaderData<typeof loader>();
   const { form, fields, isDisabled } = useEditUserForm({ user });
-  console.log(isDisabled);
 
   const [preview, setPreview] = useState<string>();
   const inputFileRef = useRef<HTMLInputElement>(null);

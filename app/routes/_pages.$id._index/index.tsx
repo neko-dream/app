@@ -99,7 +99,7 @@ export default function Page() {
                 user={{
                   displayID: "",
                   displayName: opinion.user.displayName || "",
-                  photoURL: opinion.user.iconURL || "",
+                  iconURL: opinion.user.iconURL || "",
                 }}
                 opinionStatus={opinion.opinion.voteType!}
                 isOpnionLink={`/${params.id}/${opinion.opinion.id}`}

@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { RiChat1Line } from "react-icons/ri";
 import Avator from "~/components/Avator";
 import Heading from "~/components/Heading";
-import { SessionRouteContext } from "~/feature/session/context";
 import { OpinionModal } from "./components/OpinonModal";
 import { loader } from "./modules/loader";
+import { SessionRouteContext } from "./types";
 
 const regexSwipe = /^\/[^/]+\/swipe$/;
 const regexReply = /^\/[^/]+\/(?!swipe$)[^/]+$/;

@@ -87,7 +87,7 @@ export default function CardSwiper(props: Props) {
               user={{
                 displayID: "",
                 displayName: props.opinions[i].user.displayName || "",
-                photoURL: props.opinions[i].user.iconURL || "",
+                iconURL: props.opinions[i].user.iconURL || "",
               }}
               opinionStatus={props.opinions[i].opinion.voteType!}
               className="pointer-events-none h-full w-full select-none bg-white"
