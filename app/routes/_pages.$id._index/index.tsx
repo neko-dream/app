@@ -60,21 +60,25 @@ export default function Page() {
         <ReactMarkdown className="pt-4">{report?.report}</ReactMarkdown>
       </details>
       <Heading className="mt-6">みんなの意見</Heading>
-      <select
-        className="h-6 w-32 m-2 border border-gray-300 rounded-full py-0.5 px-2 text-xs"
-        onChange={(e) => {
-          setGroupID(Number(e.currentTarget.value));
-        }}
-      >
-        <option value={1000}>すべて</option>
-        {data?.groupOpinions.map((opinion, i) => {
-          return (
-            <option key={i} value={opinion.groupId}>
-              グループ {opinion.groupId}
-            </option>
-          );
-        })}
-      </select>
+      <div className="flex items-center">
+        <div className="pl-3"></div>
+        <p className="text-xs pt-0.5">グループ：</p>
+        <select
+          className="h-6 w-32 mb-2 mt-2 border border-gray-300 rounded-full py-0.5 px-2 text-xs"
+          onChange={(e) => {
+            setGroupID(Number(e.currentTarget.value));
+          }}
+        >
+          <option value={1000}>すべて</option>
+          {data?.groupOpinions.map((opinion, i) => {
+            return (
+              <option key={i} value={opinion.groupId}>
+                {opinion.groupName}
+              </option>
+            );
+          })}
+        </select>
+      </div>
       <div className="mx-4 space-y-4">
         {opinions.map((opinion, i) => {
           return (
