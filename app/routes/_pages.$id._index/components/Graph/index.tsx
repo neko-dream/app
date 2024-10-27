@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Stage, Graphics, Sprite } from "@pixi/react";
-import React from "react";
+import React, { Fragment } from "react";
 
 const DotPlot = ({ polygons }: { polygons: any }) => {
   const drawPolygon = (
@@ -112,7 +112,9 @@ const AvatarPlot = ({ dots, myPositionData }: any) => {
   avatarWithZindex = avatarWithZindex.sort(function (a, b) {
     return a[1] - b[1];
   });
-  return <>{avatarWithZindex.map((avatar) => avatar[0])}</>;
+  return avatarWithZindex.map((avatar, i) => (
+    <Fragment key={i}>{avatar[0]}</Fragment>
+  ));
 };
 
 type Props = {
