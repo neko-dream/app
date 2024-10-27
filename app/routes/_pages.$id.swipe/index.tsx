@@ -7,7 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Button, { button } from "~/components/Button";
-import { OpinionType } from "~/feature/opinion/status";
+import { OpinionType } from "~/feature/opinion/types";
 import { api } from "~/libs/api";
 import CardSwiper from "./components/CardSwiper";
 import { OpinionModal } from "./components/OpinonModal";
@@ -51,8 +51,6 @@ export default function Page() {
       }, 300);
     },
   });
-
-  console.log(opinions);
 
   const revalidate = useRevalidator();
 

@@ -1,7 +1,7 @@
 import { ComponentProps, ForwardedRef, forwardRef } from "react";
 import { tv } from "tailwind-variants";
 import { OpinionJpMap } from "~/feature/opinion/constants";
-import { OpinionType } from "~/feature/opinion/status";
+import { OpinionType } from "~/feature/opinion/types";
 
 type Props = Badge & ComponentProps<"button">;
 

@@ -1,7 +1,7 @@
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { RiChat1Line } from "react-icons/ri";
 import { tv } from "tailwind-variants";
-import { OpinionType } from "~/feature/opinion/status";
+import { OpinionType } from "~/feature/opinion/types";
 import { User } from "~/feature/user/types";
 import Avator from "../Avator";
 import Badge from "../Badge";

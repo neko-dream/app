@@ -22,7 +22,7 @@ export const loader: LoaderFunction = ({ params }) => {
         return redirect("/");
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return redirect("/");
   }
 };

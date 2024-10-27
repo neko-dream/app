@@ -1,5 +1,5 @@
 import EefaultIcon from "~/assets/default/avator-1.png";
-import SingupButton from "~/feature/auth/SingupButton";
+import SingupButton from "~/feature/auth/components/SingupButton";
 import { generateMetaTag } from "~/modules/generateMetaTag";
 import { loader } from "./modules/loader";
 

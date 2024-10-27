@@ -1,7 +1,7 @@
 import { isRouteErrorResponse, Link, useRouteError } from "@remix-run/react";
 import { button } from "~/components/Button";
 import Error from "~/components/Error";
-import SingupButton from "~/feature/auth/SingupButton";
+import SingupButton from "~/feature/auth/components/SingupButton";
 import { forbidden } from "~/libs/notfound";
 
 export function ErrorBoundary(): JSX.Element {
