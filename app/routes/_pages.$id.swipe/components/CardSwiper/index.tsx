@@ -49,18 +49,30 @@ export default function CardSwiper(props: Props) {
             {/* 重なり */}
             <animated.div
               style={{ backgroundColor, display: disagreeDisplay, opacity }}
-              className="absolute w-full h-full z-10 rounded"
+              className="absolute w-full h-full rounded"
+            />
+            <animated.div
+              style={{ display: disagreeDisplay }}
+              className="absolute w-full h-full rounded"
             >
-              <p className="absolute text-white font-bold text-3xl right-4 top-4">
+              <p className="absolute text-white font-bold text-2xl right-4 top-4">
                 違うかも
               </p>
             </animated.div>
+
             <animated.div
               style={{ backgroundColor, display: agreeDisplay, opacity }}
-              className="absolute w-full h-full z-10 rounded"
+              className="absolute w-full h-full rounded"
+            />
+            <animated.div
+              style={{ display: agreeDisplay }}
+              className="absolute"
             >
-              <p className="text-white font-bold text-3xl p-4">いいかも</p>
+              <p className="text-white bg-transparent font-bold text-2xl p-4">
+                いいかも
+              </p>
             </animated.div>
+
             <Card
               title={props.opinions[i].opinion.title || ""}
               description={props.opinions[i].opinion.content || ""}
