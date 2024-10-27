@@ -19,6 +19,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         path: {
           talkSessionID: params.id || "",
         },
+        query: {
+          // FIXME: 無限スクロールに対応する
+          limit: 100000,
+        },
       },
     },
   );
