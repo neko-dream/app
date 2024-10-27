@@ -190,31 +190,28 @@ const Dots = ({ positions, myPosition }: Props) => {
   let isUsedMyPosition = false;
   const myPositionData: any = {};
   const dots =
-    positions.map((v: { groupId: string; posX: number; posY: any }) => {
-      let radius: number = 1; // 5
-      let myPositionFlag = false;
-      if (
-        myPosition?.posX == v.posX &&
-        myPosition?.posY == v.posY &&
-        myPosition?.groupId == v.groupId &&
-        !isUsedMyPosition
-      ) {
-        radius = 0.07; // 10 // 自分の位置の画像のサイズを変更する(倍率)
-        isUsedMyPosition = true;
-        myPositionFlag = true;
-        myPositionData["x"] =
-          (v.posX - _minX) * ((width - 30) / originalWidth) + 15;
-        myPositionData["y"] =
-          (v.posY - _minY) * ((height - 50) / originalHeight) + 25;
-      }
-      return {
-        x: (v.posX - _minX) * ((width - 30) / originalWidth) + 15,
-        y: (v.posY - _minY) * ((height - 50) / originalHeight) + 25,
-        groupId: v.groupId,
-        radius: radius,
-        myPosition: myPositionFlag,
-      };
-    }) || [];
+    positions.map(
+      (v: { displayId: string; groupId: string; posX: number; posY: any }) => {
+        let radius: number = 1; // 5
+        let myPositionFlag = false;
+        if (myPosition.displayId === v.displayId && !isUsedMyPosition) {
+          radius = 0.07; // 10 // 自分の位置の画像のサイズを変更する(倍率)
+          isUsedMyPosition = true;
+          myPositionFlag = true;
+          myPositionData["x"] =
+            (v.posX - _minX) * ((width - 30) / originalWidth) + 15;
+          myPositionData["y"] =
+            (v.posY - _minY) * ((height - 50) / originalHeight) + 25;
+        }
+        return {
+          x: (v.posX - _minX) * ((width - 30) / originalWidth) + 15,
+          y: (v.posY - _minY) * ((height - 50) / originalHeight) + 25,
+          groupId: v.groupId,
+          radius: radius,
+          myPosition: myPositionFlag,
+        };
+      },
+    ) || [];
 
   const resultPolygons = [];
   for (const groupId of hasPerimeterIndexGroup) {
