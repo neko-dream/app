@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react";
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import { RiChat1Line } from "react-icons/ri";
 import { tv } from "tailwind-variants";
-import { OpinionJpMap } from "~/feature/opinion/constants";
+import { OpinionType } from "~/feature/opinion/status";
 import { User } from "~/feature/user/types";
 import Avator from "../Avator";
 import Badge from "../Badge";
@@ -13,11 +13,12 @@ type Props = Card & ComponentProps<"div">;
 type Card = {
   description: string;
   children?: ReactNode;
-  opinionStatus?: keyof typeof OpinionJpMap;
+  opinionStatus?: OpinionType;
   user: User;
   isOpnionLink?: string;
   isJegde?: boolean;
   onClickVoteButton?: (v: string) => void;
+  myVoteType?: OpinionType;
 };
 
 const card = tv({
@@ -34,6 +35,7 @@ function Card(
     isOpnionLink,
     isJegde,
     onClickVoteButton,
+    myVoteType,
     ...props
   }: Props,
   ref: ForwardedRef<HTMLDivElement>,
@@ -58,21 +60,21 @@ function Card(
         <div className="flex justify-between mt-2">
           <Button
             className="w-24 h-8 p-1"
-            variation="disagree"
+            variation={myVoteType === "disagree" ? "disagree" : "disabled"}
             onClick={() => onClickVoteButton?.("disagree")}
           >
             違うかも
           </Button>
           <Button
             className="w-24 h-8 p-1"
-            variation="pass"
+            variation={myVoteType === "pass" ? "pass" : "disabled"}
             onClick={() => onClickVoteButton?.("pass")}
           >
             保留
           </Button>
           <Button
             className="w-24 h-8 p-1"
-            variation="agree"
+            variation={myVoteType === "agree" ? "agree" : "disabled"}
             onClick={() => onClickVoteButton?.("agree")}
           >
             良さそう

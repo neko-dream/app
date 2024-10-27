@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useSprings } from "react-spring";
 import { useDrag } from "react-use-gesture";
-import { OpinionStatus } from "~/feature/opinion/status";
+import { OpinionType } from "~/feature/opinion/status";
 import { components } from "~/libs/api/openapi";
 import { animations } from "../libs/animations";
 
 type OnSwipeParam = {
   opinionID: string;
-  opinionStatus: OpinionStatus;
+  opinionStatus: OpinionType;
 };
 
 type Props = {
@@ -89,11 +89,14 @@ export const useSwipe = ({ opinions, onSwipe }: Props) => {
           };
         }
 
+        const moving = mx > 10 ? "agree" : mx < -10 ? "disagree" : undefined;
+
         return {
           ...animations.init(),
           y: y + i * 6,
           x: x,
           rot,
+          moving: moving,
           zIndex: down ? 100 : 0,
           config,
         };

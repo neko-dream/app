@@ -1,11 +1,12 @@
 import { ComponentProps, ForwardedRef, forwardRef } from "react";
 import { tv } from "tailwind-variants";
 import { OpinionJpMap } from "~/feature/opinion/constants";
+import { OpinionType } from "~/feature/opinion/status";
 
 type Props = Badge & ComponentProps<"button">;
 
 type Badge = {
-  status?: keyof typeof OpinionJpMap;
+  status?: OpinionType;
   isSelectStyle?: boolean;
 };
 
@@ -32,7 +33,7 @@ function Badge(
       {...props}
       ref={ref}
       className={badge({
-        color: status,
+        color: status as never,
         isSelect: isSelectStyle,
         class: className,
       })}

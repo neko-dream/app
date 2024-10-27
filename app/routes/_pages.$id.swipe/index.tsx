@@ -7,7 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Button, { button } from "~/components/Button";
-import { OpinionStatus } from "~/feature/opinion/status";
+import { OpinionType } from "~/feature/opinion/status";
 import { api } from "~/libs/api";
 import CardSwiper from "./components/CardSwiper";
 import { OpinionModal } from "./components/OpinonModal";
@@ -36,7 +36,7 @@ export default function Page() {
             },
           },
           body: {
-            voteStatus: opinionStatus,
+            voteStatus: opinionStatus as never,
           },
         },
       );
@@ -89,7 +89,7 @@ export default function Page() {
     });
   };
 
-  const handleSubmitVote = async (v: OpinionStatus) => {
+  const handleSubmitVote = async (v: OpinionType) => {
     const current = opinions.length - swipe.gone.size - 1;
     // MEMO: すべてのカードをスワイプした場合は何もしない
     if (current < 0) {
@@ -111,7 +111,7 @@ export default function Page() {
           },
         },
         body: {
-          voteStatus: v,
+          voteStatus: v as never,
         },
       },
     );
