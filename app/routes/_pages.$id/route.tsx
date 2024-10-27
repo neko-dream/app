@@ -27,6 +27,7 @@ export default function Route() {
 
   useEffect(() => {
     if (isOpen) {
+      window.scrollTo(0, 0);
       document.addEventListener("touchmove", noscroll, { passive: false });
       document.addEventListener("wheel", noscroll, { passive: false });
     }
