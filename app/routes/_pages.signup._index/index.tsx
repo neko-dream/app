@@ -1,7 +1,6 @@
 import { getFormProps, getInputProps, getSelectProps } from "@conform-to/react";
-import { Form, useNavigate } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 import { ChangeEvent, useRef, useState } from "react";
-import { toast } from "react-toastify";
 import bathday from "~/assets/data/birthday.json";
 import gender from "~/assets/data/gender.json";
 import houseHoldSize from "~/assets/data/house-hold-size.json";
@@ -12,45 +11,20 @@ import Label from "~/components/Label";
 import Select from "~/components/Select";
 import Uploadarea from "~/components/Uploadarea";
 import AdressInputs from "~/feature/form/components/AdressInputs";
-import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
 import { handleDisabled, isFieldsError } from "~/feature/form/libs";
-import { signupFormSchema } from "~/feature/user/schemas/form";
-import { api } from "~/libs/api";
-import { fileCompress } from "~/libs/compressor";
+import { useCreateUserForm } from "./hooks/useCreateUserForm";
+import { toast } from "react-toastify";
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader } from "./modules/loader";
 
 export default function Page() {
-  const navigate = useNavigate();
-
-  const { form, fields, loading } = useCustomForm({
-    schema: signupFormSchema,
-    onSubmit: async ({ value }) => {
-      const compressIcon = value.icon && fileCompress(value.icon);
-
-      const { error } = await api.POST("/user", {
-        credentials: "include",
-        body: {
-          ...value,
-          icon: (await compressIcon) as unknown as string,
-        },
-      });
-
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success("登録が完了しました");
-        navigate("/home");
-      }
-    },
-  });
-
   const [preview, setPreview] = useState<string>();
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const { form, fields, loading } = useCreateUserForm();
 
   const handleOnChangeInputFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
-      return;
+      return toast.error("画像を選択してください");
     }
     const [file] = e.target.files;
     setPreview(URL.createObjectURL(file));
@@ -61,9 +35,9 @@ export default function Page() {
       {...getFormProps(form)}
       method="post"
       onSubmit={form.onSubmit}
-      className="last-child:m-0 mt-8 w-full space-y-4 px-6"
+      className="mt-8 w-full space-y-4 px-6 pb-12"
     >
-      <p className="text-center font-bold">ユーザー登録する</p>
+      <p className="text-center font-bold">ユーザー登録フォーム</p>
       <Label title="ユーザー名" required errors={fields.displayName.errors}>
         <Input
           {...getInputProps(fields.displayName, { type: "text" })}
@@ -141,7 +115,7 @@ export default function Page() {
       <input
         {...getInputProps(fields.icon, { type: "file" })}
         ref={inputFileRef}
-        accept="image/png, image/jpeg"
+        accept="image/png,image/jpeg"
         hidden
         onChange={handleOnChangeInputFile}
       />
