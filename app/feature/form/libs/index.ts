@@ -6,10 +6,15 @@ import municipality from "~/assets/data/adress/municipality.json";
  *
  * @memo APIでリクエストする前に使用して削除する
  */
-export const deleteDashValues = (obj?: object) => {
+export const deleteDashValues = <T>(obj?: T): deleteDashValues<T> => {
   return Object.fromEntries(
     Object.entries(obj || {}).filter(([, v]) => v !== "---"),
-  );
+  ) as deleteDashValues<T>;
+};
+
+// 値が"---"であるプロパティをneverに変換するユーティリティ型
+export type deleteDashValues<T> = {
+  [K in keyof T]: Exclude<T[K], "---">;
 };
 
 /**

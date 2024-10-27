@@ -13,15 +13,10 @@ import Select from "~/components/Select";
 import Uploadarea from "~/components/Uploadarea";
 import AdressInputs from "~/feature/form/components/AdressInputs";
 import { useCustomForm } from "~/feature/form/hooks/useCustomForm";
-import {
-  deleteDashValues,
-  handleDisabled,
-  isFieldsError,
-} from "~/feature/form/libs";
+import { handleDisabled, isFieldsError } from "~/feature/form/libs";
 import { signupFormSchema } from "~/feature/user/schemas/form";
 import { api } from "~/libs/api";
 import { fileCompress } from "~/libs/compressor";
-
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader } from "./modules/loader";
 
@@ -31,13 +26,14 @@ export default function Page() {
   const { form, fields, loading } = useCustomForm({
     schema: signupFormSchema,
     onSubmit: async ({ value }) => {
-      const body = deleteDashValues(value);
+      const compressIcon = value.icon && fileCompress(value.icon);
+
       const { error } = await api.POST("/user", {
         credentials: "include",
         body: {
-          ...body,
-          icon: await fileCompress(body.icon),
-        } as never,
+          ...value,
+          icon: (await compressIcon) as unknown as string,
+        },
       });
 
       if (error) {
@@ -61,106 +57,103 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center">
-      <p className="mt-8 font-bold">ユーザー登録する</p>
-      <p className="mt-3">打っていいのは打たれる覚悟のある奴だけだ</p>
-      <Form
-        {...getFormProps(form)}
-        method="post"
-        onSubmit={form.onSubmit}
-        className="last-child:m-0 mt-8 w-full space-y-4 px-6"
-      >
-        <Label title="ユーザー名" required errors={fields.displayName.errors}>
-          <Input
-            {...getInputProps(fields.displayName, { type: "text" })}
-            error={isFieldsError(fields.displayName.errors)}
-            className="h-12 w-full px-4"
-            placeholder="記入する"
-          />
-        </Label>
-
-        <Label title="ユーザーID" required errors={fields.displayID.errors}>
-          <Input
-            {...getInputProps(fields.displayID, { type: "text" })}
-            error={isFieldsError(fields.displayID.errors)}
-            className="h-12 w-full px-4"
-            placeholder="記入する"
-          />
-        </Label>
-
-        <Label title="性別" optional errors={fields.gender.errors}>
-          <Select
-            {...getSelectProps(fields.gender)}
-            error={isFieldsError(fields.gender.errors)}
-            options={gender.map((v) => ({ value: v, title: v }))}
-          />
-        </Label>
-
-        <Label title="誕生年" optional errors={fields.yearOfBirth.errors}>
-          <Select
-            {...getSelectProps(fields.yearOfBirth)}
-            error={isFieldsError(fields.yearOfBirth.errors)}
-            options={bathday.map((v) => ({
-              value: `${v}`,
-              title: `${v}年`,
-            }))}
-          />
-        </Label>
-
-        {/* FIXME: 型が合わない */}
-        <AdressInputs fields={fields} form={form as never} />
-
-        <Label title="職業" optional errors={fields.occupation.errors}>
-          <Select
-            {...getSelectProps(fields.occupation)}
-            error={isFieldsError(fields.occupation.errors)}
-            options={occupation.map((v) => ({
-              value: v,
-              title: v,
-            }))}
-          />
-        </Label>
-
-        <Label title="世帯人数" optional errors={fields.householdSize.errors}>
-          <Select
-            {...getSelectProps(fields.householdSize)}
-            error={isFieldsError(fields.householdSize.errors)}
-            options={houseHoldSize.map((v) => {
-              return {
-                value: `${v}`,
-                title: v === 5 ? `${v}人以上` : `${v}人`,
-              };
-            })}
-          />
-        </Label>
-
-        <Label title="プロフィール画像" optional className="mb-8">
-          <Uploadarea
-            onClick={() => {
-              inputFileRef.current?.click();
-            }}
-            preview={preview}
-          />
-        </Label>
-
-        {/* UIには表示しない */}
-        <input
-          {...getInputProps(fields.icon, { type: "file" })}
-          ref={inputFileRef}
-          accept="image/png, image/jpeg"
-          hidden
-          onChange={handleOnChangeInputFile}
+    <Form
+      {...getFormProps(form)}
+      method="post"
+      onSubmit={form.onSubmit}
+      className="last-child:m-0 mt-8 w-full space-y-4 px-6"
+    >
+      <p className="text-center font-bold">ユーザー登録する</p>
+      <Label title="ユーザー名" required errors={fields.displayName.errors}>
+        <Input
+          {...getInputProps(fields.displayName, { type: "text" })}
+          error={isFieldsError(fields.displayName.errors)}
+          className="h-12 w-full px-4"
+          placeholder="記入する"
         />
+      </Label>
 
-        <Button
-          variation="primary"
-          type="submit"
-          className="mx-auto !mt-12 block"
-          disabled={handleDisabled(form.value, form.allErrors) || loading}
-        >
-          登録する
-        </Button>
-      </Form>
-    </div>
+      <Label title="ユーザーID" required errors={fields.displayID.errors}>
+        <Input
+          {...getInputProps(fields.displayID, { type: "text" })}
+          error={isFieldsError(fields.displayID.errors)}
+          className="h-12 w-full px-4"
+          placeholder="記入する"
+        />
+      </Label>
+
+      <Label title="性別" optional errors={fields.gender.errors}>
+        <Select
+          {...getSelectProps(fields.gender)}
+          error={isFieldsError(fields.gender.errors)}
+          options={gender.map((v) => ({ value: v, title: v }))}
+        />
+      </Label>
+
+      <Label title="誕生年" optional errors={fields.yearOfBirth.errors}>
+        <Select
+          {...getSelectProps(fields.yearOfBirth)}
+          error={isFieldsError(fields.yearOfBirth.errors)}
+          options={bathday.map((v) => ({
+            value: `${v}`,
+            title: `${v}年`,
+          }))}
+        />
+      </Label>
+
+      {/* FIXME: 型が合わない */}
+      <AdressInputs fields={fields} form={form as never} />
+
+      <Label title="職業" optional errors={fields.occupation.errors}>
+        <Select
+          {...getSelectProps(fields.occupation)}
+          error={isFieldsError(fields.occupation.errors)}
+          options={occupation.map((v) => ({
+            value: v,
+            title: v,
+          }))}
+        />
+      </Label>
+
+      <Label title="世帯人数" optional errors={fields.householdSize.errors}>
+        <Select
+          {...getSelectProps(fields.householdSize)}
+          error={isFieldsError(fields.householdSize.errors)}
+          options={houseHoldSize.map((v) => {
+            return {
+              value: `${v}`,
+              title: v === 5 ? `${v}人以上` : `${v}人`,
+            };
+          })}
+        />
+      </Label>
+
+      <Label title="プロフィール画像" optional className="mb-8">
+        <Uploadarea
+          onClick={() => {
+            inputFileRef.current?.click();
+          }}
+          preview={preview}
+        />
+      </Label>
+
+      {/* UIには表示しない */}
+      <input
+        {...getInputProps(fields.icon, { type: "file" })}
+        ref={inputFileRef}
+        accept="image/png, image/jpeg"
+        hidden
+        onChange={handleOnChangeInputFile}
+      />
+
+      <Button
+        variation="primary"
+        type="submit"
+        className="mx-auto !mt-12 block"
+        disabled={handleDisabled(form.value, form.allErrors) || loading}
+      >
+        登録する
+      </Button>
+    </Form>
   );
 }

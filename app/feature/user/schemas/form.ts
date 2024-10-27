@@ -37,8 +37,20 @@ const baseSchema = v.object({
   icon: v.optional(v.instance(File)),
   gender: v.optional(genderSchema),
   occupation: v.optional(occupationSchema),
-  householdSize: v.optional(v.union([v.string(), v.number()])),
-  yearOfBirth: v.optional(v.union([v.string(), v.number()])),
+  householdSize: v.optional(
+    v.pipe(
+      v.string(),
+      v.transform((str) => Number(str)),
+      v.number(),
+    ),
+  ),
+  yearOfBirth: v.optional(
+    v.pipe(
+      v.string(),
+      v.transform((str) => Number(str)),
+      v.number(),
+    ),
+  ),
 });
 
 export const adressFormSchema = v.object({
