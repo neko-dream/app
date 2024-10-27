@@ -19,6 +19,10 @@ export const animations = {
     left: "10%",
     rot: 0,
     scale: 1.5,
+    backgroundColor: "transparent",
+    agreeDisplay: "none",
+    disagreeDisplay: "none",
+    opacity: 0,
   }),
   opinion: () => {
     return {

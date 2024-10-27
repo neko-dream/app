@@ -83,20 +83,28 @@ export const useSwipe = ({ opinions, onSwipe }: Props) => {
             ...animations.opinion(),
             rot,
             config,
+            backgroundColor: "transparent",
+            agreeDisplay: "none",
+            disagreeDisplay: "none",
             onRest: () => {
               api.pause();
             },
           };
         }
 
-        const moving = mx > 10 ? "agree" : mx < -10 ? "disagree" : undefined;
+        let backgroundColor = x > 10 ? "blue" : x < -10 ? "red" : "transparent";
+        backgroundColor = y < -100 ? "transparent" : backgroundColor;
+        const opacity = x > 10 ? mx / 400 : x < -10 ? -mx / 400 : 0;
 
         return {
           ...animations.init(),
           y: y + i * 6,
           x: x,
           rot,
-          moving: moving,
+          backgroundColor,
+          opacity,
+          agreeDisplay: x > 10 && y > -100 ? "block" : "none",
+          disagreeDisplay: x < -10 ? "block" : "none",
           zIndex: down ? 100 : 0,
           config,
         };
