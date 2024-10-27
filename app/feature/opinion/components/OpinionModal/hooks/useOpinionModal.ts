@@ -2,10 +2,10 @@ import { useSpring } from "react-spring";
 import { useGesture } from "react-use-gesture";
 
 type Props = {
-  onCloseModal: () => void;
+  onClose: () => void;
 };
 
-export const useOpinonModal = ({ onCloseModal }: Props) => {
+export const useOpinonModal = ({ onClose }: Props) => {
   const [item, api] = useSpring(() => ({
     from: {
       opacity: 0.2,
@@ -26,7 +26,7 @@ export const useOpinonModal = ({ onCloseModal }: Props) => {
       api.start(() => {
         if (!down) {
           if (200 < my) {
-            onCloseModal();
+            onClose();
             return {
               opacity: 0,
               y: 500,

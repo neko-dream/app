@@ -1,52 +1,48 @@
 import { getFormProps, getInputProps } from "@conform-to/react";
 import { animated } from "@react-spring/web";
-import { Form, useParams } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
-import { useCustomForm } from "~/hooks/useCustomForm";
-import { createOpinionFormSchema } from "~/feature/opinion/schemas/createOpinionFormSchema";
-import { api as apiClient } from "~/libs/api";
-import { useOpinonModal } from "../../hooks/useOpinionModal";
+import { useOpinonModal } from "./hooks/useOpinionModal";
+import { useCreateOpinionsForm } from "../../hooks/useCreateOpinionForm";
+import { tv } from "tailwind-variants";
 
 type Props = {
+  talkSessionID: string;
+  parentOpinionID?: string;
   open: boolean;
-  onOpenChange: () => void;
+  onClose: () => void;
 };
 
-export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
-  const { item, api, bind } = useOpinonModal({
-    onCloseModal: () => handleCloseModal(),
-  });
-  const params = useParams();
-
-  const { form, fields } = useCustomForm({
-    schema: createOpinionFormSchema,
-    onSubmit: async ({ value }) => {
-      const { data, error } = await apiClient.POST(
-        "/talksessions/{talkSessionID}/opinions",
-        {
-          params: {
-            path: {
-              talkSessionID: params.id as never,
-            },
-          },
-          credentials: "include",
-          body: value as never,
-        },
-      );
-
-      if (data) {
-        toast.success("意見を送信しました");
-        onOpenChange();
-      }
-      if (error) {
-        toast.error(error.message);
-      }
+const modal = tv({
+  base: "absolute bottom-0 w-[375px] touch-none will-change-transform",
+  variants: {
+    parent: {
+      true: "h-[calc(100vh-112px-40px-32px-16px)]",
     },
+    root: {
+      true: "h-[calc(100vh-112px-40px-32px-100px-16px)]",
+    },
+  },
+});
+
+export const OpinionModal = ({
+  open,
+  onClose,
+  talkSessionID,
+  parentOpinionID,
+}: Props) => {
+  const { item, api, bind } = useOpinonModal({
+    onClose: () => handleCloseModal(),
+  });
+
+  const { form, fields, isDisabled } = useCreateOpinionsForm({
+    talkSessionID,
+    parentOpinionID,
+    onFinishedProcess: () => handleCloseModal(),
   });
 
   useEffect(() => {
@@ -57,6 +53,23 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     }
   }, [api, open]);
 
+  // MEMO: モーダルが開いている間はスクロール禁止する
+  const noscroll = (e: Event) => e.preventDefault();
+
+  useEffect(() => {
+    if (open) {
+      window.scrollTo(0, 0);
+      document.addEventListener("touchmove", noscroll, {
+        passive: false,
+      });
+      document.addEventListener("wheel", noscroll, { passive: false });
+    }
+    return () => {
+      document.removeEventListener("touchmove", noscroll);
+      document.removeEventListener("wheel", noscroll);
+    };
+  }, [open]);
+
   const handleCloseModal = () => {
     api.start(() => {
       return {
@@ -64,7 +77,7 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
         y: 500,
       };
     });
-    onOpenChange();
+    onClose();
   };
 
   if (!open) {
@@ -75,10 +88,13 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     <>
       <animated.div
         style={item}
-        className="absolute bottom-0 z-30 h-[calc(100vh-112px-40px-32px-16px)] w-[375px] touch-none rounded-t-xl border-t border-gray-200 bg-white will-change-transform"
+        className={modal({
+          parent: !parentOpinionID,
+          root: !!parentOpinionID,
+          className: "z-30 rounded-t-xl border-t border-gray-200 bg-white",
+        })}
       >
         <Form
-          {...props}
           {...getFormProps(form)}
           method="post"
           onSubmit={form.onSubmit}
@@ -110,6 +126,7 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
             type="submit"
             variation="primary"
             className="mx-auto !mb-8 !mt-auto"
+            disabled={isDisabled}
           >
             送信する
           </Button>
@@ -118,8 +135,11 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
 
       <animated.div
         style={{ opacity: item.opacity }}
-        // FIXME: -mt-8 直したい
-        className="absolute bottom-0 h-[calc(100vh-112px-40px-32px)] w-[375px] bg-slate-600/60"
+        className={modal({
+          parent: !parentOpinionID,
+          root: !!parentOpinionID,
+          className: "bottom-4 bg-gray-600/60 pt-4",
+        })}
         onClick={handleCloseModal}
       />
     </>

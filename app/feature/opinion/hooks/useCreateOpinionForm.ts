@@ -1,21 +1,20 @@
-import { useRevalidator } from "@remix-run/react";
-import { toast } from "react-toastify";
-import { createOpinionFormSchema } from "~/feature/opinion/schemas/createOpinionFormSchema";
 import { useCustomForm } from "~/hooks/useCustomForm";
+import { createOpinionFormSchema } from "../schemas/createOpinionFormSchema";
 import { api } from "~/libs/api";
+import { toast } from "react-toastify";
 import { fileCompress } from "~/libs/compressor";
 
 type Props = {
   talkSessionID: string;
   parentOpinionID?: string;
+  onFinishedProcess: () => void;
 };
 
 export const useCreateOpinionsForm = ({
   talkSessionID,
   parentOpinionID,
+  onFinishedProcess,
 }: Props) => {
-  const { revalidate } = useRevalidator();
-
   return useCustomForm({
     schema: createOpinionFormSchema,
     onSubmit: async ({ value }) => {
@@ -40,7 +39,7 @@ export const useCreateOpinionsForm = ({
 
       if (data) {
         toast.success("意見を送信しました");
-        revalidate();
+        onFinishedProcess();
       }
       if (error) {
         toast.error(error.message);

@@ -1,6 +1,7 @@
 import {
   Link,
   useLoaderData,
+  useOutletContext,
   useParams,
   useRevalidator,
 } from "@remix-run/react";
@@ -10,15 +11,17 @@ import Button, { button } from "~/components/Button";
 import { OpinionType } from "~/feature/opinion/types";
 import { api } from "~/libs/api";
 import CardSwiper from "./components/CardSwiper";
-import { OpinionModal } from "./components/OpinonModal";
 import { useSwipe } from "./hooks/useSwipe";
 import { animations } from "./libs/animations";
 import { loader } from "./modules/loader";
+import { OpinionModal } from "~/feature/opinion/components/OpinionModal";
+import { SessionRouteContext } from "../_pages.$id/types";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
 
 export default function Page() {
+  const { session } = useOutletContext<SessionRouteContext>();
   const { data: opinions } = useLoaderData<typeof loader>();
   const [isOpinionEnd, setIsOpinionEnd] = useState<boolean>(false);
   const params = useParams();
@@ -182,9 +185,13 @@ export default function Page() {
           良さそう
         </Button>
       </div>
+
       <OpinionModal
+        talkSessionID={session.id}
+        // FIXME: useStateでアクティブな意見のIDを管理する
+        parentOpinionID="hoge"
         open={swipe.state.isOpinionModalOpen}
-        onOpenChange={handleClose}
+        onClose={handleClose}
       />
     </div>
   );

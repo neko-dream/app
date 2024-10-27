@@ -1,11 +1,11 @@
 import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RiChat1Line } from "react-icons/ri";
 import Avator from "~/components/Avator";
 import Heading from "~/components/Heading";
-import { OpinionModal } from "./components/OpinonModal";
 import { loader } from "./modules/loader";
 import { SessionRouteContext } from "./types";
+import { OpinionModal } from "~/feature/opinion/components/OpinionModal";
 
 const regexSwipe = /^\/[^/]+\/swipe$/;
 const regexReply = /^\/[^/]+\/(?!swipe$)[^/]+$/;
@@ -21,23 +21,6 @@ export default function Route() {
   const isSwipePage = regexSwipe.test(pathname);
   const isReplyPage = regexReply.test(pathname);
   const isHomePage = regexHome.test(pathname);
-
-  // MEMO: モーダルが開いている間はスクロール禁止する
-  const noscroll = (e: Event) => e.preventDefault();
-
-  useEffect(() => {
-    if (isOpen) {
-      window.scrollTo(0, 0);
-      document.addEventListener("touchmove", noscroll, {
-        passive: false,
-      });
-      document.addEventListener("wheel", noscroll, { passive: false });
-    }
-    return () => {
-      document.removeEventListener("touchmove", noscroll);
-      document.removeEventListener("wheel", noscroll);
-    };
-  }, [isOpen]);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -95,8 +78,9 @@ export default function Route() {
       <Outlet context={{ session } satisfies SessionRouteContext} />
 
       <OpinionModal
+        talkSessionID={session.id}
         open={isOpen}
-        onOpenChange={() => {
+        onClose={() => {
           setTimeout(() => {
             setIsOpen(false);
           }, 500);

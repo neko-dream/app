@@ -1,5 +1,10 @@
 import { getFormProps, getInputProps } from "@conform-to/react";
-import { Form, useLoaderData, useParams } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useParams,
+  useRevalidator,
+} from "@remix-run/react";
 import { toast } from "react-toastify";
 import Button from "~/components/Button";
 import Card from "~/components/Card";
@@ -8,7 +13,7 @@ import Label from "~/components/Label";
 import Textarea from "~/components/Textarea";
 import { api } from "~/libs/api";
 import { loader } from "./modules/loader";
-import { useCreateOpinionsForm } from "./hooks/useCreateOpinionsForm";
+import { useCreateOpinionsForm } from "~/feature/opinion/hooks/useCreateOpinionForm";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
@@ -18,10 +23,14 @@ export default function Page() {
     useLoaderData<typeof loader>();
 
   const params = useParams();
+  const { revalidate } = useRevalidator();
 
   const { form, fields, isDisabled } = useCreateOpinionsForm({
     talkSessionID: params.id!,
     parentOpinionID: params.iid,
+    onFinishedProcess: () => {
+      revalidate();
+    },
   });
 
   const handleSubmitVote = async (opinionID: string, voteStatus: string) => {
