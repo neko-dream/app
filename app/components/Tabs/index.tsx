@@ -11,11 +11,11 @@ type Props = ComponentProps<"div"> & {
 };
 
 const tabs = tv({
-  base: "flex justify-around h-10",
+  base: "flex h-10 justify-around",
 });
 
 const link = tv({
-  base: "border-b-2 border-white w-full h-full flex text-xs items-center justify-center",
+  base: "flex h-full w-full items-center justify-center border-b-2 border-white text-xs",
   variants: {
     active: { true: "border-b-2 border-blue-500" },
   },

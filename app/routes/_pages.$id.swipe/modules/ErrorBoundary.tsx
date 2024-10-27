@@ -31,7 +31,7 @@ export function ErrorBoundary(): JSX.Element {
         to={"../opinion"}
         className={button({
           color: "primary",
-          className: "block mx-auto mt-6 whitespace-nowrap",
+          className: "mx-auto mt-6 block whitespace-nowrap",
         })}
       >
         みんなの意見を見る

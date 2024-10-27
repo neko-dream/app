@@ -99,19 +99,19 @@ export default function Page() {
   return (
     <div className="flex flex-1 flex-col items-center pb-12">
       <div className="relative">
-        <Avator src={preview} className="w-16 h-16 mt-12" />
+        <Avator src={preview} className="mt-12 h-16 w-16" />
         <button
           onClick={handleUploadButtonClick}
-          className="absolute -right-2 -bottom-2 bg-gray-400 p-1 rounded-full"
+          className="absolute -bottom-2 -right-2 rounded-full bg-gray-400 p-1"
         >
-          <img src={CameraIcon} alt="" className="w-5 h-5" />
+          <img src={CameraIcon} alt="" className="h-5 w-5" />
         </button>
       </div>
       <Form
         {...getFormProps(form)}
         method="post"
         onSubmit={form.onSubmit}
-        className="mt-8 last-child:m-0 space-y-4 w-full px-6"
+        className="last-child:m-0 mt-8 w-full space-y-4 px-6"
       >
         <Label title="ユーザー名" required errors={fields.displayName.errors}>
           <Input
@@ -134,7 +134,10 @@ export default function Page() {
           <Select
             {...getSelectProps(fields.yearOfBirth)}
             error={isFieldsError(fields.yearOfBirth.errors)}
-            options={bathday.map((v) => ({ value: `${v}`, title: `${v}年` }))}
+            options={bathday.map((v) => ({
+              value: `${v}`,
+              title: `${v}年`,
+            }))}
           />
         </Label>
 
@@ -145,7 +148,10 @@ export default function Page() {
           <Select
             {...getSelectProps(fields.occupation)}
             error={isFieldsError(fields.occupation.errors)}
-            options={occupation.map((v) => ({ value: v, title: v }))}
+            options={occupation.map((v) => ({
+              value: v,
+              title: v,
+            }))}
           />
         </Label>
 
@@ -174,7 +180,7 @@ export default function Page() {
         <Button
           variation="primary"
           type="submit"
-          className="block !mt-12 mx-auto"
+          className="mx-auto !mt-12 block"
           disabled={handleDisabled(form.value, form.allErrors) || loading}
         >
           保存する

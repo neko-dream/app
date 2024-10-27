@@ -62,7 +62,7 @@ export default function Page() {
 
   if (!opinions.length) {
     return (
-      <div className="w-full flex flex-col justify-center items-center relative flex-1">
+      <div className="relative flex w-full flex-1 flex-col items-center justify-center">
         <p>全ての意見に意思表明しました🎉</p>
         <Link
           to={`/${params.id}`}
@@ -152,7 +152,7 @@ export default function Page() {
 
   if (isOpinionEnd) {
     return (
-      <div className="w-full flex flex-col justify-center items-center relative flex-1 space-y-4">
+      <div className="relative flex w-full flex-1 flex-col items-center justify-center space-y-4">
         <p>{opinions.length}件の意見に意思表明しました🎉</p>
         <Button variation="primary" onClick={handleRevalidate}>
           さらに意思表明する
@@ -165,10 +165,10 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full relative flex-1 pt-4">
+    <div className="relative w-full flex-1 pt-4">
       <CardSwiper {...swipe} />
 
-      <div className="flex w-full justify-between px-4 space-x-2 absolute bottom-8">
+      <div className="absolute bottom-8 flex w-full justify-between space-x-2 px-4">
         <Button
           variation="disagree"
           onClick={() => handleSubmitVote("disagree")}

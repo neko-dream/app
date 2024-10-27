@@ -12,7 +12,7 @@ type Props = {
 };
 
 const link = tv({
-  base: "flex h-10 px-4 items-center text-sm",
+  base: "flex h-10 items-center px-4 text-sm",
 });
 
 export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
@@ -36,12 +36,12 @@ export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
 
     return (
       <>
-        <animated.div style={style} className="absolute top-0 w-[375px] z-10">
+        <animated.div style={style} className="absolute top-0 z-10 w-[375px]">
           <div
             {...props}
-            className="absolute flex flex-col w-full max-w-[375px] bg-white z-10 pt-10"
+            className="absolute z-10 flex w-full max-w-[375px] flex-col bg-white pt-10"
           >
-            <div className="flex p-4 space-x-2">
+            <div className="flex space-x-2 p-4">
               <Input
                 className="h-10"
                 placeholder="キーワードで検索"
@@ -49,7 +49,7 @@ export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
               />
               <button
                 onClick={handleSubmit}
-                className="bg-blue-500 w-10 h-10 shrink-0 rounded-md flex items-center justify-center hover:opacity-80"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-blue-500 hover:opacity-80"
               >
                 <img
                   src={SearchWhiteIcon}
@@ -84,7 +84,7 @@ export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
         </animated.div>
         <animated.div
           style={{ opacity: style.opacity }}
-          className="w-[375px] top-0 absolute bg-slate-600/60 h-full"
+          className="absolute top-0 h-full w-[375px] bg-slate-600/60"
           onClick={handleCloseModal}
         ></animated.div>
       </>

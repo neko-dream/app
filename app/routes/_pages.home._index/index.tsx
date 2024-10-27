@@ -15,7 +15,7 @@ export default function Page() {
 
   return (
     <>
-      <Heading className="shrink-0 h-10">投稿されたセッション</Heading>
+      <Heading className="h-10 shrink-0">投稿されたセッション</Heading>
       <Tabs
         items={[
           { label: "開催中", href: "/home" },
@@ -32,7 +32,7 @@ export default function Page() {
                 <Error>
                   <p>お探しのトークセッションは </p>
                   <p>見つかりませんでした...</p>
-                  <p className="text-xs mt-2 text-gray-700">
+                  <p className="mt-2 text-xs text-gray-700">
                     右上の 🔍 から探せるよ！
                   </p>
                 </Error>

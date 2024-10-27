@@ -22,7 +22,7 @@ function Avator(
       <img
         src={defaultImage}
         alt=""
-        className="w-full rounded-full aspect-square object-cover"
+        className="aspect-square w-full rounded-full object-cover"
       />
     </picture>
   );

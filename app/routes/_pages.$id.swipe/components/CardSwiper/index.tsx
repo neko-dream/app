@@ -30,7 +30,7 @@ export default function CardSwiper(props: Props) {
     ) => {
       return (
         <animated.div
-          className="block absolute touch-none will-change-transform"
+          className="absolute block touch-none will-change-transform"
           key={i}
           style={{
             x,
@@ -48,27 +48,35 @@ export default function CardSwiper(props: Props) {
           >
             {/* 重なり */}
             <animated.div
-              style={{ backgroundColor, display: disagreeDisplay, opacity }}
-              className="absolute w-full h-full rounded"
+              style={{
+                backgroundColor,
+                display: disagreeDisplay,
+                opacity,
+              }}
+              className="absolute h-full w-full rounded"
             />
             <animated.div
               style={{ display: disagreeDisplay }}
-              className="absolute w-full h-full rounded"
+              className="absolute h-full w-full rounded"
             >
-              <p className="absolute text-white font-bold text-2xl right-4 top-4">
+              <p className="absolute right-4 top-4 text-2xl font-bold text-white">
                 違うかも
               </p>
             </animated.div>
 
             <animated.div
-              style={{ backgroundColor, display: agreeDisplay, opacity }}
-              className="absolute w-full h-full rounded"
+              style={{
+                backgroundColor,
+                display: agreeDisplay,
+                opacity,
+              }}
+              className="absolute h-full w-full rounded"
             />
             <animated.div
               style={{ display: agreeDisplay }}
               className="absolute"
             >
-              <p className="text-white bg-transparent font-bold text-2xl p-4">
+              <p className="bg-transparent p-4 text-2xl font-bold text-white">
                 いいかも
               </p>
             </animated.div>
@@ -82,7 +90,7 @@ export default function CardSwiper(props: Props) {
                 photoURL: props.opinions[i].user.iconURL || "",
               }}
               opinionStatus={props.opinions[i].opinion.voteType!}
-              className="bg-white pointer-events-none select-none h-full w-full"
+              className="pointer-events-none h-full w-full select-none bg-white"
             />
           </animated.div>
           {!props.state.isOpinionModalOpen && (
@@ -100,7 +108,7 @@ export default function CardSwiper(props: Props) {
                   };
                 });
               }}
-              className="absolute flex items-center space-x-1 text-blue-500 bottom-4 right-4 border border-gray-600 p-1 rounded-full"
+              className="absolute bottom-4 right-4 flex items-center space-x-1 rounded-full border border-gray-600 p-1 text-blue-500"
             >
               <RiChat1Line className="text-black" size={24} />
             </button>

@@ -18,10 +18,10 @@ export default function Uploadarea({ className, preview, ...props }: Props) {
         <img
           src={preview}
           alt=""
-          className="border border-gray-300 rounded-md"
+          className="rounded-md border border-gray-300"
         />
       ) : (
-        <div className="flex items-center justify-center border border-gray-300 rounded-md w-full h-full">
+        <div className="flex h-full w-full items-center justify-center rounded-md border border-gray-300">
           <RiImage2Line className="text-gray-500" size={20} />
         </div>
       )}

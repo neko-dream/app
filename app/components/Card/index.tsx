@@ -44,7 +44,7 @@ function Card(
     <div {...props} ref={ref} className={card({ class: className })}>
       <div className="flex items-center">
         <Avator src={user.photoURL} className="" />
-        <p className="text-xs ml-2 mr-auto text-[#6d6c6a]">
+        <p className="ml-2 mr-auto text-xs text-[#6d6c6a]">
           {user.displayName}
         </p>
         <Badge status={opinionStatus} className="ml-2" />
@@ -57,23 +57,23 @@ function Card(
       <RpleyLink to={isOpnionLink} />
 
       {isJegde && (
-        <div className="flex justify-between mt-2">
+        <div className="mt-2 flex justify-between">
           <Button
-            className="w-24 h-8 p-1"
+            className="h-8 w-24 p-1"
             variation={myVoteType === "disagree" ? "disagree" : "disabled"}
             onClick={() => onClickVoteButton?.("disagree")}
           >
             違うかも
           </Button>
           <Button
-            className="w-24 h-8 p-1"
+            className="h-8 w-24 p-1"
             variation={myVoteType === "pass" ? "pass" : "disabled"}
             onClick={() => onClickVoteButton?.("pass")}
           >
             保留
           </Button>
           <Button
-            className="w-24 h-8 p-1"
+            className="h-8 w-24 p-1"
             variation={myVoteType === "agree" ? "agree" : "disabled"}
             onClick={() => onClickVoteButton?.("agree")}
           >
@@ -95,9 +95,9 @@ function RpleyLink({ to }: RpleyLinkProps) {
   }
 
   return (
-    <Link to={to} className="mt-2 flex items-center text-blue-500 justify-end">
+    <Link to={to} className="mt-2 flex items-center justify-end text-blue-500">
       <RiChat1Line />
-      <p className="text-sm ml-1">返信画面にいく</p>
+      <p className="ml-1 text-sm">返信画面にいく</p>
     </Link>
   );
 }

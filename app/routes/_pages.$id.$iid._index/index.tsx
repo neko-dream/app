@@ -91,7 +91,7 @@ export default function Page() {
           photoURL: rootOpinion.user.iconURL,
         }}
         opinionStatus={rootOpinion.opinion.voteType}
-        className="bg-white w-full"
+        className="w-full bg-white"
         isJegde={rootOpinion.user.displayID !== user?.displayId}
         onClickVoteButton={(voteStatus) => {
           handleSubmitVote(rootOpinion.opinion.id, voteStatus);
@@ -107,7 +107,7 @@ export default function Page() {
               photoURL: parentOpinion.rootOpinion.user.iconURL,
             }}
             opinionStatus={parentOpinion.rootOpinion.opinion.voteType}
-            className="bg-white w-full"
+            className="w-full bg-white"
             isOpnionLink={`/${params.id}/${parentOpinion.rootOpinion.opinion.id}`}
           />
         )}
@@ -117,17 +117,21 @@ export default function Page() {
         {...getFormProps(form)}
         method="post"
         onSubmit={form.onSubmit}
-        className="flex flex-col space-y-4 mb-12 mt-4 w-full h-full max-w-[375px] z-10 px-4"
+        className="z-10 mb-12 mt-4 flex h-full w-full max-w-[375px] flex-col space-y-4 px-4"
       >
         <Label title="意見" optional>
           <Textarea
-            {...getInputProps(fields.opinionContent, { type: "text" })}
+            {...getInputProps(fields.opinionContent, {
+              type: "text",
+            })}
           />
         </Label>
         <Label title="参考文献" optional>
           <Input
             className="h-12 w-full px-4"
-            {...getInputProps(fields.referenceURL, { type: "text" })}
+            {...getInputProps(fields.referenceURL, {
+              type: "text",
+            })}
           />
         </Label>
         <Button type="submit" variation="primary" className="mx-auto my-4">
@@ -147,7 +151,7 @@ export default function Page() {
               photoURL: opinionUser.iconURL,
             }}
             opinionStatus={opinion.voteType!}
-            className="bg-white select-none h-full w-full mt-2"
+            className="mt-2 h-full w-full select-none bg-white"
             isOpnionLink={`/${params.id}/${opinion.id}`}
             isJegde={opinionUser.displayID !== user?.displayId}
             myVoteType={myVoteType}

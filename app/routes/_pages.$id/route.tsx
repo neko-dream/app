@@ -28,7 +28,9 @@ export default function Route() {
   useEffect(() => {
     if (isOpen) {
       window.scrollTo(0, 0);
-      document.addEventListener("touchmove", noscroll, { passive: false });
+      document.addEventListener("touchmove", noscroll, {
+        passive: false,
+      });
       document.addEventListener("wheel", noscroll, { passive: false });
     }
     return () => {
@@ -38,9 +40,9 @@ export default function Route() {
   }, [isOpen]);
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex flex-1 flex-col">
       <div className="relative">
-        <div className="shrink-0 flex h-[112px] flex-col p-3 pl-4 mt-8">
+        <div className="mt-8 flex h-[112px] shrink-0 flex-col p-3 pl-4">
           <p className="text-sm text-[#6d6c6a]">テーマ</p>
           <p>{session.theme}</p>
           <div className="flex items-center space-x-1">
@@ -54,7 +56,7 @@ export default function Route() {
         {isSwipePage && (
           <Link
             to={`/${session.id}`}
-            className="absolute top-2 right-2 text-blue-500 underline"
+            className="absolute right-2 top-2 text-blue-500 underline"
             onClick={() => setIsOpen(false)}
           >
             みんなの意見を見る {"->"}
@@ -64,7 +66,7 @@ export default function Route() {
         {isReplyPage && (
           <Link
             to={`/${session.id}`}
-            className="absolute top-2 left-2 text-blue-500 underline"
+            className="absolute left-2 top-2 text-blue-500 underline"
             onClick={() => setIsOpen(false)}
           >
             {"<-"} みんなの意見を見る
@@ -74,7 +76,7 @@ export default function Route() {
         {isHomePage && (
           <Link
             to={`/${session.id}/swipe`}
-            className="absolute top-2 left-2 text-blue-500 underline"
+            className="absolute left-2 top-2 text-blue-500 underline"
             onClick={() => setIsOpen(false)}
           >
             {"<-"} スワイプ画面にもどる
@@ -83,7 +85,7 @@ export default function Route() {
 
         <button
           onClick={() => setIsOpen(true)}
-          className="absolute flex items-center space-x-1 text-blue-500 bottom-4 right-4 border border-gray-600 p-1 rounded-full"
+          className="absolute bottom-4 right-4 flex items-center space-x-1 rounded-full border border-gray-600 p-1 text-blue-500"
         >
           <RiChat1Line className="text-black" size={24} />
         </button>

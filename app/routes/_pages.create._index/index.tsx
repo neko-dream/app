@@ -54,7 +54,9 @@ export default function Page() {
       }
     },
     onValidate: ({ formData }) => {
-      return parseWithValibot(formData, { schema: createSessionFormSchema });
+      return parseWithValibot(formData, {
+        schema: createSessionFormSchema,
+      });
     },
     shouldValidate: "onInput",
   });
@@ -88,7 +90,9 @@ export default function Page() {
 
         <Label title="セッション終了日時" required>
           <Input
-            {...getInputProps(fields.scheduledEndTime, { type: "text" })}
+            {...getInputProps(fields.scheduledEndTime, {
+              type: "text",
+            })}
             type="date"
             className="h-12 w-full px-4"
             placeholder="記入する"
@@ -105,7 +109,7 @@ export default function Page() {
         <Button
           variation="primary"
           type="submit"
-          className="block !mt-12 mx-auto"
+          className="mx-auto !mt-12 block"
           disabled={handleDisabled(form.value, form.allErrors) || loading}
         >
           登録する

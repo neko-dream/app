@@ -14,21 +14,24 @@ export default function Page() {
   const isFavorite = params.get("q") === "favorite";
 
   return (
-    <div className="flex-1 flex flex-col items-center mt-2">
+    <div className="mt-2 flex flex-1 flex-col items-center">
       <Link to={"/mypage/edit"} className="ml-auto mr-2">
         <img src={SettinIcon} alt="" />
       </Link>
-      <Avator src={user.iconURL} className="w-16 h-16 mt-2" />
+      <Avator src={user.iconURL} className="mt-2 h-16 w-16" />
       <p className="text-2xl">{user.displayName}</p>
       <Tabs
-        className="w-full mt-4"
+        className="mt-4 w-full"
         items={[
           { label: "今まで投稿した意見", href: "/mypage" },
-          { label: "リアクション済セッション", href: "/mypage?q=favorite" },
+          {
+            label: "リアクション済セッション",
+            href: "/mypage?q=favorite",
+          },
         ]}
         active={isFavorite ? "リアクション済セッション" : "今まで投稿した意見"}
       />
-      <div className="bg-gray-100 w-full flex-1 p-2 box-border space-y-2">
+      <div className="box-border w-full flex-1 space-y-2 bg-gray-100 p-2">
         {isFavorite &&
           sessions?.map((session, i) => {
             return <Session {...session} key={i} />;

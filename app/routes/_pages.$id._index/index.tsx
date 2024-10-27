@@ -65,9 +65,9 @@ export default function Page() {
       <Heading className="mt-6">みんなの意見</Heading>
       <div className="flex items-center">
         <div className="pl-3"></div>
-        <p className="text-xs pt-0.5">グループ：</p>
+        <p className="pt-0.5 text-xs">グループ：</p>
         <select
-          className="h-6 w-32 mb-2 mt-2 border border-gray-300 rounded-full py-0.5 px-2 text-xs"
+          className="mb-2 mt-2 h-6 w-32 rounded-full border border-gray-300 px-2 py-0.5 text-xs"
           onChange={(e) => {
             setGroupID(Number(e.currentTarget.value));
           }}

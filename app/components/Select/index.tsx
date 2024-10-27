@@ -10,7 +10,7 @@ type Props = ComponentProps<"select"> & {
 
 const select = tv({
   slots: {
-    base: "appearance-none h-12 border border-gray-300 rounded-md w-full px-4 text-gray-400",
+    base: "h-12 w-full appearance-none rounded-md border border-gray-300 px-4 text-gray-400",
     placeholder: "hidden text-gray-400",
   },
   variants: {
@@ -52,7 +52,7 @@ function Select(
       </select>
       <img
         src={ArrowIcon}
-        className="absolute top-1/2 -translate-y-1/2 right-4"
+        className="absolute right-4 top-1/2 -translate-y-1/2"
         alt=""
       />
     </span>

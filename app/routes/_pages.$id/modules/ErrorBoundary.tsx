@@ -9,7 +9,7 @@ export function ErrorBoundary(): JSX.Element {
       <Error>
         <p>お探しのトークセッションは </p>
         <p>見つかりませんでした...</p>
-        <p className="text-xs mt-2 text-gray-700">右上の 🔍 から探せるよ！</p>
+        <p className="mt-2 text-xs text-gray-700">右上の 🔍 から探せるよ！</p>
       </Error>
     );
   }

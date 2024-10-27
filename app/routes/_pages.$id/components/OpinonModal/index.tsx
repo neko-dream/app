@@ -75,37 +75,41 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
     <>
       <animated.div
         style={item}
-        className="touch-none absolute will-change-transform bottom-0 w-[375px] h-[calc(100vh-112px-40px-32px-16px)] bg-white z-30 border-t border-gray-200 rounded-t-xl"
+        className="absolute bottom-0 z-30 h-[calc(100vh-112px-40px-32px-16px)] w-[375px] touch-none rounded-t-xl border-t border-gray-200 bg-white will-change-transform"
       >
         <Form
           {...props}
           {...getFormProps(form)}
           method="post"
           onSubmit={form.onSubmit}
-          className="flex flex-col space-y-4 w-full h-full max-w-[375px] z-10 px-4"
+          className="z-10 flex h-full w-full max-w-[375px] flex-col space-y-4 px-4"
         >
           <animated.div
             {...bind()}
-            className="cursor-pointer w-full mx-auto py-2"
+            className="mx-auto w-full cursor-pointer py-2"
           >
-            <div className="h-1 w-[50%] bg-slate-400 mx-auto rounded-full" />
+            <div className="mx-auto h-1 w-[50%] rounded-full bg-slate-400" />
             <p className="mt-2 select-none text-center">あなたはどう思う？</p>
           </animated.div>
           <Label title="意見" optional>
             <Textarea
-              {...getInputProps(fields.opinionContent, { type: "text" })}
+              {...getInputProps(fields.opinionContent, {
+                type: "text",
+              })}
             />
           </Label>
           <Label title="参考文献" optional>
             <Input
               className="h-12 w-full px-4"
-              {...getInputProps(fields.referenceURL, { type: "text" })}
+              {...getInputProps(fields.referenceURL, {
+                type: "text",
+              })}
             />
           </Label>
           <Button
             type="submit"
             variation="primary"
-            className="mx-auto !mt-auto !mb-8"
+            className="mx-auto !mb-8 !mt-auto"
           >
             送信する
           </Button>
@@ -115,7 +119,7 @@ export const OpinionModal = ({ open, onOpenChange, ...props }: Props) => {
       <animated.div
         style={{ opacity: item.opacity }}
         // FIXME: -mt-8 直したい
-        className="w-[375px] bottom-0 absolute bg-slate-600/60 h-[calc(100vh-112px-40px-32px)]"
+        className="absolute bottom-0 h-[calc(100vh-112px-40px-32px)] w-[375px] bg-slate-600/60"
         onClick={handleCloseModal}
       />
     </>

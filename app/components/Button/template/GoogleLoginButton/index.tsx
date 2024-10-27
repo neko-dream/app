@@ -11,9 +11,9 @@ function GoogleLoginButton(
       {...props}
       ref={ref}
       outline
-      className="flex space-x-4 px-4 border border-gray-700 max-w-80"
+      className="flex max-w-80 space-x-4 border border-gray-700 px-4"
     >
-      <img src={GoogleIcon} className="w-6 h-6 inset-0 left-6" alt="" />
+      <img src={GoogleIcon} className="inset-0 left-6 h-6 w-6" alt="" />
       <p className="text-center">Googleでログイン</p>
     </Button>
   );
