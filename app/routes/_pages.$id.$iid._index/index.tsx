@@ -20,8 +20,9 @@ export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
 
 export default function Page() {
-  const { rootOpinion, opinions, parentOpinion } =
+  const { rootOpinion, opinions, parentOpinion, user } =
     useLoaderData<typeof loader>();
+
   const params = useParams();
   const { revalidate } = useRevalidator();
 
@@ -91,7 +92,7 @@ export default function Page() {
         }}
         opinionStatus={rootOpinion.opinion.voteType}
         className="bg-white w-full"
-        isJegde={true}
+        isJegde={rootOpinion.user.displayID !== user?.displayId}
         onClickVoteButton={(voteStatus) => {
           handleSubmitVote(rootOpinion.opinion.id, voteStatus);
         }}
@@ -134,7 +135,7 @@ export default function Page() {
         </Button>
       </Form>
 
-      {opinions.map(({ opinion, user }, i) => {
+      {opinions.map(({ opinion, user: opinionUser, myVoteType }, i) => {
         return (
           <Card
             key={i}
@@ -142,13 +143,14 @@ export default function Page() {
             description={opinion.content}
             user={{
               displayID: "",
-              displayName: user.displayName,
-              photoURL: user.iconURL,
+              displayName: opinionUser.displayName,
+              photoURL: opinionUser.iconURL,
             }}
             opinionStatus={opinion.voteType!}
             className="bg-white select-none h-full w-full mt-2"
             isOpnionLink={`/${params.id}/${opinion.id}`}
-            isJegde={true}
+            isJegde={opinionUser.displayID !== user?.displayId}
+            myVoteType={myVoteType}
             onClickVoteButton={(voteStatus) => {
               handleSubmitVote(opinion.id, voteStatus);
             }}
