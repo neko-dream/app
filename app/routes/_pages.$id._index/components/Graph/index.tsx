@@ -42,7 +42,13 @@ const Axes = ({
   return <Graphics draw={drawAxes} />;
 };
 
-const DotPlot = ({ polygons }: { polygons: any }) => {
+const DotPlot = ({
+  polygons,
+  selectGroupId,
+}: {
+  polygons: any;
+  selectGroupId: any;
+}) => {
   const drawPolygon = (
     g: {
       beginFill: (arg0: number, arg1: number) => void;
@@ -59,8 +65,8 @@ const DotPlot = ({ polygons }: { polygons: any }) => {
     g.endFill();
   };
 
-  const draw = React.useCallback(
-    (g: {
+  return polygons.map((polygon: any) => {
+    const draw = (g: {
       clear?: any;
       beginFill: (arg0: number) => void;
       drawCircle: (arg0: any, arg1: any, arg2: number) => void;
@@ -68,17 +74,23 @@ const DotPlot = ({ polygons }: { polygons: any }) => {
       endFill: () => void;
     }) => {
       g.clear();
-      polygons.forEach((polygon: { points: any; groupId: any }) => {
-        drawPolygon(g, polygon.points, polygon.groupId);
-      });
-    },
-    [polygons],
-  );
+      drawPolygon(g, polygon.points, polygon.groupId);
+    };
 
-  return <Graphics pointertap={console.log} draw={draw} />;
+    return (
+      // eslint-disable-next-line react/jsx-key
+      <Graphics
+        click={() => {
+          selectGroupId(polygon.groupId);
+        }}
+        interactive={true}
+        draw={draw}
+      />
+    );
+  });
 };
 
-const AvatarPlot = ({ dots, myPositionData }: any) => {
+const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
   let avatarWithZindex: any[][] = [];
 
   const drawAvatarBackground = React.useCallback(
@@ -115,11 +127,7 @@ const AvatarPlot = ({ dots, myPositionData }: any) => {
     if (myPosition) {
       avatarWithZindex.push([
         // eslint-disable-next-line react/jsx-key
-        <Graphics
-          zIndex={zIndex}
-          pointertap={console.log}
-          draw={drawAvatarBackground}
-        />,
+        <Graphics zIndex={zIndex} draw={drawAvatarBackground} />,
         zIndex,
       ]);
     }
@@ -132,7 +140,10 @@ const AvatarPlot = ({ dots, myPositionData }: any) => {
         zIndex={zIndex + 10}
         scale={[0.15 * radiusRate, 0.15 * radiusRate]}
         anchor={[0.5, 0.5]}
-        click={console.log}
+        click={() => {
+          selectGroupId(colorIdx);
+        }}
+        interactive={true}
       />,
       zIndex + 10,
     ]);
@@ -162,9 +173,10 @@ type Props = {
   polygons: any;
   positions: any;
   myPosition: any;
+  selectGroupId: any;
 };
 
-const Dots = ({ positions, myPosition }: Props) => {
+const Dots = ({ positions, myPosition, selectGroupId }: Props) => {
   let _minX = 100000000000;
   let _minY = 100000000000;
   let _maxX = -100000000000;
@@ -253,8 +265,12 @@ const Dots = ({ positions, myPosition }: Props) => {
         color={0xd9d9d9}
         thickness={2}
       />
-      <DotPlot polygons={resultPolygons} />
-      <AvatarPlot dots={dots} myPositionData={myPositionData}></AvatarPlot>
+      <DotPlot polygons={resultPolygons} selectGroupId={selectGroupId} />
+      <AvatarPlot
+        dots={dots}
+        myPositionData={myPositionData}
+        selectGroupId={selectGroupId}
+      ></AvatarPlot>
     </Stage>
   );
 };
