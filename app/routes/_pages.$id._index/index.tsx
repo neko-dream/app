@@ -1,4 +1,4 @@
-import { useLoaderData, useParams } from "@remix-run/react";
+import { Link, useLoaderData, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import Card from "~/components/Card";
@@ -88,18 +88,23 @@ export default function Page() {
       <div className="mx-4 space-y-4">
         {opinions.map((opinion, i) => {
           return (
-            <Card
+            <Link
               key={i}
-              title={opinion.opinion.title || ""}
-              description={opinion.opinion.content || ""}
-              user={{
-                displayID: "",
-                displayName: opinion.user.displayName || "",
-                photoURL: opinion.user.iconURL || "",
-              }}
-              opinionStatus={opinion.opinion.voteType!}
-              isOpnionLink={`/${params.id}/${opinion.opinion.id}`}
-            />
+              to={`/${params.id}/${opinion.opinion.id}`}
+              className="block"
+            >
+              <Card
+                title={opinion.opinion.title || ""}
+                description={opinion.opinion.content || ""}
+                user={{
+                  displayID: "",
+                  displayName: opinion.user.displayName || "",
+                  photoURL: opinion.user.iconURL || "",
+                }}
+                opinionStatus={opinion.opinion.voteType!}
+                isOpnionLink={`/${params.id}/${opinion.opinion.id}`}
+              />
+            </Link>
           );
         })}
       </div>
