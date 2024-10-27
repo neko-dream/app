@@ -15,33 +15,3 @@ body {
   margin-inline: auto;
   background-color: white;
 }
-
-.card {
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  grid-template-areas:
-    "avator      title       title       meatball"
-    "avator      status      status        meatball"
-    "description description description description"
-    "link        link        link        link";
-  grid-auto-columns: 56px 1fr auto 32px;
-  grid-auto-rows: 32px 32px 1fr 32px;
-
-  .card-avator {
-    grid-area: avator;
-  }
-  .card-title {
-    grid-area: title;
-  }
-  .card-status {
-    grid-area: status;
-  }
-  .card-description {
-    grid-area: description;
-    margin-bottom: auto;
-  }
-  .card-link {
-    grid-area: link;
-  }
-}
