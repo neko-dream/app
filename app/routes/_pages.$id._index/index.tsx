@@ -57,12 +57,14 @@ export default function Page() {
           setGroupID(id);
         }}
       />
-      <Heading className="mt-6">レポート</Heading>
+      <Heading>レポート</Heading>
+
       <details className="prose-sm px-2">
         <summary className="pt-4">レポートを見る</summary>
         <ReactMarkdown className="pt-4">{report?.report}</ReactMarkdown>
       </details>
-      <Heading className="mt-6">みんなの意見</Heading>
+
+      <Heading className="mt-4">みんなの意見</Heading>
       <div className="flex items-center">
         <div className="pl-3"></div>
         <p className="pt-0.5 text-xs">グループ：</p>
