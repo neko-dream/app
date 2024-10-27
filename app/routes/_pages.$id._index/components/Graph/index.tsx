@@ -65,7 +65,7 @@ const DotPlot = ({
     g.endFill();
   };
 
-  return polygons.map((polygon: any) => {
+  return polygons.map((polygon: any, i: number) => {
     const draw = (g: {
       clear?: any;
       beginFill: (arg0: number) => void;
@@ -80,10 +80,12 @@ const DotPlot = ({
     return (
       // eslint-disable-next-line react/jsx-key
       <Graphics
+        key={i}
         click={() => {
           selectGroupId(polygon.groupId);
         }}
-        interactive={true}
+        // interactive={true}
+        eventMode="static"
         draw={draw}
       />
     );
@@ -143,7 +145,7 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
         click={() => {
           selectGroupId(colorIdx);
         }}
-        interactive={true}
+        eventMode="static"
       />,
       zIndex + 10,
     ]);
