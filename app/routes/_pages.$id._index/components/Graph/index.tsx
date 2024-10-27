@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import "@pixi/events";
 import { Stage, Graphics, Sprite } from "@pixi/react";
 import React, { Fragment } from "react";
 
@@ -131,6 +132,7 @@ const AvatarPlot = ({ dots, myPositionData }: any) => {
         zIndex={zIndex + 10}
         scale={[0.15 * radiusRate, 0.15 * radiusRate]}
         anchor={[0.5, 0.5]}
+        click={console.log}
       />,
       zIndex + 10,
     ]);
