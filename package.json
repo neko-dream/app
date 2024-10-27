@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@conform-to/react": "^1.2.2",
+    "@geolonia/normalize-japanese-addresses": "^3.1.1",
+    "@geolonia/open-reverse-geocoder": "^0.1.0",
     "@remix-run/cloudflare": "2.13.0",
     "@remix-run/cloudflare-pages": "2.13.0",
     "@remix-run/react": "^2.13.1",
