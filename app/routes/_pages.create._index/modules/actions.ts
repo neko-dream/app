@@ -1,5 +1,5 @@
 // import { openReverseGeocoder } from "@geolonia/open-reverse-geocoder";
-// import { normalize } from "@geolonia/normalize-japanese-addresses";
+import { normalize } from "@geolonia/normalize-japanese-addresses";
 import { ActionFunction, json } from "@remix-run/cloudflare";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -28,8 +28,6 @@ export const action: ActionFunction = async ({ request }) => {
 
     try {
       // 住所を正規化
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const normalize = (args: any): any => args;
       const normalized = await normalize(`${prefecture}${city}`);
 
       if (
