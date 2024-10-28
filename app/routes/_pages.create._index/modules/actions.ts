@@ -1,6 +1,6 @@
 import { openReverseGeocoder } from "@geolonia/open-reverse-geocoder";
 import { normalize } from "@geolonia/normalize-japanese-addresses";
-import { ActionFunction, json } from "@remix-run/node";
+import { ActionFunction, json } from "@remix-run/cloudflare";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
