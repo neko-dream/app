@@ -10,7 +10,7 @@ type Props = ComponentProps<"select"> & {
 
 const select = tv({
   slots: {
-    base: "h-12 w-full appearance-none rounded-md border border-gray-300 px-4 text-gray-400",
+    base: "h-12 w-full appearance-none rounded-md border border-gray-300 bg-white px-4 text-gray-400",
     placeholder: "hidden text-gray-400",
   },
   variants: {
