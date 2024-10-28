@@ -1,4 +1,5 @@
 import * as v from "valibot";
+import { str2num } from "~/schemas/str2num";
 
 export const createSessionFormSchema = v.object({
   theme: v.pipe(
@@ -9,4 +10,6 @@ export const createSessionFormSchema = v.object({
   description: v.optional(v.string()),
   city: v.optional(v.string()),
   prefecture: v.optional(v.string()),
+  latitude: v.optional(str2num),
+  longitude: v.optional(str2num),
 });

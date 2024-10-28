@@ -1,8 +1,9 @@
 import { useCustomForm } from "~/hooks/useCustomForm";
-import { createSessionFormSchema } from "../schemas/createSessionForm.schema";
+import { createSessionFormSchema } from "../schemas";
 import { api } from "~/libs/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "@remix-run/react";
+import dayjs from "dayjs";
 
 export const useCreateSessionForm = () => {
   const navigate = useNavigate();
@@ -12,7 +13,10 @@ export const useCreateSessionForm = () => {
     onSubmit: async ({ value }) => {
       const { error } = await api.POST("/talksessions", {
         credentials: "include",
-        body: value,
+        body: {
+          ...value,
+          scheduledEndTime: dayjs(value?.scheduledEndTime).toISOString(),
+        },
       });
 
       if (error) {
