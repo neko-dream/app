@@ -4,7 +4,7 @@ const height = "calc(100% - 136px - 24px)";
 export const animations = {
   to: () => ({
     w: "80%",
-    h: "50%",
+    h: "300px",
     x: 0,
     zIndex: 0,
     left: "10%",
@@ -12,7 +12,7 @@ export const animations = {
   }),
   from: () => ({
     w: "100%",
-    h: "50%",
+    h: "300px",
     x: 0,
     y: -1000,
     zIndex: 0,
@@ -27,8 +27,8 @@ export const animations = {
   opinion: () => {
     return {
       w: "95%",
-      h: "calc(30%)",
-      y: -130,
+      h: "180px",
+      y: -140,
       x: 0,
       left: "2.5%",
       zIndex: 100,
@@ -37,7 +37,7 @@ export const animations = {
   },
   init: () => ({
     w: "80%",
-    h: "50%",
+    h: "300px",
     x: 0,
     left: "10%",
     zIndex: 0,
