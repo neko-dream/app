@@ -1,5 +1,5 @@
-import { openReverseGeocoder } from "@geolonia/open-reverse-geocoder";
-import { normalize } from "@geolonia/normalize-japanese-addresses";
+// import { openReverseGeocoder } from "@geolonia/open-reverse-geocoder";
+// import { normalize } from "@geolonia/normalize-japanese-addresses";
 import { ActionFunction, json } from "@remix-run/cloudflare";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -10,6 +10,8 @@ export const action: ActionFunction = async ({ request }) => {
     const lat = formData.get("latitude");
     const lng = formData.get("longitude");
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const openReverseGeocoder = (args: any): any => args;
       const result = await openReverseGeocoder([Number(lng), Number(lat)]);
       return json({
         prefecture: result.prefecture,
@@ -26,6 +28,8 @@ export const action: ActionFunction = async ({ request }) => {
 
     try {
       // 住所を正規化
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const normalize = (args: any): any => args;
       const normalized = await normalize(`${prefecture}${city}`);
 
       if (
