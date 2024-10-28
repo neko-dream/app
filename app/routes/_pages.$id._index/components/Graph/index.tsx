@@ -81,7 +81,7 @@ const DotPlot = ({
       // eslint-disable-next-line react/jsx-key
       <Graphics
         key={i}
-        click={() => {
+        pointerdown={() => {
           selectGroupId(polygon.groupId);
         }}
         // interactive={true}
@@ -142,7 +142,7 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
         zIndex={zIndex + 10}
         scale={[0.15 * radiusRate, 0.15 * radiusRate]}
         anchor={[0.5, 0.5]}
-        click={() => {
+        pointerdown={() => {
           selectGroupId(colorIdx);
         }}
         eventMode="static"
