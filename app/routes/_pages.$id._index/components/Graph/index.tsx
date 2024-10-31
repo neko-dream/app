@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "@pixi/events";
 import { Stage, Graphics, Sprite } from "@pixi/react";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 
 const Axes = ({
   width,
@@ -112,12 +112,30 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
     [myPositionData],
   );
 
+  const drawCircleMask = React.useCallback(
+    (g: {
+      clear: () => void;
+      beginFill: (arg0: number) => void;
+      drawCircle: (arg0: number, arg1: number, arg2: number) => void;
+      endFill: () => void;
+    }) => {
+      g.clear();
+      // g.beginFill(0xffffff);
+      g.beginFill(0x64748b);
+      g.drawCircle(0, 0, 10);
+      g.endFill();
+    },
+    [],
+  );
+
   const drawAvatar = (
     x: any,
     y: any,
     colorIdx: any,
     radiusRate = 1,
     myPosition = false,
+    iconURL: string,
+    index: number,
   ) => {
     const images = [
       "/avatar-circle/avatar-circle-red.png",
@@ -133,15 +151,41 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
         zIndex,
       ]);
     }
+    // const ref = createRef<any>();
+    // maskRefs.current.push(ref);
+
+    console.log("iconURL: " + iconURL);
+    avatarWithZindex.push([
+      // eslint-disable-next-line react/jsx-key
+      <Graphics
+        x={x}
+        y={y}
+        zIndex={zIndex}
+        // ref={ref}
+        draw={drawCircleMask}
+        ref={(ref) => setMask([...masks, ref])}
+      ></Graphics>,
+      zIndex + 10,
+    ]);
     avatarWithZindex.push([
       // eslint-disable-next-line react/jsx-key
       <Sprite
-        image={myPosition ? "/avatar-icon/avator-1.png" : images[colorIdx]}
+        // image={myPosition ? "/avatar-icon/avator-1.png" : images[colorIdx]}
+        // image={myPosition ? "/avatar-icon/avator-1.png" : images[colorIdx]}
+        image={iconURL ?? images[colorIdx]}
+        // image={
+        //   "https://images.kotohiro.com/users/hiyoko/profile_icon/1729959914.jpg"
+        // }
         x={x}
         y={y}
+        // width={200}
+        // height={200}
         zIndex={zIndex + 10}
         scale={[0.15 * radiusRate, 0.15 * radiusRate]}
+        // scale={[0.15 * radiusRate * 0.3, 0.15 * radiusRate * 0.3]}
+        // scale={[0.1]}
         anchor={[0.5, 0.5]}
+        mask={masks[index]}
         pointerdown={() => {
           selectGroupId(colorIdx);
         }}
@@ -151,15 +195,29 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
     ]);
   };
 
+  const [masks, setMask] = useState<any[]>([]);
+
   dots.forEach(
-    (dot: {
-      x: any;
-      y: any;
-      groupId: number;
-      radius: number;
-      myPosition: boolean;
-    }) => {
-      drawAvatar(dot.x, dot.y, dot.groupId, dot.radius ?? 1, dot.myPosition);
+    (
+      dot: {
+        x: any;
+        y: any;
+        groupId: number;
+        radius: number;
+        myPosition: boolean;
+        iconURL: string;
+      },
+      index: number,
+    ) => {
+      drawAvatar(
+        dot.x,
+        dot.y,
+        dot.groupId,
+        dot.radius ?? 1,
+        dot.myPosition,
+        dot.iconURL,
+        index,
+      );
     },
   );
 
@@ -207,7 +265,13 @@ const Dots = ({ positions, myPosition, selectGroupId }: Props) => {
   const myPositionData: any = {};
   const dots =
     positions.map(
-      (v: { displayId: string; groupId: string; posX: number; posY: any }) => {
+      (v: {
+        displayId: string;
+        groupId: string;
+        posX: number;
+        posY: any;
+        iconURL: string;
+      }) => {
         let radius: number = 1; // 5
         let myPositionFlag = false;
         if (myPosition?.displayId === v?.displayId && !isUsedMyPosition) {
@@ -225,6 +289,7 @@ const Dots = ({ positions, myPosition, selectGroupId }: Props) => {
           groupId: v.groupId,
           radius: radius,
           myPosition: myPositionFlag,
+          iconURL: v.iconURL,
         };
       },
     ) || [];
