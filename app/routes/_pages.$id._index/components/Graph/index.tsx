@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "@pixi/events";
 import { Stage, Graphics, Sprite } from "@pixi/react";
-import React, { Fragment, RefObject, createRef, useRef, useState } from "react";
-import { Any } from "react-spring";
+import React, { Fragment, useState } from "react";
 
 const Axes = ({
   width,
