@@ -7,6 +7,7 @@ tags:
   - name: vote
   - name: opinion
   - name: talk_session
+  - name: timeline
   - name: user
   - name: auth
   - name: test
@@ -44,6 +45,11 @@ paths:
                     - agree
                     - disagree
                     - pass
+                  x-apidog:
+                    enumDescriptions:
+                      agree: ''
+                      disagree: ''
+                      pass: ''
                   example: ''
                   nullable: true
               required:
@@ -55,21 +61,33 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &ref_0
+                items: &ref_1
                   $ref: '#/components/schemas/opinion'
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: &ref_0
+                    $ref: '#/components/schemas/error'
+                    x-apidog-overrides:
+                      data:
+                        type: string
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -79,18 +97,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -100,9 +126,14 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: Vote
+      x-apidog-folder: talk_session/opinion/vote
+      x-apidog-status: developing
+      x-apidog-maintainer: haryoiro
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10248043-run
   /talksessions/{talkSessionID}/swipe_opinions:
     get:
       summary: スワイプ用のエンドポイント
@@ -136,29 +167,43 @@ paths:
                 items:
                   type: object
                   properties:
-                    opinion: *ref_0
-                    user: &ref_1
+                    opinion: *ref_1
+                    user: &ref_2
                       $ref: '#/components/schemas/user'
                       description: 作成ユーザー
                     replyCount:
                       type: integer
+                  x-apidog-orders:
+                    - opinion
+                    - user
+                    - replyCount
                   required:
                     - opinion
                     - user
                     - replyCount
+                  x-apidog-refs: {}
+                  x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -168,18 +213,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -189,9 +242,14 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: Opinion
+      x-apidog-folder: talk_session/opinion
+      x-apidog-status: developing
+      x-apidog-maintainer: haryoiro
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10247870-run
   /talksessions/{talkSessionID}/opinions:
     post:
       summary: セッションに対して意見投稿
@@ -245,19 +303,29 @@ paths:
               schema:
                 type: object
                 properties: {}
+                x-apidog-ignore-properties: []
+                x-apidog-orders: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -267,18 +335,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -288,9 +364,13 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: Opinion
+      x-apidog-folder: talk_session/opinion
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10247872-run
     get:
       summary: セッションに対する意見一覧
       deprecated: false
@@ -350,35 +430,53 @@ paths:
                     items:
                       type: object
                       properties:
-                        opinion: *ref_0
-                        user: *ref_1
+                        opinion: *ref_1
+                        user: *ref_2
                         replyCount:
                           type: integer
-                        myVoteType: &ref_4
+                        myVoteType: &ref_5
                           $ref: '#/components/schemas/voteType'
                           description: 意見投稿主の意見。ルート意見の場合はここには何も入らない
+                      x-apidog-orders:
+                        - opinion
+                        - user
+                        - replyCount
+                        - myVoteType
                       required:
                         - opinion
                         - user
                         - replyCount
                         - myVoteType
+                      x-apidog-ignore-properties: []
                   pagination:
                     type: object
                     properties:
                       totalCount:
                         type: integer
+                    x-apidog-orders:
+                      - totalCount
                     required:
                       - totalCount
+                    x-apidog-ignore-properties: []
+                x-apidog-orders:
+                  - opinions
+                  - pagination
                 required:
                   - opinions
                   - pagination
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties: {}
               examples:
                 '1':
@@ -387,12 +485,17 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties: {}
               examples:
                 '1':
@@ -401,8 +504,12 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security: []
       x-ogen-operation-group: Opinion
+      x-apidog-folder: talk_session/opinion
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10949503-run
   /talksessions/{talkSessionID}/opinions/{opinionID}:
     get:
       summary: 意見の詳細
@@ -432,18 +539,27 @@ paths:
               schema:
                 type: object
                 properties:
-                  opinion: *ref_0
-                  user: *ref_1
+                  opinion: *ref_1
+                  user: *ref_2
+                x-apidog-orders:
+                  - opinion
+                  - user
                 required:
                   - opinion
                   - user
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties: {}
               examples:
                 '1':
@@ -452,8 +568,12 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security: []
       x-ogen-operation-group: Opinion
+      x-apidog-folder: talk_session/opinion
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10736486-run
   /talksessions/{talkSessionId}:
     get:
       summary: トークセッションの詳細
@@ -474,21 +594,29 @@ paths:
           description: ''
           content:
             application/json:
-              schema: &ref_2
+              schema: &ref_3
                 $ref: '#/components/schemas/talkSession'
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -498,8 +626,13 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
       security: []
       x-ogen-operation-group: TalkSession
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-apidog-maintainer: haryoiro
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10247330-run
   /talksessions:
     get:
       summary: セッション一覧
@@ -578,30 +711,46 @@ paths:
                     items:
                       type: object
                       properties:
-                        talkSession: *ref_2
+                        talkSession: *ref_3
                         opinionCount:
                           type: integer
+                      x-apidog-orders:
+                        - talkSession
+                        - opinionCount
                       required:
                         - talkSession
                         - opinionCount
-                  pagination: &ref_5
+                      x-apidog-ignore-properties: []
+                  pagination: &ref_8
                     $ref: '#/components/schemas/offsetPagination'
+                x-apidog-orders:
+                  - talkSessions
+                  - pagination
                 required:
                   - talkSessions
                   - pagination
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -611,18 +760,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -632,8 +789,12 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security: []
       x-ogen-operation-group: TalkSession
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10247460-run
     post:
       summary: セッション作成
       deprecated: false
@@ -694,19 +855,16 @@ paths:
                   theme:
                     type: string
                     description: テーマ
-                  owner: *ref_1
+                  owner: *ref_2
                   createdAt:
                     type: string
                     description: 作成日時
                   scheduledEndTime:
                     type: string
                     description: 終了予定日時
-                  location:
-                    anyOf:
-                      - &ref_6
-                        $ref: '#/components/schemas/location'
-                      - type: 'null'
+                  location: &ref_9
                     description: 位置情報
+                    $ref: '#/components/schemas/location'
                   city:
                     type: string
                     description: 市区町村
@@ -715,25 +873,46 @@ paths:
                     type: string
                     description: 都道府県
                     nullable: true
+                x-apidog-orders:
+                  - 01J8CN9HRQTD2WA2TWEGPK4KK0
                 required:
                   - id
                   - theme
                   - owner
                   - createdAt
                   - scheduledEndTime
+                x-apidog-refs:
+                  01J8CN9HRQTD2WA2TWEGPK4KK0: *ref_3
+                x-apidog-ignore-properties:
+                  - id
+                  - theme
+                  - owner
+                  - createdAt
+                  - scheduledEndTime
+                  - location
+                  - city
+                  - prefecture
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -743,9 +922,14 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: TalkSession
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-apidog-maintainer: りっかえび
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10247334-run
   /talksessions/{talkSessionId}/analysis:
     get:
       summary: 分析結果一覧
@@ -769,11 +953,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  myPosition: &ref_3
+                  myPosition: &ref_4
                     $ref: '#/components/schemas/userGroupPosition'
                   positions:
                     type: array
-                    items: *ref_3
+                    items: *ref_4
                   groupOpinions:
                     type: array
                     items:
@@ -788,40 +972,65 @@ paths:
                           items:
                             type: object
                             properties:
-                              opinion: *ref_0
-                              user: *ref_1
+                              opinion: *ref_1
+                              user: *ref_2
                               agreeCount:
                                 type: integer
                               disagreeCount:
                                 type: integer
                               passCount:
                                 type: integer
+                            x-apidog-orders:
+                              - opinion
+                              - user
+                              - agreeCount
+                              - disagreeCount
+                              - passCount
                             required:
                               - opinion
                               - user
                               - agreeCount
                               - disagreeCount
                               - passCount
+                            x-apidog-ignore-properties: []
+                      x-apidog-orders:
+                        - groupName
+                        - groupId
+                        - opinions
                       required:
                         - groupName
                         - opinions
                         - groupId
+                      x-apidog-ignore-properties: []
+                x-apidog-orders:
+                  - myPosition
+                  - positions
+                  - groupOpinions
                 required:
                   - positions
                   - groupOpinions
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -831,18 +1040,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -852,8 +1069,12 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security: []
       x-ogen-operation-group: TalkSession
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10444796-run
   /talksessions/{talkSessionId}/report:
     get:
       summary: セッションレポートを返す
@@ -879,15 +1100,23 @@ paths:
                 properties:
                   report:
                     type: string
+                x-apidog-orders:
+                  - report
                 required:
                   - report
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties: {}
               examples:
                 '1':
@@ -896,8 +1125,12 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security: []
       x-ogen-operation-group: TalkSession
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10917883-run
   /talksessions/{talkSessionID}/opinions/{opinionID}/replies:
     get:
       summary: 意見に対するリプライ意見一覧
@@ -930,43 +1163,61 @@ paths:
                   rootOpinion:
                     type: object
                     properties:
-                      user: *ref_1
-                      myVoteType: *ref_4
-                      opinion: *ref_0
+                      user: *ref_2
+                      myVoteType: *ref_5
+                      opinion: *ref_1
+                    x-apidog-orders:
+                      - user
+                      - myVoteType
+                      - opinion
                     required:
                       - user
                       - opinion
-                      - myVoteType
+                    x-apidog-ignore-properties: []
                   opinions:
                     type: array
                     items:
                       type: object
                       properties:
-                        opinion: *ref_0
-                        user: *ref_1
-                        myVoteType:
-                          anyOf:
-                            - *ref_4
-                            - type: 'null'
+                        opinion: *ref_1
+                        user: *ref_2
+                        myVoteType: *ref_5
+                      x-apidog-orders:
+                        - opinion
+                        - user
+                        - myVoteType
                       required:
                         - opinion
                         - user
+                      x-apidog-ignore-properties: []
+                x-apidog-orders:
+                  - rootOpinion
+                  - opinions
                 required:
                   - rootOpinion
                   - opinions
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -976,18 +1227,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -997,8 +1256,12 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security: []
       x-ogen-operation-group: Opinion
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10444591-run
   /talksessions/{talkSessionID}/opinions/{opinionID}/replies2:
     get:
       summary: 意見に対するリプライ意見一覧 Copy
@@ -1031,57 +1294,85 @@ paths:
                   rootOpinion:
                     type: object
                     properties:
-                      user: *ref_1
-                      opinion: *ref_0
+                      user: *ref_2
+                      opinion: *ref_1
+                    x-apidog-orders:
+                      - user
+                      - opinion
                     required:
                       - user
                       - opinion
+                    x-apidog-ignore-properties: []
                   replyOpinions:
                     type: array
                     items:
                       type: object
                       properties:
-                        opinion: *ref_0
-                        user: *ref_1
+                        opinion: *ref_1
+                        user: *ref_2
                         myVoteType:
                           anyOf:
-                            - *ref_4
+                            - *ref_5
                             - type: 'null'
+                      x-apidog-orders:
+                        - opinion
+                        - user
+                        - myVoteType
                       required:
                         - opinion
                         - user
+                      x-apidog-ignore-properties: []
                   parentOpinions:
                     type: array
                     items:
                       type: object
                       properties:
-                        opinion: *ref_0
-                        user: *ref_1
-                        myVoteType: *ref_4
+                        opinion: *ref_1
+                        user: *ref_2
+                        myVoteType: *ref_5
                         level:
                           type: integer
+                      x-apidog-orders:
+                        - opinion
+                        - user
+                        - myVoteType
+                        - level
                       required:
                         - opinion
                         - user
                         - myVoteType
                         - level
+                      x-apidog-ignore-properties: []
+                x-apidog-orders:
+                  - rootOpinion
+                  - replyOpinions
+                  - parentOpinions
                 required:
                   - rootOpinion
                   - replyOpinions
                   - parentOpinions
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -1091,18 +1382,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -1112,8 +1411,357 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security: []
       x-ogen-operation-group: Opinion
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-11017575-run
+  /talksessions/{talkSessionID}/conclusion:
+    get:
+      summary: 結論取得
+      deprecated: false
+      description: ''
+      operationId: getConclusion
+      tags:
+        - talk_session
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema: &ref_6
+                $ref: '#/components/schemas/conclusion'
+          headers: {}
+          x-apidog-name: 成功
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ErrorResponse
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ServerErrorResponse
+      security: []
+      x-ogen-operation-group: TalkSession
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-apidog-maintainer: haryoiro
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-11104857-run
+    post:
+      summary: 結論投稿
+      deprecated: false
+      description: |-
+        結論（conclusion）はセッションが終了した後にセッっションの作成者が投稿できる文章。
+        セッションの流れやグループの分かれ方などに対するセッション作成者の感想やそれらの意見を受け、これからの方向性などを記入する。
+      operationId: postConclusion
+      tags:
+        - talk_session
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  minLength: 2
+                  description: 結論本文。2文字以上
+                  example: よかった！
+              required:
+                - content
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema: *ref_6
+          headers: {}
+          x-apidog-name: 成功
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ErrorResponse
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ServerErrorResponse
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: TalkSession
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-11104879-run
+  /talksessions/{talkSessionID}/timelines:
+    get:
+      summary: タイムライン取得
+      deprecated: false
+      description: タイムラインはセッション終了後にセッション作成者が設定できるその後の予定を知らせるもの
+      operationId: getTimeLine
+      tags:
+        - timeline
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: &ref_7
+                      $ref: '#/components/schemas/actionItem'
+                x-apidog-orders:
+                  - items
+                required:
+                  - items
+                x-apidog-ignore-properties: []
+          headers: {}
+          x-apidog-name: 成功
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ErrorResponse
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ServerErrorResponse
+      security: []
+      x-ogen-operation-group: Timeline
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-11128852-run
+  /talksessions/{talkSessionID}/timeline:
+    post:
+      summary: タイムラインアイテム追加
+      deprecated: false
+      description: ''
+      operationId: postTimeLineItem
+      tags:
+        - timeline
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  example: ''
+                  type: string
+                status:
+                  example: ''
+                  type: string
+                parentActionItemID:
+                  type: string
+                  description: 親があるなら親のIDヲシテイ
+                  example: ''
+                  nullable: true
+              required:
+                - content
+                - status
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01JBBYRJ6CJXWTJZEZK6E78140: *ref_7
+                properties:
+                  ActionItemID:
+                    type: string
+                  Sequence:
+                    type: integer
+                  Content:
+                    type: string
+                  Status:
+                    type: string
+                  CreatedAt:
+                    type: string
+                  UpdatedAt:
+                    type: string
+                x-apidog-orders:
+                  - 01JBBYRJ6CJXWTJZEZK6E78140
+                required:
+                  - ActionItemID
+                  - Sequence
+                  - Content
+                  - Status
+                  - CreatedAt
+                  - UpdatedAt
+                x-apidog-ignore-properties:
+                  - ActionItemID
+                  - Sequence
+                  - Content
+                  - Status
+                  - CreatedAt
+                  - UpdatedAt
+          headers: {}
+          x-apidog-name: 成功
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ErrorResponse
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ServerErrorResponse
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: Timeline
+      x-apidog-folder: talk_session
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-11128855-run
   /user:
     put:
       summary: ユーザー情報の変更
@@ -1156,6 +1804,19 @@ paths:
                     - 女性
                     - その他
                     - 回答しない
+                  x-apidog-enum:
+                    - name: ''
+                      value: male
+                      description: 男
+                    - name: ''
+                      value: female
+                      description: 女
+                    - name: ''
+                      value: other
+                      description: その他
+                    - name: ''
+                      value: preferNotToSay
+                      description: 無回答
                   description: 性別
                   example: ''
                   nullable: true
@@ -1178,6 +1839,53 @@ paths:
                     - 無職
                     - その他
                     - 回答しない
+                  x-apidog-enum:
+                    - name: ''
+                      value: 正社員
+                      description: ''
+                    - name: ''
+                      value: 契約社員
+                      description: ''
+                    - name: ''
+                      value: 公務員
+                      description: ''
+                    - name: ''
+                      value: 自営業
+                      description: ''
+                    - name: ''
+                      value: 会社役員
+                      description: ''
+                    - name: ''
+                      value: パート・アルバイト
+                      description: ''
+                    - name: ''
+                      value: 家事従事者
+                      description: ''
+                    - name: ''
+                      value: 学生
+                      description: ''
+                    - name: ''
+                      value: 無職
+                      description: ''
+                    - name: ''
+                      value: その他
+                      description: ''
+                    - name: ''
+                      value: 無回答
+                      description: ''
+                  x-apidog:
+                    enumDescriptions:
+                      正社員: ''
+                      契約社員: ''
+                      公務員: ''
+                      自営業: ''
+                      会社役員: ''
+                      パート・アルバイト: ''
+                      家事従事者: ''
+                      学生: ''
+                      無職: ''
+                      その他: ''
+                      回答しない: ''
                   description: 職業
                   example: ''
                   nullable: true
@@ -1201,6 +1909,7 @@ paths:
                 properties:
                   displayID:
                     type: string
+                    x-apidog-mock: '{{$string.uuid}}'
                     pattern: ^[A-Za-z0-9]$
                     examples:
                       - userid
@@ -1208,25 +1917,42 @@ paths:
                     maxLength: 25
                   displayName:
                     type: string
+                    x-apidog-mock: '{{$person.firstName}}'
                   iconURL:
                     type: string
                     nullable: true
+                x-apidog-orders:
+                  - 01J8CMAME8X2QY675JMNK1AGX7
                 required:
                   - displayID
                   - displayName
+                x-apidog-refs:
+                  01J8CMAME8X2QY675JMNK1AGX7: *ref_2
+                x-apidog-ignore-properties:
+                  - displayID
+                  - displayName
+                  - iconURL
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -1236,18 +1962,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -1257,9 +1991,14 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: user
+      x-apidog-folder: user
+      x-apidog-status: developing
+      x-apidog-maintainer: haryoiro
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10247590-run
     get:
       summary: ユーザー情報の取得
       deprecated: false
@@ -1276,19 +2015,28 @@ paths:
               schema:
                 type: object
                 properties:
-                  user: *ref_1
+                  user: *ref_2
                   demographics:
                     $ref: '#/components/schemas/userDemographics'
+                x-apidog-orders:
+                  - user
+                  - demographics
                 required:
                   - user
                   - demographics
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties: {}
               examples:
                 '1':
@@ -1297,9 +2045,13 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: User
+      x-apidog-folder: user
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10732690-run
     post:
       summary: ユーザー作成
       deprecated: false
@@ -1341,6 +2093,19 @@ paths:
                     - その他
                     - 回答しない
                   default: preferNotToSay
+                  x-apidog-enum:
+                    - name: ''
+                      value: male
+                      description: 男
+                    - name: ''
+                      value: female
+                      description: 女
+                    - name: ''
+                      value: other
+                      description: その他
+                    - name: ''
+                      value: preferNotToSay
+                      description: 未回答
                   description: 性別
                   example: ''
                   nullable: true
@@ -1368,6 +2133,53 @@ paths:
                     - その他
                     - 回答しない
                   default: 無回答
+                  x-apidog-enum:
+                    - name: ''
+                      value: 正社員
+                      description: ''
+                    - name: ''
+                      value: 契約社員
+                      description: ''
+                    - name: ''
+                      value: 公務員
+                      description: ''
+                    - name: ''
+                      value: 自営業
+                      description: ''
+                    - name: ''
+                      value: 会社役員
+                      description: ''
+                    - name: ''
+                      value: パート・アルバイト
+                      description: ''
+                    - name: ''
+                      value: 家事従事者
+                      description: ''
+                    - name: ''
+                      value: 学生
+                      description: ''
+                    - name: ''
+                      value: 無職
+                      description: ''
+                    - name: ''
+                      value: その他
+                      description: ''
+                    - name: ''
+                      value: 無回答
+                      description: ''
+                  x-apidog:
+                    enumDescriptions:
+                      正社員: ''
+                      契約社員: ''
+                      公務員: ''
+                      自営業: ''
+                      会社役員: ''
+                      パート・アルバイト: ''
+                      家事従事者: ''
+                      学生: ''
+                      無職: ''
+                      その他: ''
+                      回答しない: ''
                   description: ユーザーの職業
                   example: ''
                   nullable: true
@@ -1390,6 +2202,7 @@ paths:
                 properties:
                   displayID:
                     type: string
+                    x-apidog-mock: '{{$string.uuid}}'
                     pattern: ^[A-Za-z0-9]$
                     examples:
                       - userid
@@ -1397,25 +2210,42 @@ paths:
                     maxLength: 25
                   displayName:
                     type: string
+                    x-apidog-mock: '{{$person.firstName}}'
                   iconURL:
                     type: string
                     nullable: true
+                x-apidog-orders:
+                  - 01J8CN529FRJKRAC33QMQSKKBZ
                 required:
                   - displayID
                   - displayName
+                x-apidog-refs:
+                  01J8CN529FRJKRAC33QMQSKKBZ: *ref_2
+                x-apidog-ignore-properties:
+                  - displayID
+                  - displayName
+                  - iconURL
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -1425,18 +2255,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -1446,9 +2284,133 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: user
+      x-apidog-folder: user
+      x-apidog-status: testing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10247589-run
+  /talksessions/opened:
+    get:
+      summary: 自分が開いたセッション一覧
+      deprecated: false
+      description: ''
+      operationId: getOpenedTalkSession
+      tags:
+        - talk_session
+      parameters:
+        - name: limit
+          in: query
+          description: ''
+          required: false
+          example: 0
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: ''
+          required: false
+          example: 0
+          schema:
+            type: integer
+        - name: theme
+          in: query
+          description: 'テーマ '
+          required: false
+          example: ''
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: ''
+          required: false
+          example: ''
+          schema:
+            type: string
+            enum:
+              - finished
+              - open
+            x-apidog:
+              enumDescriptions:
+                finished: ''
+                open: ''
+            nullable: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  talkSessions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        talkSession: *ref_3
+                        opinionCount:
+                          type: integer
+                      x-apidog-orders:
+                        - talkSession
+                        - opinionCount
+                      required:
+                        - talkSession
+                        - opinionCount
+                      x-apidog-ignore-properties: []
+                x-apidog-orders:
+                  - talkSessions
+                required:
+                  - talkSessions
+                x-apidog-ignore-properties: []
+          headers: {}
+          x-apidog-name: 成功
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ErrorResponse
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+          x-apidog-name: ServerErrorResponse
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: TalkSession
+      x-apidog-folder: user
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-11099872-run
   /opinions/histories:
     get:
       summary: 今までに投稿した異見
@@ -1499,31 +2461,48 @@ paths:
                     items:
                       type: object
                       properties:
-                        user: *ref_1
-                        opinion: *ref_0
+                        user: *ref_2
+                        opinion: *ref_1
                         replyCount:
                           type: integer
+                      x-apidog-orders:
+                        - user
+                        - opinion
+                        - replyCount
                       required:
                         - user
                         - opinion
                         - replyCount
+                      x-apidog-ignore-properties: []
                   pagination:
                     type: object
                     properties:
                       totalCount:
                         type: integer
+                    x-apidog-orders:
+                      - totalCount
                     required:
                       - totalCount
+                    x-apidog-ignore-properties: []
+                x-apidog-orders:
+                  - opinions
+                  - pagination
                 required:
                   - opinions
                   - pagination
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties: {}
               examples:
                 '1':
@@ -1532,12 +2511,17 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties: {}
               examples:
                 '1':
@@ -1546,9 +2530,13 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: User
+      x-apidog-folder: user
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10734257-run
   /talksessions/histories:
     get:
       summary: リアクション済みのセッション一覧
@@ -1599,7 +2587,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  pagination: *ref_5
+                  pagination: *ref_8
                   talkSessions:
                     type: array
                     items:
@@ -1607,20 +2595,33 @@ paths:
                       properties:
                         opinionCount:
                           type: integer
-                        talkSession: *ref_2
+                        talkSession: *ref_3
+                      x-apidog-orders:
+                        - opinionCount
+                        - talkSession
                       required:
                         - opinionCount
                         - talkSession
+                      x-apidog-ignore-properties: []
+                x-apidog-orders:
+                  - pagination
+                  - talkSessions
                 required:
                   - pagination
                   - talkSessions
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties: {}
               examples:
                 '1':
@@ -1629,12 +2630,17 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties: {}
               examples:
                 '1':
@@ -1643,9 +2649,13 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: User
+      x-apidog-folder: user
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10734290-run
   /auth/token/info:
     get:
       summary: JWTの内容を返してくれる
@@ -1693,6 +2703,8 @@ paths:
                   isVerify:
                     type: boolean
                     description: ユーザ登録済みか
+                x-apidog-orders:
+                  - 01JA0KEG5Q307R5DQQZ7Q9J398
                 required:
                   - aud
                   - exp
@@ -1701,19 +2713,41 @@ paths:
                   - sub
                   - jti
                   - isVerify
+                x-apidog-refs:
+                  01JA0KEG5Q307R5DQQZ7Q9J398:
+                    $ref: '#/components/schemas/tokenClaim'
+                x-apidog-ignore-properties:
+                  - aud
+                  - exp
+                  - iat
+                  - iss
+                  - sub
+                  - jti
+                  - displayId
+                  - displayName
+                  - iconURL
+                  - isVerify
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -1723,18 +2757,26 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties:
                   code:
                     type: string
                   message:
                     type: string
                 required:
+                  - code
+                  - message
+                x-apidog-ignore-properties:
                   - code
                   - message
               examples:
@@ -1744,9 +2786,14 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: Auth
+      x-apidog-folder: auth
+      x-apidog-status: released
+      x-apidog-maintainer: haryoiro
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10726331-run
   /test:
     get:
       summary: OpenAPIテスト用
@@ -1781,13 +2828,26 @@ paths:
                     type: string
                     format: url
                     nullable: true
+                x-apidog-orders:
+                  - optInt
+                  - optNilInt
+                  - optNilBool
+                  - optBool
+                  - optUrl
+                  - optNilUrl
+                x-apidog-ignore-properties: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties: {}
               examples:
                 '1':
@@ -1796,12 +2856,17 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties: {}
               examples:
                 '1':
@@ -1810,8 +2875,12 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security: []
       x-ogen-operation-group: test
+      x-apidog-folder: test
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-10578533-run
   /test/dummy:
     post:
       summary: mudai
@@ -1829,13 +2898,20 @@ paths:
               schema:
                 type: object
                 properties: {}
+                x-apidog-ignore-properties: []
+                x-apidog-orders: []
           headers: {}
+          x-apidog-name: 成功
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM1RK7D7RYXBDWR8BAXC32: *ref_0
+                x-apidog-orders:
+                  - 01J8CM1RK7D7RYXBDWR8BAXC32
                 properties: {}
               examples:
                 '1':
@@ -1844,12 +2920,17 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ErrorResponse
         '500':
           description: ''
           content:
             application/json:
               schema:
                 type: object
+                x-apidog-refs:
+                  01J8CM2DXNYHW930NK1SESFPYM: *ref_0
+                x-apidog-orders:
+                  - 01J8CM2DXNYHW930NK1SESFPYM
                 properties: {}
               examples:
                 '1':
@@ -1858,8 +2939,12 @@ paths:
                     code: GENERAL-000
                     message: INTERNAL SERVER ERROR.
           headers: {}
+          x-apidog-name: ServerErrorResponse
       security: []
       x-ogen-operation-group: Test
+      x-apidog-folder: test
+      x-apidog-status: developing
+      x-run-in-apidog: https://app.apidog.com/web/project/674502/apis/api-11004488-run
 components:
   schemas:
     talkSession:
@@ -1871,18 +2956,14 @@ components:
         theme:
           type: string
           description: テーマ
-        owner: *ref_1
+        owner: *ref_2
         createdAt:
           type: string
           description: 作成日時
         scheduledEndTime:
           type: string
           description: 終了予定日時
-        location:
-          anyOf:
-            - *ref_6
-            - type: 'null'
-          description: 位置情報
+        location: *ref_9
         city:
           type: string
           description: 市区町村
@@ -1891,12 +2972,23 @@ components:
           type: string
           description: 都道府県
           nullable: true
+      x-apidog-orders:
+        - id
+        - theme
+        - owner
+        - createdAt
+        - scheduledEndTime
+        - location
+        - city
+        - prefecture
       required:
         - id
         - theme
         - owner
         - createdAt
         - scheduledEndTime
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     validationErrorItem:
       type: object
       properties:
@@ -1907,9 +2999,14 @@ components:
         message:
           type: string
           description: バリデーションエラーメッセージ
+      x-apidog-orders:
+        - field
+        - message
       required:
         - field
         - message
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     error:
       type: object
       properties:
@@ -1917,14 +3014,20 @@ components:
           type: string
         message:
           type: string
+      x-apidog-orders:
+        - code
+        - message
       required:
         - code
         - message
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     user:
       type: object
       properties:
         displayID:
           type: string
+          x-apidog-mock: '{{$string.uuid}}'
           pattern: ^[A-Za-z0-9]$
           examples:
             - userid
@@ -1932,12 +3035,19 @@ components:
           maxLength: 25
         displayName:
           type: string
+          x-apidog-mock: '{{$person.firstName}}'
         iconURL:
           type: string
           nullable: true
+      x-apidog-orders:
+        - displayID
+        - displayName
+        - iconURL
       required:
         - displayID
         - displayName
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     opinion:
       type: object
       properties:
@@ -1955,16 +3065,30 @@ components:
         parentID:
           type: string
           description: 親の意見ID。ルートならば無し
-        voteType: *ref_4
+        voteType: *ref_5
         pictureURL:
           type: string
           description: 画像が返る場合もある
         referenceURL:
           type: string
           description: 参考文献URL
+        postedAt:
+          type: string
+      x-apidog-orders:
+        - id
+        - title
+        - content
+        - parentID
+        - voteType
+        - pictureURL
+        - referenceURL
+        - postedAt
       required:
         - content
         - id
+        - postedAt
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     voteType:
       type: string
       description: 意見の3種のステータス
@@ -1972,8 +3096,23 @@ components:
         - agree
         - disagree
         - pass
-        - unvote
+      x-apidog-enum:
+        - name: ''
+          value: agree
+          description: 良さそう
+        - name: ''
+          value: disagree
+          description: 違うかも
+        - name: ''
+          value: pass
+          description: 保留
+      x-apidog:
+        enumDescriptions:
+          agree: ''
+          disagree: ''
+          pass: ''
       default: unvote
+      x-apidog-folder: ''
     location:
       type: object
       properties:
@@ -1983,9 +3122,11 @@ components:
         longitude:
           type: number
           description: 経度
-      required:
+      x-apidog-orders:
         - latitude
         - longitude
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     tokenClaim:
       type: object
       properties:
@@ -2019,6 +3160,17 @@ components:
         isVerify:
           type: boolean
           description: ユーザ登録済みか
+      x-apidog-orders:
+        - aud
+        - exp
+        - iat
+        - iss
+        - sub
+        - jti
+        - displayId
+        - displayName
+        - iconURL
+        - isVerify
       required:
         - aud
         - exp
@@ -2027,6 +3179,8 @@ components:
         - sub
         - jti
         - isVerify
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     offsetPagination:
       type: object
       properties:
@@ -2036,10 +3190,16 @@ components:
           type: integer
         limit:
           type: integer
+      x-apidog-orders:
+        - totalCount
+        - offset
+        - limit
       required:
         - totalCount
         - offset
         - limit
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     userDemographics:
       type: object
       properties:
@@ -2071,9 +3231,18 @@ components:
           type: string
           description: 都道府県
           nullable: true
+      x-apidog-orders:
+        - yearOfBirth
+        - occupation
+        - gender
+        - city
+        - householdSize
+        - prefecture
       required:
         - occupation
         - gender
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     userGroupPosition:
       type: object
       properties:
@@ -2095,6 +3264,15 @@ components:
         perimeterIndex:
           type: integer
           description: 境界ポイントのインデックス
+      x-apidog-orders:
+        - posX
+        - posY
+        - displayId
+        - displayName
+        - iconURL
+        - groupName
+        - groupId
+        - perimeterIndex
       required:
         - posX
         - posY
@@ -2102,6 +3280,8 @@ components:
         - groupName
         - displayName
         - groupId
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
     Report:
       type: object
       properties:
@@ -2110,9 +3290,60 @@ components:
         content:
           type: string
           description: レポート本文
+      x-apidog-orders:
+        - talkSessionID
+        - content
       required:
         - talkSessionID
         - content
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
+    conclusion:
+      type: object
+      properties:
+        user: *ref_2
+        content:
+          type: string
+          description: 結論本文
+      x-apidog-orders:
+        - user
+        - content
+      required:
+        - user
+        - content
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
+    actionItem:
+      type: object
+      properties:
+        ActionItemID:
+          type: string
+        Sequence:
+          type: integer
+        Content:
+          type: string
+        Status:
+          type: string
+        CreatedAt:
+          type: string
+        UpdatedAt:
+          type: string
+      x-apidog-orders:
+        - ActionItemID
+        - Sequence
+        - Content
+        - Status
+        - CreatedAt
+        - UpdatedAt
+      required:
+        - ActionItemID
+        - Sequence
+        - Content
+        - Status
+        - CreatedAt
+        - UpdatedAt
+      x-apidog-ignore-properties: []
+      x-apidog-folder: ''
   securitySchemes:
     apikey-header-SessionId:
       type: apiKey

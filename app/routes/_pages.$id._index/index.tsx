@@ -7,6 +7,7 @@ import { components } from "~/libs/api/openapi";
 import Graph from "./components/Graph";
 import { loader } from "./modules/loader";
 import { SessionRouteContext } from "../_pages.$id/types";
+import { JST } from "~/libs/date";
 
 export { loader };
 
@@ -15,27 +16,66 @@ type Card = {
   user: components["schemas"]["user"];
 };
 
+type TimelineItem = {
+  actionItem: components["schemas"]["actionItem"];
+}
+
 export default function Page() {
   const {
     data,
     opinions: allOpinions,
     report,
+    actionItems,
   } = useLoaderData<typeof loader>();
   const { session } = useOutletContext<SessionRouteContext>();
 
   const [groupID, setGroupID] = useState<number>(1000);
   const [opinions, setOpinions] = useState<Card[]>([]);
+  const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([
+    {
+      actionItem: {
+        ActionItemID: "1",
+        Sequence: 1,
+        Content: "議論開始",
+        CreatedAt: "2021-10-01T00:00:00Z",
+        UpdatedAt: "2021-10-01T00:00:00Z",
+        Status: "完了"
+      },
+    },
+    {
+      actionItem: {
+        ActionItemID: "1",
+        Sequence: 1,
+        Content: "議論開始",
+        CreatedAt: "2021-10-01T00:00:00Z",
+        UpdatedAt: "2021-10-01T00:00:00Z",
+        Status: "完了"
+      },
+    },
+  ]);
 
   useEffect(() => {
     if (groupID === 1000) {
       setOpinions(allOpinions?.opinions || []);
-      return;
+    } else {
+      const opinions = data?.groupOpinions.filter((opinion) => {
+        return opinion.groupId === groupID;
+      });
+      setOpinions(opinions?.[0]?.opinions || []);
     }
-    const opinions = data?.groupOpinions.filter((opinion) => {
-      return opinion.groupId === groupID;
-    });
-    setOpinions(opinions?.[0]?.opinions || []);
-  }, [data?.groupOpinions, groupID, allOpinions?.opinions]);
+
+    if (isFinished) {
+      const items = actionItems?.items.map((item) => {
+        return {
+          actionItem: item,
+        };
+      });
+      setTimelineItems(items || []);
+    }
+  }, [data?.groupOpinions, groupID, allOpinions?.opinions, actionItems?.items]);
+
+  // セッションが終了しているかどうかのフラグ
+  const isFinished = JST(session.scheduledEndTime).isBefore();
 
   // グループ３が一番意見多そうなので、グループ３の意見を取得
   // ついでにインデックス順にする
@@ -50,6 +90,8 @@ export default function Page() {
 
   return (
     <>
+
+      <Heading>意見グループ</Heading>
       <Graph
         polygons={positions}
         positions={data?.positions}
@@ -58,8 +100,19 @@ export default function Page() {
           setGroupID(id);
         }}
       />
+      {isFinished && timelineItems.length > 0 &&
+        <>
+          <Heading>タイムライン</Heading>
+          <div className="relative px-4">
+            <div className="h-full border-l py-1 border-opacity-20 border-secondary">
+              {timelineItems.map((item, i) => {
+                return <TimelineItem key={i} actionItem={item.actionItem} />;
+              })}
+            </div>
+          </div>
+        </>
+      }
       <Heading>レポート</Heading>
-
       <details className="prose-sm px-2">
         <summary className="pt-4">レポートを見る</summary>
         <ReactMarkdown className="pt-4">{report?.report}</ReactMarkdown>
@@ -110,5 +163,21 @@ export default function Page() {
         })}
       </div>
     </>
+  );
+}
+
+function TimelineItem({ actionItem }: TimelineItem) {
+  return (
+    <div className="flex items-center w-full my-6 -ml-2">
+      <div className="w-1/12 z-10">
+        <div className="w-3.5 h-3.5 bg-blue-600 rounded-full"></div>
+      </div>
+      <div className="flex w-full justify-between	">
+        <div className="">
+          {actionItem.Content}
+        </div>
+        <span>{actionItem.Status}</span>
+      </div>
+    </div>
   );
 }

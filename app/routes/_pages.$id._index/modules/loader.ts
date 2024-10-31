@@ -39,5 +39,15 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     },
   );
 
-  return defer({ data, opinions, report });
+  const { data: actionItems } = await api.GET("/talksessions/{talkSessionID}/timelines", {
+    headers: request.headers,
+    params: {
+      path: {
+        talkSessionID: params.id || "",
+      }
+    }
+  })
+
+
+  return defer({ data, opinions, report, actionItems });
 };
