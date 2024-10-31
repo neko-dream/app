@@ -2,6 +2,9 @@
 import "@pixi/events";
 import { Stage, Graphics, Sprite } from "@pixi/react";
 import { Fragment, useCallback } from "react";
+import * as PIXI from "pixi.js";
+
+const colorList = [0xff453a, 0xffd60a, 0xbf5af2, 0x30d158];
 
 const Axes = ({
   width,
@@ -58,7 +61,7 @@ const DotPlot = ({
     points: any,
     colorIdx: any,
   ) => {
-    const colorList = [0xff453a, 0xffd60a, 0xbf5af2, 0x30d158];
+    // const colorList = [0xff453a, 0xffd60a, 0xbf5af2, 0x30d158];
 
     g.beginFill(colorList[colorIdx], 0.3); // 色と透明度
     g.drawPolygon(points);
@@ -113,16 +116,19 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
   );
 
   const drawCircleMask = useCallback(
-    (g: {
-      clear: () => void;
-      beginFill: (arg0: number) => void;
-      drawCircle: (arg0: number, arg1: number, arg2: number) => void;
-      endFill: () => void;
-    }) => {
+    (
+      g: {
+        clear: () => void;
+        beginFill: (arg0: number) => void;
+        drawCircle: (arg0: number, arg1: number, arg2: number) => void;
+        endFill: () => void;
+      },
+      color: number = 0x64748b,
+      radius: number = 11,
+    ) => {
       g.clear();
-      // g.beginFill(0xffffff);
-      g.beginFill(0x64748b);
-      g.drawCircle(0, 0, 10);
+      g.beginFill(color);
+      g.drawCircle(0, 0, radius);
       g.endFill();
     },
     [],
@@ -161,7 +167,9 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
         y={y}
         zIndex={zIndex}
         // ref={ref}
-        draw={drawCircleMask}
+        draw={(graphics) =>
+          drawCircleMask(graphics, colorList[colorIdx], 11 * radiusRate)
+        }
         // ref={(ref) => setMask([...masks, ref])}
       ></Graphics>,
       zIndex + 10,
@@ -264,7 +272,8 @@ const Dots = ({ positions, myPosition, selectGroupId }: Props) => {
         let radius: number = 1; // 5
         let myPositionFlag = false;
         if (myPosition?.displayId === v?.displayId && !isUsedMyPosition) {
-          radius = 0.07; // 10 // 自分の位置の画像のサイズを変更する(倍率)
+          // radius = 0.07; // 10 // 自分の位置の画像のサイズを変更する(倍率)
+          radius = 1.5;
           isUsedMyPosition = true;
           myPositionFlag = true;
           myPositionData["x"] =
