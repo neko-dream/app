@@ -2,7 +2,6 @@
 import "@pixi/events";
 import { Stage, Graphics, Sprite } from "@pixi/react";
 import { Fragment, useCallback } from "react";
-import * as PIXI from "pixi.js";
 
 const colorList = [0xff453a, 0xffd60a, 0xbf5af2, 0x30d158];
 
