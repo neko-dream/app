@@ -11,7 +11,8 @@ export const useCreateUserForm = () => {
   return useCustomForm({
     schema: signupFormSchema,
     onSubmit: async ({ value }) => {
-      const compressIcon = value.icon && fileCompress(value.icon);
+      const compressIcon =
+        value.icon && value.icon?.size !== 0 && fileCompress(value.icon);
 
       const { error } = await api.POST("/user", {
         credentials: "include",

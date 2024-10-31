@@ -42,7 +42,7 @@ export const useCustomForm = <T extends U>({
 
   const [form, fields] = useForm({
     defaultValue,
-    onSubmit: async (e) => {
+    onSubmit: async (e, { submission }) => {
       e.preventDefault();
 
       if (loading) {
@@ -50,15 +50,8 @@ export const useCustomForm = <T extends U>({
       }
       setLoading(true);
 
-      const parse = v.safeParse(schema, form.value);
-
-      if (parse.issues) {
-        console.error(parse.issues);
-        return toast.error("入力内容に誤りがあります");
-      }
-
       try {
-        await onSubmit({ e, value: deleteDashValues(parse.output) });
+        await onSubmit({ e, value: deleteDashValues(submission?.payload) });
       } catch (e) {
         console.error(e);
         toast.error("エラーが発生しました");

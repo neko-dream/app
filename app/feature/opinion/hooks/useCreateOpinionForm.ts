@@ -18,7 +18,10 @@ export const useCreateOpinionsForm = ({
   return useCustomForm({
     schema: createOpinionFormSchema,
     onSubmit: async ({ value }) => {
-      const compressedPicture = value.picture && fileCompress(value.picture);
+      const compressedPicture =
+        value.picture &&
+        value.picture?.size !== 0 &&
+        fileCompress(value.picture);
 
       const { data, error } = await api.POST(
         "/talksessions/{talkSessionID}/opinions",

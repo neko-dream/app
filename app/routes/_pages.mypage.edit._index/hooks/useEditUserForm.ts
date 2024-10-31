@@ -21,7 +21,8 @@ export const useEditUserForm = ({ user }: Props) => {
       icon: undefined,
     } as never,
     onSubmit: async ({ value }) => {
-      const compressIcon = value.icon && fileCompress(value.icon);
+      const compressIcon =
+        value.icon && value.icon?.size !== 0 && fileCompress(value.icon);
 
       const { error } = await api.PUT("/user", {
         credentials: "include",
