@@ -53,11 +53,11 @@ export default function CardSwiper(props: Props) {
                 display: disagreeDisplay,
                 opacity,
               }}
-              className="absolute h-full w-full rounded"
+              className="absolute z-10 h-full w-full rounded"
             />
             <animated.p
               style={{ display: disagreeDisplay }}
-              className="absolute w-full select-none p-4 text-end text-2xl font-bold text-white"
+              className="absolute z-10 w-full select-none p-4 text-end text-2xl font-bold text-white"
             >
               違うかも
             </animated.p>
@@ -68,11 +68,11 @@ export default function CardSwiper(props: Props) {
                 display: agreeDisplay,
                 opacity,
               }}
-              className="absolute h-full w-full rounded"
+              className="absolute z-10 h-full w-full rounded"
             />
             <animated.p
               style={{ display: agreeDisplay }}
-              className="absolute w-full select-none p-4 text-2xl font-bold text-white"
+              className="absolute z-10 w-full select-none p-4 text-2xl font-bold text-white"
             >
               いいかも
             </animated.p>
