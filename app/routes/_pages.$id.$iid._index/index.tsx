@@ -1,6 +1,7 @@
 import { getFormProps, getInputProps } from "@conform-to/react";
 import {
   Form,
+  Link,
   useLoaderData,
   useOutletContext,
   useRevalidator,
@@ -68,18 +69,23 @@ export default function Page() {
         }}
       >
         {parentOpinion && (
-          <Card
-            title={parentOpinion.rootOpinion.opinion.title}
-            description={parentOpinion.rootOpinion.opinion.content}
-            user={{
-              displayID: "",
-              displayName: parentOpinion.rootOpinion.user.displayName,
-              iconURL: parentOpinion.rootOpinion.user.iconURL,
-            }}
-            opinionStatus={parentOpinion.rootOpinion.opinion.voteType}
-            className="w-full bg-white"
-            isOpnionLink={`/${session.id}/${parentOpinion.rootOpinion.opinion.id}`}
-          />
+          <Link
+            to={`/${session.id}/${parentOpinion.rootOpinion.opinion.id}`}
+            className="mt-2 block"
+          >
+            <Card
+              title={parentOpinion.rootOpinion.opinion.title}
+              description={parentOpinion.rootOpinion.opinion.content}
+              user={{
+                displayID: "",
+                displayName: parentOpinion.rootOpinion.user.displayName,
+                iconURL: parentOpinion.rootOpinion.user.iconURL,
+              }}
+              opinionStatus={parentOpinion.rootOpinion.opinion.voteType}
+              className="w-full bg-white"
+              isOpnionLink={`/${session.id}/${parentOpinion.rootOpinion.opinion.id}`}
+            />
+          </Link>
         )}
       </Card>
 

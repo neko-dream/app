@@ -89,7 +89,7 @@ function Card(
       <RpleyLink to={isOpnionLink} />
 
       {isJegde && (
-        <div className="mt-2 flex justify-between">
+        <div className="mt-4 flex justify-between">
           <Button
             className="h-8 w-24 p-1"
             variation={myVoteType === "disagree" ? "disagree" : "disabled"}
