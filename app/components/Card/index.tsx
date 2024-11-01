@@ -134,6 +134,7 @@ function Card(
             className="h-8 w-24 p-1"
             variation={myVoteType === "disagree" ? "disagree" : "disabled"}
             onClick={() => onClickVoteButton?.("disagree")}
+            outline={myVoteType !== "disagree"}
           >
             違うかも
           </Button>
@@ -141,6 +142,7 @@ function Card(
             className="h-8 w-24 p-1"
             variation={myVoteType === "pass" ? "pass" : "disabled"}
             onClick={() => onClickVoteButton?.("pass")}
+            outline={myVoteType !== "pass"}
           >
             保留
           </Button>
@@ -148,6 +150,7 @@ function Card(
             className="h-8 w-24 p-1"
             variation={myVoteType === "agree" ? "agree" : "disabled"}
             onClick={() => onClickVoteButton?.("agree")}
+            outline={myVoteType !== "agree"}
           >
             良さそう
           </Button>
