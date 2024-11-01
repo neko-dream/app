@@ -80,10 +80,11 @@ function Card(
     event.stopPropagation();
     event.preventDefault();
     setIsTooltipOpen(!isTooltipOpen);
-    console.log("Button clicked");
   };
 
-  const handleCloseButton = () => {
+  const handleCloseButton = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    event.preventDefault();
     toast.success("通報しました");
     setIsTooltipOpen(false);
   };
@@ -120,7 +121,7 @@ function Card(
 
       {isTooltipOpen && (
         <div className="absolute right-12 top-3 rounded border border-gray-500 bg-white p-2">
-          <button onClick={() => handleCloseButton()}>通報する</button>
+          <button onClick={handleCloseButton}>通報する</button>
         </div>
       )}
 
