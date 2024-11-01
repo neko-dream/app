@@ -122,24 +122,26 @@ export default function Page() {
 
       {opinions.map(({ opinion, user: opinionUser, myVoteType }, i) => {
         return (
-          <Card
-            key={i}
-            title={opinion.title}
-            description={opinion.content}
-            user={{
-              displayID: "",
-              displayName: opinionUser.displayName,
-              iconURL: opinionUser.iconURL,
-            }}
-            opinionStatus={opinion.voteType!}
-            className="mt-2 h-full w-full select-none bg-white"
-            isOpnionLink={`/${session.id}/${opinion.id}`}
-            isJegde={opinionUser.displayID !== user?.displayId}
-            myVoteType={myVoteType}
-            onClickVoteButton={(voteStatus) => {
-              handleSubmitVote(opinion.id, voteStatus);
-            }}
-          />
+          <Link to={`/${session.id}/${opinion.id}`} key={i}>
+            <Card
+              key={i}
+              title={opinion.title}
+              description={opinion.content}
+              user={{
+                displayID: "",
+                displayName: opinionUser.displayName,
+                iconURL: opinionUser.iconURL,
+              }}
+              opinionStatus={opinion.voteType!}
+              className="mt-2 h-full w-full select-none bg-white"
+              isOpnionLink={`/${session.id}/${opinion.id}`}
+              isJegde={opinionUser.displayID !== user?.displayId}
+              myVoteType={myVoteType}
+              onClickVoteButton={(voteStatus) => {
+                handleSubmitVote(opinion.id, voteStatus);
+              }}
+            />
+          </Link>
         );
       })}
     </div>
