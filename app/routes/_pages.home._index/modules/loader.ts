@@ -45,6 +45,23 @@ const setTheme = (requestURL: string) => {
   return undefined;
 };
 
+const setGeoLocation = (requestURL: string) => {
+  try {
+    const lat = new URL(requestURL).searchParams.get("lat");
+    const lng = new URL(requestURL).searchParams.get("lng");
+    if (lat && lng) {
+      return {
+        lat: Number(lat),
+        lng: Number(lng),
+      };
+    }
+  } catch {
+    return;
+  }
+
+  return undefined;
+};
+
 export const loader = ({ request }: LoaderFunctionArgs) => {
   const $session = api
     .GET("/talksessions", {
@@ -54,6 +71,8 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
           status: setStatus(request.url),
           sortKey: setSortKey(request.url),
           theme: setTheme(request.url),
+          latitude: setGeoLocation(request.url)?.lat,
+          longitude: setGeoLocation(request.url)?.lng,
         },
       },
     })

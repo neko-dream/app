@@ -5,6 +5,8 @@ import { tv } from "tailwind-variants";
 import SearchWhiteIcon from "~/assets/search-white.svg";
 import Input from "~/components/Input";
 import { useOpenModalAnimation } from "../../animation/useOpenModalAnimation";
+import { RiMapPin5Fill } from "react-icons/ri";
+import { toast } from "react-toastify";
 
 type Props = {
   open: boolean;
@@ -27,6 +29,23 @@ export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
     const query = encodeURIComponent(inputRef.current?.value || "");
     navigate(`/home?q=${query}`);
     handleCloseModal();
+  };
+
+  const handleSearchNearSession = () => {
+    const success = (pos: GeolocationPosition) => {
+      navigate(`/home?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}`);
+      handleCloseModal();
+    };
+
+    const error = (e: unknown) => {
+      toast.error("位置情報の取得に失敗しました");
+      console.error(e);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+    });
   };
 
   return transition((style, item) => {
@@ -57,6 +76,12 @@ export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
                   loading="lazy"
                   className="fill-white"
                 />
+              </button>
+              <button
+                onClick={handleSearchNearSession}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-blue-500 hover:opacity-80"
+              >
+                <RiMapPin5Fill color="white" size={22} />
               </button>
             </div>
             <Link
