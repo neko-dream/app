@@ -7,6 +7,7 @@ import { loader } from "./modules/loader";
 import { SessionRouteContext } from "./types";
 import { OpinionModal } from "~/feature/opinion/components/OpinionModal";
 import { SessionDetialModal } from "./components/SessionDetialModal";
+import { JST } from "~/libs/date";
 
 const regexSwipe = /^\/[^/]+\/swipe$/;
 const regexReply = /^\/[^/]+\/(?!swipe$)[^/]+$/;
@@ -16,7 +17,7 @@ export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
 
 export default function Route() {
-  const { session } = useLoaderData<typeof loader>();
+  const { session, isOwner } = useLoaderData<typeof loader>();
   const [isOpen, setIsOpen] = useState(false);
   const [isSessionDetailOpen, setIsSessionDetailOpen] = useState(false);
   const pathname = useLocation().pathname;
@@ -24,15 +25,17 @@ export default function Route() {
   const isReplyPage = regexReply.test(pathname);
   const isHomePage = regexHome.test(pathname);
 
+  const isFinished = JST(session.scheduledEndTime).isBefore();
+
   return (
     <div className="flex flex-1 flex-col">
       <div className="relative">
-        <div className="mt-8 flex h-[112px] shrink-0 flex-col p-3 pl-4">
+        <div className="mt-8 flex shrink-0 flex-col p-3 pl-4">
           <p className="text-sm text-[#6d6c6a]">テーマ</p>
           <p className="line-clamp-1">{session.theme}</p>
           <div className="mt-2 flex items-center space-x-2">
             <Avator src={session.owner.iconURL} className="h-6 w-6" />
-            <p className="text-sm text-[#6d6c6a]">
+            <p className="line-clamp-1 w-48 text-sm text-[#6d6c6a]">
               {session.owner.displayName}
             </p>
           </div>
@@ -58,7 +61,7 @@ export default function Route() {
           </Link>
         )}
 
-        {isHomePage && (
+        {!isFinished && isHomePage && (
           <Link
             to={`/${session.id}/swipe`}
             className="absolute left-2 top-2 text-blue-500 underline"
@@ -68,12 +71,22 @@ export default function Route() {
           </Link>
         )}
 
+        {isHomePage && isOwner && (
+          <Link
+            to={`/${session.id}/conclusion`}
+            className="absolute right-2 top-2 text-blue-500 underline"
+            onClick={() => setIsOpen(false)}
+          >
+            結論を投稿する {"->"}
+          </Link>
+        )}
+
         <button
           onClick={() => {
             setIsOpen(false);
             setIsSessionDetailOpen(true);
           }}
-          className="absolute bottom-4 right-16 flex items-center space-x-1 rounded-full border border-gray-600 px-2 py-1"
+          className="absolute bottom-2 right-16 flex items-center space-x-1 rounded-full border border-gray-600 px-2 py-1"
         >
           詳細
         </button>
@@ -83,7 +96,7 @@ export default function Route() {
             setIsOpen(true);
             setIsSessionDetailOpen(false);
           }}
-          className="absolute bottom-4 right-4 flex items-center space-x-1 rounded-full border border-gray-600 p-1 text-blue-500"
+          className="absolute bottom-2 right-4 flex items-center space-x-1 rounded-full border border-gray-600 p-1 text-blue-500"
         >
           <RiChat1Line className="text-black" size={24} />
         </button>

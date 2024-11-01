@@ -132,6 +132,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/talksessions/{talkSessionID}/timelines/{actionItemID}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** タイムライン編集 */
+        put: operations["editTimeLine"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/talksessions/{talkSessionId}/report": {
         parameters: {
             query?: never;
@@ -1088,6 +1105,53 @@ export interface operations {
                         code: string;
                         message: string;
                     };
+                };
+            };
+        };
+    };
+    editTimeLine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                talkSessionID: string;
+                actionItemID: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** @example  */
+                    content?: string | null;
+                    /** @example  */
+                    status?: string | null;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["actionItem"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
                 };
             };
         };

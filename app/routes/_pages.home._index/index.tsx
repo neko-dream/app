@@ -43,7 +43,11 @@ export default function Page() {
               <div className="space-y-2 bg-gray-100 pt-2">
                 {data?.talkSessions.map((session, i) => (
                   <Link
-                    to={`/${session.talkSession.id}/swipe`}
+                    to={
+                      isFinished
+                        ? `/${session.talkSession.id}`
+                        : `/${session.talkSession.id}/swipe`
+                    }
                     className="block"
                     key={i}
                   >

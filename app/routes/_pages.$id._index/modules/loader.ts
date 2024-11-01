@@ -11,6 +11,28 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     },
   });
 
+  const { data: timeline } = await api.GET(
+    "/talksessions/{talkSessionID}/timelines",
+    {
+      params: {
+        path: {
+          talkSessionID: params.id!,
+        },
+      },
+    },
+  );
+
+  const { data: conclusion } = await api.GET(
+    "/talksessions/{talkSessionID}/conclusion",
+    {
+      params: {
+        path: {
+          talkSessionID: params.id!,
+        },
+      },
+    },
+  );
+
   const { data: opinions } = await api.GET(
     "/talksessions/{talkSessionID}/opinions",
     {
@@ -39,5 +61,5 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     },
   );
 
-  return defer({ data, opinions, report });
+  return defer({ data, opinions, report, timeline, conclusion });
 };

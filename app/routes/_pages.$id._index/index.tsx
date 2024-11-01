@@ -7,6 +7,7 @@ import { components } from "~/libs/api/openapi";
 import Graph from "./components/Graph";
 import { loader } from "./modules/loader";
 import { SessionRouteContext } from "../_pages.$id/types";
+import { JST } from "~/libs/date";
 
 export { loader };
 
@@ -23,11 +24,15 @@ export default function Page() {
     data,
     opinions: allOpinions,
     report,
+    timeline,
+    conclusion,
   } = useLoaderData<typeof loader>();
   const { session } = useOutletContext<SessionRouteContext>();
 
   const [groupID, setGroupID] = useState<number>(1000);
   const [opinions, setOpinions] = useState<Card[]>([]);
+
+  const isFinished = JST(session.scheduledEndTime).isBefore();
 
   useEffect(() => {
     if (groupID === 1000) {
@@ -51,6 +56,10 @@ export default function Page() {
     })
     .sort((a, b) => (a.perimeterIndex || 0) - (b.perimeterIndex || 0));
 
+  const sortedTimeline = timeline?.items.sort(
+    (a, b) => a.Sequence - b.Sequence,
+  );
+
   return (
     <>
       <Graph
@@ -61,12 +70,32 @@ export default function Page() {
           setGroupID(id);
         }}
       />
-      <Heading>レポート</Heading>
+      <Heading>レポート & 結論</Heading>
 
       <details className="prose-sm px-2">
         <summary className="pt-4">レポートを見る</summary>
         <ReactMarkdown className="pt-4">{report?.report}</ReactMarkdown>
       </details>
+
+      {isFinished && (
+        <details className="px-2">
+          <summary className="pt-4">結論</summary>
+          <p className="text-xl">タイトル: {conclusion?.content}</p>
+          <div className="mt-4">
+            {sortedTimeline?.map((item, i) => {
+              return (
+                <div key={i} className="relative flex pb-6">
+                  <p className="w-14 shrink-0">{item.Status}</p>
+                  <p>{item.Content}</p>
+                  {sortedTimeline.length - 1 !== i && (
+                    <div className="absolute bottom-1 left-5 h-4 w-0.5 bg-slate-500" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </details>
+      )}
 
       <Heading className="mt-4">みんなの意見</Heading>
       <div className="flex items-center">

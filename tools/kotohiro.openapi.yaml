@@ -674,7 +674,7 @@ paths:
                       required:
                         - talkSession
                         - opinionCount
-                  pagination: &ref_6
+                  pagination: &ref_7
                     $ref: '#/components/schemas/offsetPagination'
                 required:
                   - talkSessions
@@ -800,7 +800,7 @@ paths:
                   scheduledEndTime:
                     type: string
                     description: 終了予定日時
-                  location: &ref_7
+                  location: &ref_8
                     description: 位置情報
                     $ref: '#/components/schemas/location'
                   city:
@@ -950,6 +950,79 @@ paths:
           headers: {}
       security: []
       x-ogen-operation-group: TalkSession
+  /talksessions/{talkSessionID}/timelines/{actionItemID}:
+    put:
+      summary: タイムライン編集
+      deprecated: false
+      description: ''
+      operationId: editTimeLine
+      tags:
+        - timeline
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: actionItemID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  example: ''
+                  nullable: true
+                status:
+                  type: string
+                  example: ''
+                  nullable: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema: &ref_6
+                $ref: '#/components/schemas/actionItem'
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: Timeline
   /talksessions/{talkSessionId}/report:
     get:
       summary: セッションレポートを返す
@@ -1351,8 +1424,7 @@ paths:
                 properties:
                   items:
                     type: array
-                    items:
-                      $ref: '#/components/schemas/actionItem'
+                    items: *ref_6
                 required:
                   - items
           headers: {}
@@ -2051,7 +2123,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  pagination: *ref_6
+                  pagination: *ref_7
                   talkSessions:
                     type: array
                     items:
@@ -2334,7 +2406,7 @@ components:
         scheduledEndTime:
           type: string
           description: 終了予定日時
-        location: *ref_7
+        location: *ref_8
         city:
           type: string
           description: 市区町村

@@ -12,9 +12,16 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     },
   });
 
+  const { data: user } = await api.GET("/auth/token/info", {
+    headers: request.headers,
+  });
+
   if (!session) {
     throw notfound();
   }
 
-  return json({ session });
+  return json({
+    session,
+    isOwner: user?.displayId === session.owner.displayID,
+  });
 };
