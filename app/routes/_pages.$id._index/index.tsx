@@ -13,6 +13,9 @@ export { loader };
 type Card = {
   opinion: components["schemas"]["opinion"];
   user: components["schemas"]["user"];
+  agreeCount?: number;
+  disagreeCount?: number;
+  passCount?: number;
 };
 
 export default function Page() {
@@ -88,6 +91,31 @@ export default function Page() {
       </div>
       <div className="mx-4 mb-16 space-y-4">
         {opinions.map((opinion, i) => {
+          const total = [
+            opinion.agreeCount || 0,
+            opinion.disagreeCount || 0,
+            opinion.passCount || 0,
+          ].reduce((acc, cur) => acc + cur, 0);
+          const sortedOpinion = [
+            {
+              key: "agree",
+              count: opinion.agreeCount || 0,
+            },
+            {
+              key: "disagree",
+              count: opinion.disagreeCount || 0,
+            },
+            {
+              key: "pass",
+              count: opinion.passCount || 0,
+            },
+          ].sort((a, b) => {
+            return a.count - b.count;
+          });
+
+          const lastItem = sortedOpinion[sortedOpinion.length - 1];
+          const parcent = lastItem && (lastItem?.count / total) * 100;
+
           return (
             <Link
               key={i}
@@ -95,6 +123,10 @@ export default function Page() {
               className="block"
             >
               <Card
+                percentage={{
+                  key: lastItem?.key,
+                  value: parcent || 0,
+                }}
                 title={opinion.opinion.title || ""}
                 description={opinion.opinion.content || ""}
                 user={{

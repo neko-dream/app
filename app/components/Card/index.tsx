@@ -13,10 +13,15 @@ import Avator from "../Avator";
 import Badge from "../Badge";
 import Button from "../Button";
 import { toast } from "react-toastify";
+import { OpinionJpMap } from "~/feature/opinion/constants";
 
 type Props = Card & ComponentProps<"div">;
 
 type Card = {
+  percentage?: {
+    key: string;
+    value: number;
+  };
   description: string;
   children?: ReactNode;
   opinionStatus?: OpinionType;
@@ -29,10 +34,34 @@ type Card = {
 
 const card = tv({
   base: "relative rounded-md border border-solid border-black p-4",
+  variants: {
+    isView: {
+      true: "pt-10",
+    },
+  },
+});
+
+const percentageUI = tv({
+  base: "absolute left-1/2 top-3 -translate-x-1/2 whitespace-nowrap text-xs underline",
+  variants: {
+    agree: { true: "text-blue-500" },
+    disagree: { true: "text-red-500" },
+    pass: { true: "text-gray-500" },
+  },
+});
+
+const kebab = tv({
+  base: "absolute right-4 top-6 z-10",
+  variants: {
+    isView: {
+      true: "top-12",
+    },
+  },
 });
 
 function Card(
   {
+    percentage,
     user,
     description,
     opinionStatus,
@@ -59,8 +88,22 @@ function Card(
     setIsTooltipOpen(false);
   };
 
+  const isView = !isNaN(percentage?.value || NaN);
+
   return (
-    <div {...props} ref={ref} className={card({ class: className })}>
+    <div {...props} ref={ref} className={card({ class: className, isView })}>
+      {isView && (
+        <p
+          className={percentageUI({
+            agree: percentage?.key === "agree",
+            disagree: percentage?.key === "disagree",
+            pass: percentage?.key === "pass",
+          })}
+        >
+          {percentage?.value}%の人がこの意見に「
+          {OpinionJpMap[percentage?.key as never]}」しました
+        </p>
+      )}
       <div className="flex items-center">
         <Avator src={user.iconURL} className="" />
         <p className="ml-2 mr-auto text-xs text-[#6d6c6a]">
@@ -71,10 +114,7 @@ function Card(
 
       <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
 
-      <button
-        className="absolute right-4 top-6 z-10"
-        onClick={handleButtonClick}
-      >
+      <button className={kebab({ isView })} onClick={handleButtonClick}>
         <RiMore2Fill size={24} />
       </button>
 
