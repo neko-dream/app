@@ -26,4 +26,5 @@ jobs:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          FUNCTIONS_URL: ${{ secrets.FUNCTIONS_URL }}
         run: bun run deploy
