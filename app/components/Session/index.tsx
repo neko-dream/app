@@ -12,9 +12,9 @@ export default function Session({ talkSession, opinionCount }: Props) {
   const isFinished = JST(talkSession.scheduledEndTime).isBefore();
 
   return (
-    <div className="h-[156px] border-b border-gray-400 bg-white p-4">
+    <div className="border-b border-gray-400 bg-white p-4">
       <p className="text-xs text-gray-500">テーマ</p>
-      <p className="mt-1 text-[14px]">{talkSession.theme}</p>
+      <p className="mt-1 line-clamp-1 text-[14px]">{talkSession.theme}</p>
       <div className="mt-1 flex items-center space-x-2">
         <Avator
           src={talkSession.owner.iconURL || undefined}
@@ -22,12 +22,15 @@ export default function Session({ talkSession, opinionCount }: Props) {
         />
         <p className="text-xs text-gray-500">{talkSession.owner.displayName}</p>
       </div>
+
+      <p className="mt-2 line-clamp-3">{talkSession.description}</p>
+
       {isFinished ? (
-        <p className="mt-4 inline-block whitespace-nowrap rounded-full bg-gray-500 px-2 py-1 text-xs text-white">
+        <p className="mt-2 inline-block whitespace-nowrap rounded-full bg-gray-500 px-2 py-1 text-xs text-white">
           終了
         </p>
       ) : (
-        <p className="mt-4 inline-block whitespace-nowrap rounded-full bg-blue-500 px-2 py-1 text-xs text-white">
+        <p className="mt-2 inline-block whitespace-nowrap rounded-full bg-blue-500 px-2 py-1 text-xs text-white">
           {JST(talkSession.scheduledEndTime).format("MM/DD(ddd)まで")}
         </p>
       )}

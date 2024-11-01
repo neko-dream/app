@@ -6,6 +6,7 @@ import Heading from "~/components/Heading";
 import { loader } from "./modules/loader";
 import { SessionRouteContext } from "./types";
 import { OpinionModal } from "~/feature/opinion/components/OpinionModal";
+import { SessionDetialModal } from "./components/SessionDetialModal";
 
 const regexSwipe = /^\/[^/]+\/swipe$/;
 const regexReply = /^\/[^/]+\/(?!swipe$)[^/]+$/;
@@ -17,6 +18,7 @@ export { loader };
 export default function Route() {
   const { session } = useLoaderData<typeof loader>();
   const [isOpen, setIsOpen] = useState(false);
+  const [isSessionDetailOpen, setIsSessionDetailOpen] = useState(false);
   const pathname = useLocation().pathname;
   const isSwipePage = regexSwipe.test(pathname);
   const isReplyPage = regexReply.test(pathname);
@@ -27,8 +29,8 @@ export default function Route() {
       <div className="relative">
         <div className="mt-8 flex h-[112px] shrink-0 flex-col p-3 pl-4">
           <p className="text-sm text-[#6d6c6a]">テーマ</p>
-          <p>{session.theme}</p>
-          <div className="flex items-center space-x-1">
+          <p className="line-clamp-1">{session.theme}</p>
+          <div className="mt-2 flex items-center space-x-2">
             <Avator src={session.owner.iconURL} className="h-6 w-6" />
             <p className="text-sm text-[#6d6c6a]">
               {session.owner.displayName}
@@ -67,7 +69,20 @@ export default function Route() {
         )}
 
         <button
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            setIsOpen(false);
+            setIsSessionDetailOpen(true);
+          }}
+          className="absolute bottom-4 right-16 flex items-center space-x-1 rounded-full border border-gray-600 px-2 py-1"
+        >
+          詳細
+        </button>
+
+        <button
+          onClick={() => {
+            setIsOpen(true);
+            setIsSessionDetailOpen(false);
+          }}
           className="absolute bottom-4 right-4 flex items-center space-x-1 rounded-full border border-gray-600 p-1 text-blue-500"
         >
           <RiChat1Line className="text-black" size={24} />
@@ -76,6 +91,16 @@ export default function Route() {
       <Heading>みんなの意見、どう思う？</Heading>
 
       <Outlet context={{ session } satisfies SessionRouteContext} />
+
+      <SessionDetialModal
+        open={isSessionDetailOpen}
+        onClose={() => {
+          setTimeout(() => {
+            setIsSessionDetailOpen(false);
+          }, 500);
+        }}
+        session={session}
+      />
 
       <OpinionModal
         talkSessionID={session.id}

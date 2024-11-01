@@ -7,6 +7,7 @@ tags:
   - name: vote
   - name: opinion
   - name: talk_session
+  - name: timeline
   - name: user
   - name: auth
   - name: test
@@ -315,11 +316,6 @@ paths:
               - latest
               - mostReply
               - oldest
-            x-apidog:
-              enumDescriptions:
-                latest: ''
-                mostReply: ''
-                oldest: ''
             nullable: true
         - name: limit
           in: query
@@ -500,6 +496,97 @@ paths:
           headers: {}
       security: []
       x-ogen-operation-group: TalkSession
+    put:
+      summary: セッション編集
+      deprecated: false
+      description: ''
+      operationId: editTalkSession
+      tags:
+        - talk_session
+      parameters:
+        - name: talkSessionId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                theme:
+                  example: ''
+                  type: string
+                scheduledEndTime:
+                  example: ''
+                  type: string
+                latitude:
+                  type: number
+                  description: 緯度
+                  example: 0
+                  nullable: true
+                longitude:
+                  type: number
+                  description: 経度
+                  example: 0
+                prefecture:
+                  type: string
+                  description: 都道府県
+                  example: ''
+                  nullable: true
+                city:
+                  type: string
+                  description: 市区町村
+                  example: ''
+                  nullable: true
+                description:
+                  type: string
+                  description: 説明文
+                  example: ''
+                  nullable: true
+              required:
+                - theme
+                - scheduledEndTime
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema: *ref_2
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: TalkSession
   /talksessions:
     get:
       summary: セッション一覧
@@ -542,13 +629,6 @@ paths:
               - open
               - finished
             default: open
-            x-apidog-enum:
-              - name: ''
-                value: open
-                description: 開催中
-              - name: ''
-                value: finished
-                description: 終了済み
             nullable: true
         - name: sortKey
           in: query
@@ -560,11 +640,21 @@ paths:
               - latest
               - oldest
               - mostReplies
-            x-apidog:
-              enumDescriptions:
-                latest: ''
-                oldest: ''
-                mostReplies: ''
+              - nearest
+        - name: latitude
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: number
+            nullable: true
+        - name: longitude
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: number
+            nullable: true
       responses:
         '200':
           description: ''
@@ -584,7 +674,7 @@ paths:
                       required:
                         - talkSession
                         - opinionCount
-                  pagination: &ref_5
+                  pagination: &ref_6
                     $ref: '#/components/schemas/offsetPagination'
                 required:
                   - talkSessions
@@ -677,6 +767,11 @@ paths:
                   description: 都道府県
                   example: ''
                   nullable: true
+                description:
+                  type: string
+                  description: 説明文
+                  example: ''
+                  nullable: true
               required:
                 - theme
                 - scheduledEndTime
@@ -694,6 +789,10 @@ paths:
                   theme:
                     type: string
                     description: テーマ
+                  description:
+                    type: string
+                    description: 説明
+                    nullable: true
                   owner: *ref_1
                   createdAt:
                     type: string
@@ -701,12 +800,9 @@ paths:
                   scheduledEndTime:
                     type: string
                     description: 終了予定日時
-                  location:
-                    anyOf:
-                      - &ref_6
-                        $ref: '#/components/schemas/location'
-                      - type: 'null'
+                  location: &ref_7
                     description: 位置情報
+                    $ref: '#/components/schemas/location'
                   city:
                     type: string
                     description: 市区町村
@@ -936,7 +1032,6 @@ paths:
                     required:
                       - user
                       - opinion
-                      - myVoteType
                   opinions:
                     type: array
                     items:
@@ -944,10 +1039,7 @@ paths:
                       properties:
                         opinion: *ref_0
                         user: *ref_1
-                        myVoteType:
-                          anyOf:
-                            - *ref_4
-                            - type: 'null'
+                        myVoteType: *ref_4
                       required:
                         - opinion
                         - user
@@ -1114,6 +1206,280 @@ paths:
           headers: {}
       security: []
       x-ogen-operation-group: Opinion
+  /talksessions/{talkSessionID}/conclusion:
+    get:
+      summary: 結論取得
+      deprecated: false
+      description: ''
+      operationId: getConclusion
+      tags:
+        - talk_session
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema: &ref_5
+                $ref: '#/components/schemas/conclusion'
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: TalkSession
+    post:
+      summary: 結論投稿
+      deprecated: false
+      description: |-
+        結論（conclusion）はセッションが終了した後にセッっションの作成者が投稿できる文章。
+        セッションの流れやグループの分かれ方などに対するセッション作成者の感想やそれらの意見を受け、これからの方向性などを記入する。
+      operationId: postConclusion
+      tags:
+        - talk_session
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  minLength: 2
+                  description: 結論本文。2文字以上
+                  example: よかった！
+              required:
+                - content
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema: *ref_5
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: TalkSession
+  /talksessions/{talkSessionID}/timelines:
+    get:
+      summary: タイムライン取得
+      deprecated: false
+      description: タイムラインはセッション終了後にセッション作成者が設定できるその後の予定を知らせるもの
+      operationId: getTimeLine
+      tags:
+        - timeline
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/actionItem'
+                required:
+                  - items
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security: []
+      x-ogen-operation-group: Timeline
+  /talksessions/{talkSessionID}/timeline:
+    post:
+      summary: タイムラインアイテム追加
+      deprecated: false
+      description: ''
+      operationId: postTimeLineItem
+      tags:
+        - timeline
+      parameters:
+        - name: talkSessionID
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  example: ''
+                  type: string
+                status:
+                  example: ''
+                  type: string
+                parentActionItemID:
+                  type: string
+                  description: 親があるなら親のIDヲシテイ
+                  example: ''
+                  nullable: true
+              required:
+                - content
+                - status
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ActionItemID:
+                    type: string
+                  Sequence:
+                    type: integer
+                  Content:
+                    type: string
+                  Status:
+                    type: string
+                  CreatedAt:
+                    type: string
+                  UpdatedAt:
+                    type: string
+                required:
+                  - ActionItemID
+                  - Sequence
+                  - Content
+                  - Status
+                  - CreatedAt
+                  - UpdatedAt
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: Timeline
   /user:
     put:
       summary: ユーザー情報の変更
@@ -1449,6 +1815,101 @@ paths:
       security:
         - apikey-header-SessionId: []
       x-ogen-operation-group: user
+  /talksessions/opened:
+    get:
+      summary: 自分が開いたセッション一覧
+      deprecated: false
+      description: ''
+      operationId: getOpenedTalkSession
+      tags:
+        - talk_session
+      parameters:
+        - name: limit
+          in: query
+          description: ''
+          required: false
+          example: 0
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: ''
+          required: false
+          example: 0
+          schema:
+            type: integer
+        - name: theme
+          in: query
+          description: 'テーマ '
+          required: false
+          example: ''
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: ''
+          required: false
+          example: ''
+          schema:
+            type: string
+            enum:
+              - finished
+              - open
+            nullable: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  talkSessions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        talkSession: *ref_2
+                        opinionCount:
+                          type: integer
+                      required:
+                        - talkSession
+                        - opinionCount
+                required:
+                  - talkSessions
+          headers: {}
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '1':
+                  summary: internal
+                  value:
+                    code: GENERAL-000
+                    message: INTERNAL SERVER ERROR.
+          headers: {}
+      security:
+        - apikey-header-SessionId: []
+      x-ogen-operation-group: TalkSession
   /opinions/histories:
     get:
       summary: 今までに投稿した異見
@@ -1468,11 +1929,6 @@ paths:
               - latest
               - mostReply
               - oldest
-            x-apidog:
-              enumDescriptions:
-                latest: 最新
-                mostReply: もっともリプライされた
-                oldest: 最古
             nullable: true
         - name: limit
           in: query
@@ -1586,10 +2042,6 @@ paths:
             enum:
               - open
               - finished
-            x-apidog:
-              enumDescriptions:
-                open: ''
-                finished: ''
             nullable: true
       responses:
         '200':
@@ -1599,7 +2051,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  pagination: *ref_5
+                  pagination: *ref_6
                   talkSessions:
                     type: array
                     items:
@@ -1871,6 +2323,10 @@ components:
         theme:
           type: string
           description: テーマ
+        description:
+          type: string
+          description: 説明
+          nullable: true
         owner: *ref_1
         createdAt:
           type: string
@@ -1878,11 +2334,7 @@ components:
         scheduledEndTime:
           type: string
           description: 終了予定日時
-        location:
-          anyOf:
-            - *ref_6
-            - type: 'null'
-          description: 位置情報
+        location: *ref_7
         city:
           type: string
           description: 市区町村
@@ -1962,9 +2414,12 @@ components:
         referenceURL:
           type: string
           description: 参考文献URL
+        postedAt:
+          type: string
       required:
         - content
         - id
+        - postedAt
     voteType:
       type: string
       description: 意見の3種のステータス
@@ -1972,7 +2427,6 @@ components:
         - agree
         - disagree
         - pass
-        - unvote
       default: unvote
     location:
       type: object
@@ -1983,9 +2437,6 @@ components:
         longitude:
           type: number
           description: 経度
-      required:
-        - latitude
-        - longitude
     tokenClaim:
       type: object
       properties:
@@ -2113,6 +2564,38 @@ components:
       required:
         - talkSessionID
         - content
+    conclusion:
+      type: object
+      properties:
+        user: *ref_1
+        content:
+          type: string
+          description: 結論本文
+      required:
+        - user
+        - content
+    actionItem:
+      type: object
+      properties:
+        ActionItemID:
+          type: string
+        Sequence:
+          type: integer
+        Content:
+          type: string
+        Status:
+          type: string
+        CreatedAt:
+          type: string
+        UpdatedAt:
+          type: string
+      required:
+        - ActionItemID
+        - Sequence
+        - Content
+        - Status
+        - CreatedAt
+        - UpdatedAt
   securitySchemes:
     apikey-header-SessionId:
       type: apiKey
