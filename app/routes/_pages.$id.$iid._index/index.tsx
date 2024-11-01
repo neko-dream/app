@@ -43,6 +43,7 @@ export default function Page() {
 
     if (data) {
       toast.success("意思表明を行いました");
+      revalidate();
     }
     if (error) {
       toast.error(error.message);
@@ -59,7 +60,7 @@ export default function Page() {
           displayName: rootOpinion.user.displayName,
           iconURL: rootOpinion.user.iconURL || "",
         }}
-        opinionStatus={rootOpinion.opinion.voteType}
+        myVoteType={rootOpinion.myVoteType}
         className="w-full bg-white"
         isJegde={rootOpinion.user.displayID !== user?.displayId}
         onClickVoteButton={(voteStatus) => {
