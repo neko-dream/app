@@ -180,7 +180,7 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
       <Sprite
         image={
           iconURL
-            ? `/api/images?i=${iconURL}&width=120&height=120`
+            ? `${FUNCTIONS_URL}/?i=${iconURL}&width=120&height=120`
             : images[colorIdx]
         }
         x={x}

@@ -10,7 +10,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default ({ mode }: UserConfig) => {
   process.env = { ...process.env, ...loadEnv(mode || "", process.cwd()) };
 
-  if (!process.env.API_BASE_URL || !process.env.BASE_URL) {
+  if (
+    !process.env.API_BASE_URL ||
+    !process.env.BASE_URL ||
+    !process.env.FUNCTIONS_URL
+  ) {
     throw new Error("❌ 必要な環境変数が読み込めていません。");
   }
 
@@ -18,6 +22,7 @@ export default ({ mode }: UserConfig) => {
     define: {
       BASE_URL: `${JSON.stringify(process.env.BASE_URL)}`,
       API_BASE_URL: `${JSON.stringify(process.env.API_BASE_URL)}`,
+      FUNCTIONS_URL: `${JSON.stringify(process.env.FUNCTIONS_URL)}`,
     },
     server: {
       proxy: {},
