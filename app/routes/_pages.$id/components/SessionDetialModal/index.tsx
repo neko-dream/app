@@ -11,7 +11,7 @@ type Props = {
 };
 
 const modal = tv({
-  base: "absolute bottom-0 h-[calc(100dvh-200px)] w-[375px] touch-none will-change-transform",
+  base: "absolute bottom-0 h-[calc(100dvh-188px)] w-[375px] touch-none will-change-transform",
 });
 
 export const SessionDetialModal = ({ open, onClose, session }: Props) => {
