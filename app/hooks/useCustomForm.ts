@@ -23,6 +23,7 @@ type Props<T extends U> = {
   schema: T;
   onSubmit: ({ e, value }: OnSubmitProps<T>) => Promise<void>;
   defaultValue?: DefaultValue<v.InferOutput<T>>;
+  shouldValidate?: "onInput" | "onBlur";
 };
 
 /**
@@ -37,6 +38,7 @@ export const useCustomForm = <T extends U>({
   schema,
   onSubmit,
   defaultValue,
+  shouldValidate = "onInput",
 }: Props<T>) => {
   const [loading, setLoading] = useState(false);
 
@@ -62,7 +64,7 @@ export const useCustomForm = <T extends U>({
     onValidate: ({ formData }) => {
       return parseWithValibot(formData, { schema });
     },
-    shouldValidate: "onInput",
+    shouldValidate,
   });
 
   const isDisabled = handleDisabled(form.value, form.allErrors) || loading;

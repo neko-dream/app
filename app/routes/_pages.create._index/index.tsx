@@ -1,6 +1,6 @@
 import { getFormProps, getInputProps } from "@conform-to/react";
-import { Form, useFetcher } from "@remix-run/react";
-import { Suspense, useState, lazy, useCallback, useEffect } from "react";
+import { Form } from "@remix-run/react";
+import { Suspense, useState, lazy, useEffect, useRef } from "react";
 import Button from "~/components/Button";
 import Heading from "~/components/Heading";
 import Input from "~/components/Input";
@@ -9,10 +9,11 @@ import Textarea from "~/components/Textarea";
 import { isFieldsError } from "~/libs/form";
 import AdressInputs from "~/feature/form/components/AdressInputs";
 import { useCreateSessionForm } from "./hooks/useCreateSessionForm";
+import { LatLng, PrefectureCity } from "./types";
+import { normalize, reverse } from "./libs";
+import { defaultLagLng } from "./constants/defaultValue";
 
 const Map = lazy(() => import("./components/Map"));
-
-export { action } from "./modules/actions";
 
 /**
  * ====================================
@@ -22,110 +23,85 @@ export { action } from "./modules/actions";
  * ====================================
  */
 export default function Page() {
-  const fetcher = useFetcher();
+  const adressRef = useRef<PrefectureCity>();
+  const [lagLng, setLagLng] = useState<LatLng>();
+  const [zoom, setZoom] = useState(18);
   const [showLocationFields, setShowLocationFields] = useState(false);
 
   const { form, fields } = useCreateSessionForm();
 
-  const handlePositionChange = useCallback(
-    async (lat: number, lng: number) => {
-      form.update({
-        name: fields.latitude.name,
-        value: lat,
-      });
-      form.update({
-        name: fields.longitude.name,
-        value: lng,
-      });
-      fetcher.submit(
-        {
-          latitude: String(lat),
-          longitude: String(lng),
-          type: "reverseGeocoder",
-        },
-        { method: "post" },
-      );
-    },
-    [fetcher, fields.latitude.name, fields.longitude.name, form],
-  );
+  useEffect(() => {
+    form.update({
+      name: fields.latitude.name,
+      value: lagLng?.lat,
+    });
+    form.update({
+      name: fields.longitude.name,
+      value: lagLng?.lng,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lagLng]);
+
+  const handlePositionChange = async (lat: number, lng: number) => {
+    setLagLng({ lat, lng });
+    const prefectureCity = await reverse({ lat, lng });
+
+    if (prefectureCity) {
+      if (form.value?.city !== "---") {
+        form.update({
+          name: fields.city.name,
+          value: "---",
+        });
+      }
+      if (form.value?.prefecture !== "---") {
+        form.update({
+          name: fields.prefecture.name,
+          value: "---",
+        });
+      }
+    }
+  };
 
   useEffect(() => {
-    if (
-      fetcher.data &&
-      typeof fetcher.data === "object" &&
-      !("error" in fetcher.data)
-    ) {
-      const data = fetcher.data as { prefecture: string; city: string };
-      form.update({
-        name: fields.prefecture.name,
-        value: data.prefecture,
+    normalize({
+      prefecture: fields.prefecture.value || "",
+      city: fields.city.value || "",
+    }).then((data) => data && setLagLng(data));
+    adressRef.current = {
+      prefecture: fields.prefecture.value || "",
+      city: fields.city.value || "",
+    };
+  }, [fields.city.value, fields.prefecture.value]);
+
+  useEffect(() => {
+    const success = (pos: GeolocationPosition) => {
+      setLagLng({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
       });
-      form.update({
-        name: fields.city.name,
-        value: data.city,
-      });
-    }
-    if (
-      fetcher.data &&
-      typeof fetcher.data === "object" &&
-      !("error" in fetcher.data)
-    ) {
-      const data = fetcher.data as { lat: number; lng: number };
-      form.update({
-        name: fields.latitude.name,
-        value: data.lat,
-      });
-      form.update({
-        name: fields.longitude.name,
-        value: data.lng,
-      });
-    }
-  }, [fetcher.data]);
+    };
+
+    // 今は使わない
+    const error = () => {};
+
+    navigator.geolocation.getCurrentPosition(success, error, {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+    });
+  }, []);
 
   function LazyMap() {
     return (
       <Suspense fallback={<div>Loading map...</div>}>
         <Map
           onLatLngChange={handlePositionChange}
-          initialPosition={
-            fields.latitude.valid && fields.longitude.valid
-              ? {
-                  lat: Number(fields.latitude.value) || 35.6768927,
-                  lng: Number(fields.longitude.value) || 139.752275,
-                }
-              : undefined
-          }
+          position={lagLng ?? defaultLagLng}
+          onZoom={setZoom}
+          zoom={zoom}
         />
       </Suspense>
     );
   }
-
-  useEffect(() => {
-    if (fields.prefecture.value !== "---") {
-      fetcher.submit(
-        {
-          prefecture: fields.prefecture.value || "",
-          city: "",
-          type: "normalizeGeocoder",
-        },
-        { method: "post" },
-      );
-    }
-  }, [fields.prefecture.value]);
-
-  useEffect(() => {
-    // 都道府県と市区町村が選択されている場合のみ緯度経度を取得
-    if (fields.city.value !== "---" && fields.prefecture.value !== "---") {
-      fetcher.submit(
-        {
-          prefecture: fields.prefecture.value || "",
-          city: fields.city.value || "",
-          type: "normalizeGeocoder",
-        },
-        { method: "post" },
-      );
-    }
-  }, [fields.city.value, fields.prefecture.value]);
 
   return (
     <div className="flex flex-col">
