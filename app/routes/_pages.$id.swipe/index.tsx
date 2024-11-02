@@ -148,7 +148,7 @@ export default function Page() {
   }
 
   return (
-    <div className="relative w-full flex-1 overflow-hidden pt-4">
+    <div className="relative w-full flex-1 pt-4">
       <CardSwiper {...swipe} />
 
       <div className="absolute bottom-8 flex w-full justify-between space-x-2 px-4">
