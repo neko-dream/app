@@ -1,7 +1,7 @@
 import { getFormProps, getInputProps } from "@conform-to/react";
 import { animated } from "@react-spring/web";
 import { Form } from "@remix-run/react";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Button from "~/components/Button";
 import Input from "~/components/Input";
 import Label from "~/components/Label";
@@ -9,6 +9,8 @@ import Textarea from "~/components/Textarea";
 import { useOpinonModal } from "./hooks/useOpinionModal";
 import { useCreateOpinionsForm } from "../../hooks/useCreateOpinionForm";
 import { tv } from "tailwind-variants";
+import Uploadarea from "~/components/Uploadarea";
+import { toast } from "react-toastify";
 
 type Props = {
   talkSessionID: string;
@@ -42,7 +44,11 @@ export const OpinionModal = ({
   const { form, fields, isDisabled } = useCreateOpinionsForm({
     talkSessionID,
     parentOpinionID,
-    onFinishedProcess: () => handleCloseModal(),
+    onFinishedProcess: () => {
+      handleCloseModal();
+      form.reset();
+      setPreview(undefined);
+    },
   });
 
   useEffect(() => {
@@ -78,6 +84,17 @@ export const OpinionModal = ({
       };
     });
     onClose();
+  };
+
+  const [preview, setPreview] = useState<string>();
+  const inputFileRef = useRef<HTMLInputElement>(null);
+
+  const handleOnChangeInputFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return toast.error("画像を選択してください");
+    }
+    const [file] = e.target.files;
+    setPreview(URL.createObjectURL(file));
   };
 
   if (!open) {
@@ -122,6 +139,23 @@ export const OpinionModal = ({
               })}
             />
           </Label>
+          <Label title="参考画像" optional className="mb-8">
+            <Uploadarea
+              onClick={() => {
+                inputFileRef.current?.click();
+              }}
+              preview={preview}
+            />
+          </Label>
+          {/* UIには表示しない */}
+          <input
+            {...getInputProps(fields.picture, { type: "file" })}
+            ref={inputFileRef}
+            accept="image/png,image/jpeg"
+            hidden
+            onChange={handleOnChangeInputFile}
+          />
+
           <Button
             type="submit"
             variation="primary"

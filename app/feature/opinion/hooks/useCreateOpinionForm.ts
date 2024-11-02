@@ -21,7 +21,7 @@ export const useCreateOpinionsForm = ({
       const compressedPicture =
         value.picture &&
         value.picture?.size !== 0 &&
-        fileCompress(value.picture);
+        fileCompress(value.picture, 150);
 
       const { data, error } = await api.POST(
         "/talksessions/{talkSessionID}/opinions",

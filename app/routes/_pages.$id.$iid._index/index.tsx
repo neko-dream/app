@@ -16,6 +16,8 @@ import { loader } from "./modules/loader";
 import { useCreateOpinionsForm } from "~/feature/opinion/hooks/useCreateOpinionForm";
 import { SessionRouteContext } from "../_pages.$id/types";
 import { postVote } from "~/feature/opinion/libs/postVote";
+import { ChangeEvent, useRef, useState } from "react";
+import Uploadarea from "~/components/Uploadarea";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
@@ -32,6 +34,8 @@ export default function Page() {
     parentOpinionID: rootOpinion.opinion.id,
     onFinishedProcess: () => {
       revalidate();
+      form.reset();
+      setPreview(undefined);
     },
   });
 
@@ -51,6 +55,17 @@ export default function Page() {
     }
   };
 
+  const [preview, setPreview] = useState<string>();
+  const inputFileRef = useRef<HTMLInputElement>(null);
+
+  const handleOnChangeInputFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return toast.error("画像を選択してください");
+    }
+    const [file] = e.target.files;
+    setPreview(URL.createObjectURL(file));
+  };
+
   return (
     <div className="m-4">
       <Card
@@ -67,6 +82,8 @@ export default function Page() {
         onClickVoteButton={(voteStatus) => {
           handleSubmitVote(rootOpinion.opinion.id, voteStatus);
         }}
+        img={rootOpinion.opinion.pictureURL}
+        referenceURL={rootOpinion.opinion.referenceURL}
       >
         {parentOpinion && (
           <Link
@@ -110,6 +127,22 @@ export default function Page() {
             })}
           />
         </Label>
+        <Label title="参考画像" optional className="mb-8">
+          <Uploadarea
+            onClick={() => {
+              inputFileRef.current?.click();
+            }}
+            preview={preview}
+          />
+        </Label>
+        <input
+          {...getInputProps(fields.picture, { type: "file" })}
+          ref={inputFileRef}
+          accept="image/png,image/jpeg"
+          hidden
+          onChange={handleOnChangeInputFile}
+        />
+
         <Button
           type="submit"
           variation="primary"
@@ -137,6 +170,8 @@ export default function Page() {
               isOpnionLink={`/${session.id}/${opinion.id}`}
               isJegde={opinionUser.displayID !== user?.displayId}
               myVoteType={myVoteType}
+              img={opinion.pictureURL}
+              referenceURL={opinion.referenceURL}
               onClickVoteButton={(voteStatus) => {
                 handleSubmitVote(opinion.id, voteStatus);
               }}

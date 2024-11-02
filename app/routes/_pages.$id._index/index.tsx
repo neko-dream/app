@@ -163,8 +163,10 @@ export default function Page() {
                   displayName: opinion.user.displayName || "",
                   iconURL: opinion.user.iconURL || "",
                 }}
+                img={opinion.opinion.pictureURL}
                 opinionStatus={opinion.opinion.voteType!}
                 isOpnionLink={`/${session.id}/${opinion.opinion.id}`}
+                referenceURL={opinion.opinion.referenceURL}
               />
             </Link>
           );

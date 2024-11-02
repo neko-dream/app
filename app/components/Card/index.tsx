@@ -30,6 +30,8 @@ type Card = {
   isJegde?: boolean;
   onClickVoteButton?: (v: string) => void;
   myVoteType?: OpinionType;
+  referenceURL?: string;
+  img?: string;
 };
 
 const card = tv({
@@ -71,6 +73,8 @@ function Card(
     isJegde,
     onClickVoteButton,
     myVoteType,
+    referenceURL,
+    img,
     ...props
   }: Props,
   ref: ForwardedRef<HTMLDivElement>,
@@ -99,6 +103,13 @@ function Card(
   };
 
   const isView = !isNaN(percentage?.value || NaN);
+
+  const handleClick = () => {
+    const result = window.confirm(`${referenceURL}に飛びます。`);
+    if (result) {
+      window.location.replace(referenceURL || "");
+    }
+  };
 
   return (
     <div {...props} ref={ref} className={card({ class: className, isView })}>
@@ -134,7 +145,21 @@ function Card(
         </div>
       )}
 
+      {img && <img src={img} alt="" className="mx-auto my-2" />}
+
       {children}
+
+      {referenceURL && (
+        <p className="mt-4 flex space-x-1 text-xs">
+          <span className="shrink-0">参考文献:</span>
+          <button
+            onClick={handleClick}
+            className="line-clamp-1 w-full text-start text-blue-400"
+          >
+            {referenceURL}
+          </button>
+        </p>
+      )}
 
       <RpleyLink to={isOpnionLink} />
 
