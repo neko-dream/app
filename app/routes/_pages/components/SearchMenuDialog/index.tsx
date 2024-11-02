@@ -1,5 +1,5 @@
 import { animated } from "@react-spring/web";
-import { Link, useNavigate } from "@remix-run/react";
+import { Link, useLocation, useNavigate } from "@remix-run/react";
 import { useRef } from "react";
 import { tv } from "tailwind-variants";
 import SearchWhiteIcon from "~/assets/search-white.svg";
@@ -18,6 +18,7 @@ const link = tv({
 });
 
 export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
+  const location = useLocation();
   const transition = useOpenModalAnimation({ open });
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,7 +34,15 @@ export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
 
   const handleSearchNearSession = () => {
     const success = (pos: GeolocationPosition) => {
-      navigate(`/home?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}`);
+      if (location.search) {
+        navigate(
+          `/home?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&sortKey=nearest&${location.search.replace("?", "")}`,
+        );
+      } else {
+        navigate(
+          `/home?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}&sortKey=nearest`,
+        );
+      }
       handleCloseModal();
     };
 
@@ -85,21 +94,21 @@ export const SearchMenuDialog = ({ open, onOpenChange, ...props }: Props) => {
               </button>
             </div>
             <Link
-              to={"/home?q=latest"}
+              to={"/home?sortKey=latest"}
               className={link()}
               onClick={handleCloseModal}
             >
               新着のセッション
             </Link>
             <Link
-              to={"/home?q=mostReplies"}
+              to={"/home?sortKey=mostReplies"}
               className={link()}
               onClick={handleCloseModal}
             >
               盛り上がってるセッション
             </Link>
             <Link
-              to={"/home?q=oldest"}
+              to={"/home?sortKey=oldest"}
               className={link()}
               onClick={handleCloseModal}
             >

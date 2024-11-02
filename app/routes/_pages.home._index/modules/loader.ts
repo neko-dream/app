@@ -15,8 +15,13 @@ const setStatus = (requestURL: string) => {
 
 const setSortKey = (requestURL: string) => {
   try {
-    const query = new URL(requestURL).searchParams.get("q");
-    if (query === "latest" || query === "oldest" || query === "mostReplies") {
+    const query = new URL(requestURL).searchParams.get("sortKey");
+    if (
+      query === "latest" ||
+      query === "oldest" ||
+      query === "mostReplies" ||
+      query === "nearest"
+    ) {
       return query;
     }
   } catch {
@@ -77,6 +82,12 @@ export const loader = ({ request }: LoaderFunctionArgs) => {
       },
     })
     .then((res) => res?.data || null);
+
+  console.log(
+    setSortKey(request.url),
+    setGeoLocation(request.url)?.lat,
+    setGeoLocation(request.url)?.lng,
+  );
 
   return defer({ $session }, { headers: httpCacheHeader() });
 };
