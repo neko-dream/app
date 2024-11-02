@@ -169,7 +169,9 @@ export default function Page() {
       <OpinionModal
         talkSessionID={session.id}
         // FIXME: useStateでアクティブな意見のIDを管理する
-        parentOpinionID="hoge"
+        parentOpinionID={
+          opinions[opinions.length - swipe.gone.size - 1].opinion.id
+        }
         open={swipe.state.isOpinionModalOpen}
         onClose={handleClose}
       />
