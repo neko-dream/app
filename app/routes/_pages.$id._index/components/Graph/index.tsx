@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "@pixi/events";
-import { Stage, Graphics, Sprite } from "@pixi/react";
+import { Stage, Graphics, Sprite, Text } from "@pixi/react";
 import { Fragment, useCallback } from "react";
 
 const colorList = [0xff453a, 0xffd60a, 0xbf5af2, 0x30d158];
@@ -177,22 +177,25 @@ const AvatarPlot = ({ dots, myPositionData, selectGroupId }: any) => {
 
     avatarWithZindex.push([
       // eslint-disable-next-line react/jsx-key
-      <Sprite
-        image={
-          iconURL
-            ? `${FUNCTIONS_URL}/image/?i=${iconURL}&width=120&height=120`
-            : images[colorIdx]
-        }
-        x={x}
-        y={y}
-        zIndex={zIndex + 10}
-        scale={[0.15 * radiusRate, 0.15 * radiusRate]}
-        anchor={[0.5, 0.5]}
-        pointerdown={() => {
-          selectGroupId(colorIdx);
-        }}
-        eventMode="static"
-      />,
+      <>
+        <Sprite
+          image={
+            iconURL
+              ? `${FUNCTIONS_URL}/image/?i=${iconURL}&width=120&height=120`
+              : images[colorIdx]
+          }
+          x={x}
+          y={y}
+          zIndex={zIndex + 10}
+          scale={[0.15 * radiusRate, 0.15 * radiusRate]}
+          anchor={[0.5, 0.5]}
+          pointerdown={() => {
+            selectGroupId(colorIdx);
+          }}
+          eventMode="static"
+        />
+        {myPosition && <Text text="🕶️" x={x - 13} y={y - 15} />}
+      </>,
       zIndex + 10,
     ]);
   };
