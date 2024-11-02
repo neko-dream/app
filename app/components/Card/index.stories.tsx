@@ -34,7 +34,7 @@ export const Default: Story = {
     user: {
       displayID: "",
       displayName: "山田太郎マン",
-      photoURL: "",
+      iconURL: "",
     },
     opinionStatus: "disagree",
   },

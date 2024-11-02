@@ -89,6 +89,15 @@ function Card(
     setIsTooltipOpen(false);
   };
 
+  const handleClickVoteButton = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    target: string,
+  ) => {
+    event.stopPropagation();
+    event.preventDefault();
+    onClickVoteButton?.(target);
+  };
+
   const isView = !isNaN(percentage?.value || NaN);
 
   return (
@@ -113,7 +122,7 @@ function Card(
         <Badge status={opinionStatus} className="ml-2 mr-8" />
       </div>
 
-      <p className="card-description mt-2 text-[#4e4d4b]">{description}</p>
+      <p className="mt-2 line-clamp-4 text-[#4e4d4b]">{description}</p>
 
       <button className={kebab({ isView })} onClick={handleButtonClick}>
         <RiMore2Fill size={24} />
@@ -134,7 +143,7 @@ function Card(
           <Button
             className="h-8 w-24 p-1"
             variation={myVoteType === "disagree" ? "disagree" : "disabled"}
-            onClick={() => onClickVoteButton?.("disagree")}
+            onClick={(e) => handleClickVoteButton(e, "disagree")}
             outline={myVoteType !== "disagree"}
           >
             違うかも
@@ -142,7 +151,7 @@ function Card(
           <Button
             className="h-8 w-24 p-1"
             variation={myVoteType === "pass" ? "pass" : "disabled"}
-            onClick={() => onClickVoteButton?.("pass")}
+            onClick={(e) => handleClickVoteButton(e, "pass")}
             outline={myVoteType !== "pass"}
           >
             保留
@@ -150,7 +159,7 @@ function Card(
           <Button
             className="h-8 w-24 p-1"
             variation={myVoteType === "agree" ? "agree" : "disabled"}
-            onClick={() => onClickVoteButton?.("agree")}
+            onClick={(e) => handleClickVoteButton(e, "agree")}
             outline={myVoteType !== "agree"}
           >
             良さそう

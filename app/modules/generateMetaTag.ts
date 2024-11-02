@@ -24,7 +24,7 @@ export const generateMetaTag = ({ title, description, ogp }: Props) => {
       {
         property: "og:image",
         // WIP
-        content: ogp || "https://ogp-sample.pages.dev/ogp?title=ことひろ",
+        content: ogp || "/ogp.png",
       },
       {
         property: "og:site_name",

@@ -4,12 +4,19 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PenIcon from "~/assets/pen.svg";
 import SearchIcon from "~/assets/search.svg";
+import LogoIcon from "~/assets/kotihiro.png";
 import Avator from "~/components/Avator";
 import { SearchMenuDialog } from "./components/SearchMenuDialog";
 import { loader } from "./modules/loader";
+import { generateMetaTag } from "~/modules/generateMetaTag";
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
+export const meta = generateMetaTag({
+  title: "ことひろ",
+  description: "多種多様な意見や言葉を重ねてよりよい意思決定を目指すサービス",
+  ogp: "/ogp.png",
+});
 
 export default function Route() {
   const { $user } = useLoaderData<typeof loader>();
@@ -27,7 +34,7 @@ export default function Route() {
     <>
       <header className="z-20 flex h-10 w-full shrink-0 items-center justify-between space-x-6 border-b-[1px] border-solid border-[#d6e3ed] bg-white px-4">
         <Link to="/home" className="mr-auto">
-          ことひろ
+          <img src={LogoIcon} alt="" className="h-8" />
         </Link>
 
         <button onClick={handleOpenChange}>
