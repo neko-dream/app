@@ -8,6 +8,7 @@ import { SessionRouteContext } from "./types";
 import { OpinionModal } from "~/feature/opinion/components/OpinionModal";
 import { SessionDetialModal } from "./components/SessionDetialModal";
 import { JST } from "~/libs/date";
+import { tv } from "tailwind-variants";
 
 const regexSwipe = /^\/[^/]+\/swipe$/;
 const regexReply = /^\/[^/]+\/(?!swipe$)[^/]+$/;
@@ -15,6 +16,15 @@ const regexHome = /^\/[^/]+$/;
 
 export { ErrorBoundary } from "./modules/ErrorBoundary";
 export { loader };
+
+const swipeUI = tv({
+  base: "flex flex-1 flex-col",
+  variants: {
+    isSwipePage: {
+      true: "overflow-hidden",
+    },
+  },
+});
 
 export default function Route() {
   const { session, isOwner } = useLoaderData<typeof loader>();
@@ -28,7 +38,7 @@ export default function Route() {
   const isFinished = JST(session.scheduledEndTime).isBefore();
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className={swipeUI({ isSwipePage })}>
       <div className="relative">
         <div className="mt-8 flex shrink-0 flex-col p-3 pl-4">
           <p className="text-sm text-[#6d6c6a]">テーマ</p>
