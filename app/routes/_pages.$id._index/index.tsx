@@ -143,7 +143,8 @@ export default function Page() {
           });
 
           const lastItem = sortedOpinion[sortedOpinion.length - 1];
-          const parcent = lastItem && (lastItem?.count / total) * 100;
+          const parcent =
+            lastItem && Math.trunc((lastItem?.count / total) * 100);
 
           return (
             <Link
