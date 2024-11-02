@@ -65,7 +65,7 @@ export default function Route() {
       <Outlet />
 
       {/* 常時表示はされない */}
-      <ToastContainer position="top-center" />
+      <ToastContainer position="top-center" autoClose={1500} />
       <SearchMenuDialog
         open={isSearchMenuOpen}
         onOpenChange={setIsSearchMenuOpen}
