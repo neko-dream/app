@@ -23,10 +23,10 @@ const modal = tv({
   base: "absolute bottom-0 w-[375px] touch-none will-change-transform",
   variants: {
     parent: {
-      true: "h-[calc(100dvh-188px)]",
+      true: "h-[calc(100svh-188px)]",
     },
     root: {
-      true: "h-[calc(100dvh-280px)]",
+      true: "h-[calc(100svh-280px)]",
     },
   },
 });
