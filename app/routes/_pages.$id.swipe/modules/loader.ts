@@ -22,7 +22,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   );
 
   if (!data || error) {
-    if (error?.code === "AUTH-0000") {
+    if (error?.code.includes("AUTH")) {
       throw forbidden();
     }
 
